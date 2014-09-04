@@ -26,7 +26,6 @@ if (global_common::isCLogin())
 
 <?php
 include_once('include/_header.inc');
-include_once('include/_menu.inc');
 ?>
 <script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_user.js');?>"></script>
 <script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_article.js');?>"></script>
