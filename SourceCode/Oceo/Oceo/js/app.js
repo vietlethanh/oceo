@@ -576,12 +576,36 @@ var App = function () {
         }
 
         $(".chosen").each(function () {
+			controlID = $.trim($(this).attr("id"));
+			message = $("#"+controlID).attr("not-found");
+			if(typeof(message) == 'undefined' || message == null || message == '')
+			{
+				message = 'Tạo mới';
+			}
             $(this).chosen({
-                allow_single_deselect: $(this).attr("data-with-deselect") == "1" ? true : false
+                allow_single_deselect: $(this).attr("data-with-deselect") == "1" ? true : false,
+			
+				// message, which is somewhat redundant when option adding is enabled
+				 no_results_text: message +" <a style=\"cursor:pointer\" href=\"#\" onclick=\"App.addOptionChosen('"+controlID+"')\">Thêm</a>",
+				//persistent_create_option: true,
+				//create_option_text: 'Create New Business'
             });
         });
     }
-
+	
+	var addOptionChosen = function(controlID)
+	{
+		$("#"+controlID+" option").removeAttr("selected");		
+		//core.util.deSelectOption(controlID);
+		newOption =  $("#"+controlID).parent().find('.chzn-container-active .chzn-drop .chzn-search input[type="text"]').val();
+		$("#"+controlID).prepend("<option selected='selected'>"+newOption+"</option>");
+	
+		$("#"+controlID).trigger("liszt:updated");
+		
+		//$("#"+controlID+" option[value='"+newOption+"']").attr("selected", "selected");		
+		$("#"+controlID).change();	
+	}
+	
     var handleFancybox = function () {
         if (!jQuery.fancybox) {
             return;
@@ -923,7 +947,12 @@ var App = function () {
                     allow_single_deselect: true
                 });
         },
-
+		
+		// initializes choosen dropdowns
+        addOptionChosen: function (controlID) {
+           addOptionChosen(controlID);
+        },
+		
         initFancybox: function () {
             handleFancybox();
         },

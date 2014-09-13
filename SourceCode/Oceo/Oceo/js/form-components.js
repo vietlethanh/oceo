@@ -197,6 +197,32 @@ var FormComponents = function () {
             });    
         }    
     }
+	
+	var handelSelectize = function()
+	{
+		$('.selectize').selectize({
+					create: true,
+					sortField: {
+						field: 'text',
+						direction: 'asc'
+					},
+					dropdownParent: 'body'
+				});
+	}
+	
+	var handleSelect2 = function () {
+		 $('.select2').select2({
+            placeholder: "Select an option",
+            allowClear: true,
+			createSearchChoice: function(term) {
+				return {
+					id: term,
+					text: term + ' (new)'
+				};
+			},
+        });
+	}
+	
     /*
     var handleWysihtml5 = function () {
         if (!jQuery().wysihtml5) {
@@ -764,7 +790,10 @@ var FormComponents = function () {
             handleDatetimePicker();
             handleDateRangePickers();
             handleInputMasks();
-            handleMultiSelect
+			handleSelect2();
+            handleMultiSelect();
+            handelSelectize();
+		
             /*
             handleWysihtml5();
             handleToggleButtons();
@@ -775,7 +804,7 @@ var FormComponents = function () {
             handleDateRangePickers();
             handleClockfaceTimePickers();
             handleColorPicker();
-            handleSelect2();
+          
             handleSelect2Modal();
             handleInputMasks();
             handleIPAddressInput();

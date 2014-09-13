@@ -42,7 +42,12 @@ include_once('include/_right_side.inc');
 ?>
 <?php 
 //search box
-include_once('include/_search_box.inc');
+//include_once('include/_search_box.inc');
+?>
+<?php 
+
+//article list
+include_once('include/_company_list.inc');
 ?>
 <?php 
 
