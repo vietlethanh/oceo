@@ -632,6 +632,43 @@ table.table {
       cursor: text; }
 
 /*********** end post ************/
+/*********** post product************/
+#post-product {
+  min-height: 500px; }
+  #post-product .table-post .zone {
+    margin: 10px 0 0 0; }
+    #post-product .table-post .zone .zone-title {
+      color: #0099ff;
+      font-size: 1.1em; }
+  #post-product .table-post .ad-value {
+    margin-top: 3px;
+    vertical-align: top; }
+  #post-product .table-post .property-product .btn-add {
+    vertical-align: top; }
+  #post-product .table-post .controls .row-item {
+    margin-bottom: 0px;
+    border-top: 1px solid #e5e5e5;
+    padding-top: 5px;
+    padding-bottom: 5px; }
+    #post-product .table-post .controls .row-item label.lbl-property {
+      min-height: 15px;
+      margin: 0;
+      cursor: text; }
+  #post-product .table-post .controls .selectize {
+    margin: 0px; }
+    #post-product .table-post .controls .selectize .selectize-input {
+      padding: 4px 8px 0 11px;
+      height: 30px;
+      border-color: #e5e5e5;
+      background-image: none !important;
+      background-color: white;
+      box-shadow: none; }
+  #post-product .item {
+    overflow: inherit;
+    display: inherit;
+    margin-bottom: 0px; }
+
+/*********** end post product ************/
 /*********** profile ************/
 #profile-page {
   min-height: 500px;
@@ -1025,6 +1062,57 @@ table.table {
       height: 270px; }
 
 /*********** end article ************/
+/*********** company-list ************/
+#company-list {
+  margin-top: 30px; }
+  #company-list #companies {
+    display: inline-block;
+    background-clip: padding-box;
+    border: 5px solid rgba(113, 108, 104, 0.3);
+    margin: 1px;
+    vertical-align: top;
+    width: 99%; }
+    #company-list #companies .item {
+      width: 327px;
+      display: inline-block;
+      vertical-align: top;
+      margin: 4px; }
+      #company-list #companies .item .info {
+        position: relative; }
+      #company-list #companies .item .name {
+        color: #0099ff;
+        font-size: 1.2em;
+        font-weight: bold; }
+      #company-list #companies .item .artcile-title {
+        font-weight: bold; }
+      #company-list #companies .item .price {
+        float: right;
+        margin-right: 6px;
+        margin-top: -24px;
+        background: red; }
+        #company-list #companies .item .price a, #company-list #companies .item .price a:focus, #company-list #companies .item .price a:hover, #company-list #companies .item .price a:active, #company-list #companies .item .price a:visited {
+          color: black !important; }
+      #company-list #companies .item .article-thumbnail {
+        /*min-height:171px;*/
+        border: 5px solid; }
+        #company-list #companies .item .article-thumbnail img {
+          max-height: 150px; }
+      #company-list #companies .item img {
+        -webkit-transition: box-shadow 0.5s ease;
+        -moz-transition: box-shadow 0.5s ease;
+        -o-transition: box-shadow 0.5s ease;
+        -ms-transition: box-shadow 0.5s ease;
+        transition: box-shadow 0.5s ease;
+        width: 100%; }
+  #company-list ul {
+    list-style-type: none; }
+    #company-list ul li {
+      display: inline; }
+      #company-list ul li img:hover {
+        -webkit-box-shadow: 0px 0px 7px rgba(255, 255, 255, 0.9);
+        box-shadow: 0px 0px 7px rgba(255, 255, 255, 0.9); }
+
+/*********** end company-list ************/
 /*********** map ************/
 #map {
   display: block;

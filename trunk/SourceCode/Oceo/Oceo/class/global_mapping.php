@@ -94,6 +94,11 @@ class global_mapping
 	const ImageLink					= 'ImageLink';
 	const PartnerID					= 'PartnerID';
 	
+	//table Product
+	const ProductID					= 'ProductID';
+	const ProductName				= 'ProductName';
+	
+	
 	const Mode						= 'Mode';
 }
 ?>

@@ -108,6 +108,10 @@ h1  a:hover {color:$color_header !important;}
 @import "post.scss";
 /*********** end post ************/
 
+/*********** post product************/
+@import "post-product.scss";
+/*********** end post product ************/
+
 /*********** profile ************/
 @import "profile.scss";
 /*********** end profile ************/
@@ -115,7 +119,7 @@ h1  a:hover {color:$color_header !important;}
 
 /*********** seach box ************/
 @import "search-box.scss";
-/*********** end seach box ************/
+/*********** end seach box ************/ 
 
 /*********** footer ************/
 @import "footer.scss";
@@ -125,9 +129,15 @@ h1  a:hover {color:$color_header !important;}
 @import "article-list.scss";
 /*********** end article-list ************/
 
+
 /*********** article ************/
 @import "article.scss";
 /*********** end article ************/
+
+
+/*********** company-list ************/
+@import "company-list.scss";
+/*********** end company-list ************/
 
 /*********** map ************/
 @import "map.scss"; 
