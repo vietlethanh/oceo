@@ -111,7 +111,6 @@ label {
   vertical-align: top !important; }
 
 .btn {
-  color: black;
   border: 1px solid #15aeec;
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;
@@ -140,6 +139,25 @@ label {
 .btn-mini {
   font-size: 10px;
   padding: 1px 4px; }
+
+.lbtn {
+  -webkit-border-radius: 0px;
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+  font-size: 13px;
+  cursor: pointer;
+  font-family: arial, helvetica, sans-serif;
+  text-decoration: none;
+  background-position: 0 0px;
+  font-weight: bold;
+  text-shadow: none;
+  box-shadow: none;
+  background: none;
+  color: black;
+  border: none;
+  padding: 5px 20px 5px 20px;
+  margin: 3px 5px;
+  display: inline-block; }
 
 .btn-large {
   border-radius: 0px;
@@ -669,6 +687,41 @@ table.table {
     margin-bottom: 0px; }
 
 /*********** end post product ************/
+/*********** post price************/
+#post-price {
+  min-height: 500px; }
+  #post-price .table-post .zone {
+    margin: 10px 0 0 0; }
+    #post-price .table-post .zone .zone-title {
+      color: #0099ff;
+      font-size: 1.1em; }
+  #post-price .table-post .ad-value {
+    margin-top: 3px;
+    vertical-align: top; }
+  #post-price .table-post .controls .row-item {
+    margin-bottom: 0px;
+    border-top: 1px solid #e5e5e5;
+    padding-top: 5px;
+    padding-bottom: 5px; }
+    #post-price .table-post .controls .row-item label.lbl-property {
+      min-height: 15px;
+      margin: 0;
+      cursor: text; }
+  #post-price .table-post .controls .selectize {
+    margin: 0px; }
+    #post-price .table-post .controls .selectize .selectize-input {
+      padding: 4px 8px 0 11px;
+      height: 30px;
+      border-color: #e5e5e5;
+      background-image: none !important;
+      background-color: white;
+      box-shadow: none; }
+  #post-price .item {
+    overflow: inherit;
+    display: inherit;
+    margin-bottom: 0px; }
+
+/*********** end post price ************/
 /*********** profile ************/
 #profile-page {
   min-height: 500px;
