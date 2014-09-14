@@ -21,7 +21,6 @@ label
 
 .btn
 {
-	color: $color_body;
 	border:1px solid #15aeec; 
 	-webkit-border-radius: 0px; 
 	-moz-border-radius: 0px;
@@ -51,6 +50,30 @@ label
 {	
 	font-size:10px;		
 	padding: 1px 4px;
+}
+
+.lbtn
+{
+	-webkit-border-radius: 0px; 
+	-moz-border-radius: 0px;
+	border-radius: 0px;
+	font-size:13px;
+	cursor: pointer;
+
+	font-family:arial, helvetica, sans-serif; 
+	
+	text-decoration:none; 
+	background-position: 0 0px;
+
+	font-weight:bold; 
+	text-shadow: none;
+	box-shadow: none;
+	background:none;
+	color: $color_body;
+	border:none;
+	padding: 5px 20px 5px 20px; 
+	margin: 3px 5px;
+	display:inline-block;
 }
 
 .btn-large
