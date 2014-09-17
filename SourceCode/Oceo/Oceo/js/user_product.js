@@ -211,40 +211,72 @@ var product = {
 		return articleInfo;
     },
 	
-	postArticle: function() {  
-		var articleInfo = this.getArticleInfo();
+	postProduct: function() {  
+	    //var productInfo = this.getProductInfo();
+	    var property = 
+	    {
+	        PropertyGroupID: 'newgroup',
+	        PropertyName: 'name1',
+	        PropertyValue: 'value1'
+	    };
+	    var properties= [];
+	    properties.push(property);
+	    property = 
+	    {
+	        PropertyGroupID: 1,
+	        PropertyName: 'name2',
+	        PropertyValue: 'value2'
+	    };
+	    properties.push(property);
+	    property = 
+	    {
+	        PropertyGroupID: 3,
+	        PropertyName: 'name3',
+	        PropertyValue: 'value3'
+	    };
+	    properties.push(property);
+		var productInfo = 
+		{
+			 Properties: properties,
+			 ProductName:'ProductName',
+			 CatalogueID:'1',
+			 ImageLink: 'ImageLink1,ImageLink2,ImageLin3',
+			 ManufactoryID: '1',
+			 Description:'Description Description Description ',
+			 Mode: core.util.getObjectValueByID('adddocmode')
+		};
 		
-		if(core.util.isNull(articleInfo))
+		if(core.util.isNull(productInfo))
 		{
 			return false;
 		}
-		if(articleInfo.Mode=='1' || articleInfo.Mode==1)
+		if(productInfo.Mode=='1' || productInfo.Mode==1)
 		{
-			articleInfo.act = this.ACT_UPDATE;
+			productInfo.act = this.ACT_UPDATE;
 		}
 		else
 		{
-			articleInfo.act = this.ACT_ADD;
+			productInfo.act = this.ACT_ADD;
 		}
-		//return false;;
-		
-        core.request.post(this.Page,articleInfo,
+			
+        core.request.post(this.Page,productInfo,
             function(respone, info){
+                console.log(info);
 				var strRespond = core.util.parserXML(respone);
-				if (parseInt(strRespond[1]['rs']) == 1) {
-					core.ui.showInfoBar(1, strRespond[1]["inf"]);	
-					//core.util.goTo("PostSucess.php");
-					article.clearForm();
+				//if (parseInt(strRespond[1]['rs']) == 1) {
+				//	core.ui.showInfoBar(1, strRespond[1]["inf"]);	
+				//	core.util.goTo("PostSucess.php");
+					//article.clearForm();
 					core.util.disableControl("btnOK", false);
-					if(articleInfo.Mode=='1' || articleInfo.Mode==1)
-					{
-						core.util.redirect('profile_article.php')
-					}
-                }
-                else{
-                    core.ui.showInfoBar(2, strRespond[1]["inf"]);	
-					core.util.disableControl("btnOK", false);
-                }
+					//if(articleInfo.Mode=='1' || articleInfo.Mode==1)
+					//{
+					//	core.util.redirect('profile_article.php')
+					//}
+                //}
+                //else{
+                 //   core.ui.showInfoBar(2, strRespond[1]["inf"]);	
+				//	core.util.disableControl("btnOK", false);
+                //}
             },
             function()
             {
@@ -592,18 +624,41 @@ var product = {
 			}
 		}
 	},
-	bindDistrict: function(obj)
+	
+	moveUpItem:function(obj,itemName)
+	{
+	    me = this;
+	    currentGroup = $(obj).closest('.'+itemName);
+	    nextGroup = $(currentGroup).prev('.'+itemName);
+	    currentGroup.insertBefore(nextGroup)
+	    
+	    
+	},
+	
+	moveDownItem:function(obj,itemName)
+	{
+	    me = this;
+	    currentGroup = $(obj).closest('.'+itemName);
+	    nextGroup = $(currentGroup).next('.'+itemName);
+	    currentGroup.insertAfter(nextGroup)
+	    
+	    
+	},
+	
+	
+	bindGroup: function(obj,controlID,attName)
 	{
 		me = this;
+	
 		var selectedCity = $(obj).find("option:selected");
-		var cityID = selectedCity.attr("CityID");
-		optDistrict = core.util.getObjectByID('optDistrict');
-		optDistrict.val('');
-		var districts = optDistrict.find("option");
-		districts.each(function(index){
-			if($(this).attr("CityID") != "0")
+		var attValue = selectedCity.attr(attName);
+		control = core.util.getObjectByID(controlID);
+		control.val('');
+		var elementOpts = control.find("option");
+		elementOpts.each(function(index){
+			if($(this).attr(attName) != "0")
 			{
-				if($(this).attr("CityID") == cityID )
+				if($(this).attr(attName) == attValue )
 				{
 					$(this).css("display","block");
 				}
@@ -613,19 +668,9 @@ var product = {
 				}
 			}
 		});
-		/*var currentParent = core.util.getObjectValueByID('cmArea');
-		$("#cmCategory").empty();
-		for (var item in categories) {
-			if( categories[item].ParentID == currentParent)
-			{				
-				key = categories[item].ArticleTypeID;
-				val =  categories[item].ArticleTypeName;			
-				$("#cmCategory").append("<option value=\"" + key + "\">" + val + "</option>");
-			}
-		}
-		*/
-		$("#optDistrict option[CityID=0]").attr('selected', 'selected');
-		optDistrict.trigger("liszt:updated");
+		
+		$("#"+controlID+" option["+attName+"=0]").attr('selected', 'selected');
+		control.trigger("liszt:updated");
 	},
 	
 	activeArticle: function(articleID,isActivate)

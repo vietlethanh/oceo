@@ -403,6 +403,7 @@ core.util = {
 	
 	parserXML: function(text) {
         text = text.replace(/(\r\n|\n|\r)/gm, "");
+        text = text.replace(/(\")/gm, "\'");
         var xmlDoc;
         //debugger;
         if (window.DOMParser) {

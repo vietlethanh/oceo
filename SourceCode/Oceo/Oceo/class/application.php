@@ -91,13 +91,15 @@ class Application
         $filePath = $filePath['dirname'].'/';
         $lockFolder = $filePath.'temp/';
         
-        //echo $lockFolder;
-      if(!is_dir($lockFolder))
+        //echo '<br>$lockFolder: '.$lockFolder .'<br>';
+        if(!is_dir($lockFolder))
         {
             mkdir($lockFolder);
         }
 	
 		$strFileLock = $lockFolder . $fileName . self::APP_LOCK_EXTENSION;
+		//echo '<br>$strFileLock: '.$strFileLock .'<br>';
+		//echo '<br>$strFileName: '.$strFileName .'<br>';
 		//serializ du lieu
 		$strValue = serialize($value);
 	

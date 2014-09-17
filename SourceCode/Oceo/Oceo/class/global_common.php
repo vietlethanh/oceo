@@ -2792,8 +2792,8 @@ class global_common
 	public function getMaxID($strTableName, $intReserveId=1, $readonly)
 	{		
 		
-		$strFileName = self::FOLDER_FILES_MAXID.$strTableName;
-		
+		$strFileName = $strTableName;
+		//echo $strFileName;
 		if(!file_exists($strFileName.'.app'))
 		{
 			// file not exist
@@ -3677,6 +3677,12 @@ class global_common
 	{
 		return ord($input);
 	}
+	
+	public function convertToInt($string)
+	{
+		return intval($string);
+	}
+	
 	
 	public function mergeUserInfo($arrResult)
 	{

@@ -113,7 +113,7 @@ foreach($parentTypes as $item)
 			<div class="control-group">
 				<label class="control-label">Hình minh họa</label>
 				<div class="controls">
-					<input type="text" name="txtImage" id="txtImage" class="text span6 maxlength="255"  
+					<input type="text" name="txtImage" id="txtImage" class="text span6" maxlength="255"  
 					placeholder="vd: http://i134.photobucket.com/albums/q99/45748_0_square_1a.jpg"  
 					value="<?php echo $article[global_mapping::FileName];?>"/>
 				</div>
@@ -154,14 +154,14 @@ foreach($allTypes as $item)
 			<div class="control-group">
 				<label class="control-label">Thời gian giao hàng</label>
 				<div class="controls">
-					<input type="text" name="txtName" id="txtName" class="text span6 maxlength="255"  
+					<input type="text" name="txtName" id="txtName" class="text span6" maxlength="255"  
 					value="<?php echo $article[global_mapping::Title];?>"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">Chi phí giao hàng</label>
 				<div class="controls">
-					<input type="text" name="txtName" id="txtName" class="text span6 maxlength="255"  
+					<input type="text" name="txtName" id="txtName" class="text span6" maxlength="255"  
 					value="<?php echo $article[global_mapping::Title];?>"/>
 				</div>
 			</div>
