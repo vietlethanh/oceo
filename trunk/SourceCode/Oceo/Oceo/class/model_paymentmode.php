@@ -96,10 +96,10 @@ class Model_PaymentMode
     #region Public Functions
     
     public function insert( $paymentmodename,$createdby,$createddate,$modifiedby,$modifieddate,$deletedby,$deleteddate,$isdeleted)
-	{
-		$intID = global_common::getMaxID(self::TBL_SL_PAYMENT_MODE);
+	{	
 		
 		$strTableName = self::TBL_SL_PAYMENT_MODE;
+		$intID = global_common::getMaxValueofField(global_mapping::UserID, $strTableName) + 1;
 		$strSQL = global_common::prepareQuery(self::SQL_INSERT_SL_PAYMENT_MODE,
 				array(self::TBL_SL_PAYMENT_MODE,$intID,
 						global_common::escape_mysql_string($paymentmodename),

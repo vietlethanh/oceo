@@ -10,22 +10,26 @@ include_once('class/model_articletype.php');
 include_once('class/model_article.php');
 include_once('class/model_comment.php');
 include_once('class/model_user.php');
-include_once('class/model_city.php');
-include_once('class/model_district.php');
+include_once('class/model_propertygroup.php');
+include_once('class/model_property.php');
+
 
 $objArticle = new Model_Article($objConnection);
 $objArticleType = new Model_ArticleType($objConnection);
-$objCity = new Model_City($objConnection);
-$objDistrict = new Model_District($objConnection);
+$objPropertyGroup = new Model_PropertyGroup($objConnection);
+$objProperty = new Model_Property($objConnection);
+
 $intMode = 0;//add mode
 $parentTypes = $objArticleType->getAllArticleType(0,null, 'ParentID=0','Level');
 $allTypes = $objArticleType->getAllArticleType(0,null, 'ParentID='.$parentTypes[0][global_mapping::ArticleTypeID] ,'Level');
 
-$allCities = $objCity->getAllCity();
-//echo 'get city:';
-//echo($allCities);
-$allDistricts = $objDistrict->getAllDistrict();
+$allGroups = $objPropertyGroup->getAllPropertyGroup(0,'*',global_mapping::ArticleTypeID.'=1','`Order`');
 
+//print_r($allGroups);
+$allGroupIDs = global_common::getArrayColumn($allGroups,global_mapping::PropertyGroupID);
+$strQueryIN = global_mapping::PropertyGroupID .' IN('. global_common::convertToQueryIN($allGroupIDs) .')';
+//echo($allCities);
+$allProperties = $objProperty->getAllProperty(0,'*',$strQueryIN,'`Order`');
 if ($_pgR["aid"])
 {
 	$articleID = $_pgR["aid"];
@@ -133,36 +137,37 @@ foreach($allTypes as $item)
 			<div class="control-group">
 				<label class="control-label">Tên sản phẩm *</label>
 				<div class="controls">
-					<input type="text" name="txtName" id="txtName" class="text span6 maxlength="255"  
+					<input type="text" name="txtName" id="txtName" class="text span6" maxlength="255"  
 					value="<?php echo $article[global_mapping::Title];?>"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">Hình minh họa</label>
 				<div class="controls">
-					<input type="text" name="txtImage" id="txtImage" class="text span6 maxlength="255"  
-					placeholder="vd: http://i134.photobucket.com/albums/q99/45748_0_square_1a.jpg"  
-					value="<?php echo $article[global_mapping::FileName];?>"/>
+					<textarea type="text" name="txtImage" id="txtImage" class="text span6" maxlength="255"  
+					placeholder="vd: http://i134.photobucket.com/albums/q99/image1.jpg; http://i134.photobucket.com/albums/q99/image1.jpg http://i134.photobucket.com/albums/q99/image3.jpg"  
+					value="<?php echo $article[global_mapping::FileName];?>"></textarea>
 				</div>
 			</div>
 			<div class="control-group property-product">
 				<label class="control-label">Chi tiết kỹ thuật</label>
 				<div class="controls">
 					
-					<select id="optGroup" name="optGroup" class="chosen span2 "  data-placeholder="Chọn nhóm" not-found="Tạo mới" onchange="product.bindGroup(this);">
+					<select id="optGroup" name="optGroup" class="chosen span2 "  data-placeholder="Chọn nhóm" not-found="Tạo mới" onchange="product.bindGroup(this,'optProperty','PropertyGroupID');">
 <?php
-foreach($allCities as $item)
+foreach($allGroups as $item)
 {
-	echo '			<option value="'.$item[global_mapping::CityName].'" CityID="'.$item[global_mapping::CityID].'">'.$item[global_mapping::CityName].'</option>';
+	echo '			<option value="'.$item[global_mapping::PropertyGroupName].'" PropertyGroupID="'.$item[global_mapping::PropertyGroupID].'">'.$item[global_mapping::PropertyGroupName].'</option>';
 }
 ?>
 					</select>
 					<select id="optProperty" name="optProperty"  class="chosen span2" data-placeholder="Chọn thuộc tính" not-found="Tạo mới" >
 <?php
 $display='style="display:none"';
-foreach($allDistricts as $item)
+$display='';
+foreach($allProperties as $item)
 {
-	echo '			<option value="'.$item[global_mapping::DistrictName].'" '.$display.'  CityID="'.$item[global_mapping::CityID].'">'.$item[global_mapping::DistrictName].'</option>';
+	echo '			<option value="'.$item[global_mapping::PropertyName].'" '.$display.'  PropertyGroupID="'.$item[global_mapping::PropertyGroupID].'">'.$item[global_mapping::PropertyName].'</option>';
 }
 ?>
 					</select>	
@@ -177,13 +182,68 @@ $total = count($addresses);
 for($i=0; $i<$total; $i++)
 {
 	echo '		<div class="controls row-item '.($i==0?'no-border':'').'">';
-	echo '			<label class="m-wrap inline span6 lbl-address">';
-	echo '			<span class="property-product-value">'.$addresses[$i].'</span>, <span class="location-district">'.$districts[$i].'</span>, <span class="location-city">'.$cities[$i].'</span> </label>';
+	echo '			<label class="m-wrap inline span6 lbl-property">';
+	echo '				<span class="property-product-value">'.$addresses[$i].'</span>, <span class="location-district">'.$districts[$i].'</span>, <span class="location-city">'.$cities[$i].'</span>';
+	echo '			<lalel>';
 	echo '			<a onclick="article.clickEDIT(this);" class="btn btn-mini " href="javascript:void(0);"><i class="icon-pencil"></i> Sửa</a> ';
 	echo '			<a onclick="article.clickDELETE(this);" class="btn btn-mini " href="javascript:void(0);"><i class="icon-remove"></i> Xóa</a>';
 	echo '		</div>';
 }
 ?>				
+				<div class="control-group zone property-group">
+					<div class="controls">
+						<h2 class="m-wrap property-zone float-left">Group1</h2>
+						<a onclick="product.moveUpItem(this,'property-group')" class="btn btn-mini float-right" href="javascript:;"><i class="icon-pencil"></i> Lên</a> 
+						<a onclick="product.moveDownItem(this,'property-group')" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Xuống</a> 
+					</div>
+					
+					<div class="controls row-item clear">
+						<label class="m-wrap inline span4 lbl-property">
+							<span class="property-product-value">PropertyName1: PropertyValue</span>
+						</label>
+						<a onclick="product.moveUpItem(this,'row-item')" class="btn btn-mini float-right" href="javascript:;"><i class="icon-pencil"></i> Lên</a> 
+						<a onclick="product.moveDownItem(this,'row-item')" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Xuống</a> 
+						<a onclick="article.clickEDIT(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Sửa</a> 
+						<a onclick="article.clickDELETE(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-remove"></i> Xóa</a>
+					</div>
+					<div class="controls row-item clear">
+						<label class="m-wrap inline span4 lbl-property">
+							<span class="property-product-value">PropertyName2: PropertyValue</span>
+						</label>
+						<a onclick="product.moveUpItem(this,'row-item')" class="btn btn-mini float-right" href="javascript:;"><i class="icon-pencil"></i> Lên</a> 
+						<a onclick="product.moveDownItem(this,'row-item')" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Xuống</a> 
+						<a onclick="article.clickEDIT(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Sửa</a> 
+						<a onclick="article.clickDELETE(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-remove"></i> Xóa</a>
+						
+					</div>
+				</div>
+				<div class="control-group zone property-group">
+					<div class="controls">
+						<h2 class="m-wrap property-zone float-left">Group2</h2>
+						<a onclick="product.moveUpItem(this,'property-group')" class="btn btn-mini float-right" href="javascript:;"><i class="icon-pencil"></i> Lên</a> 
+						<a onclick="product.moveDownItem(this,'property-group')" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Xuống</a> 
+					</div>
+					
+					<div class="controls row-item clear">
+						<label class="m-wrap inline span4 lbl-property">
+							<span class="property-product-value">PropertyName3: PropertyValue</span>
+						</label>
+						<a onclick="product.moveUpItem(this,'row-item')" class="btn btn-mini float-right" href="javascript:;"><i class="icon-pencil"></i> Lên</a> 
+						<a onclick="product.moveDownItem(this,'row-item')" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Xuống</a> 
+						<a onclick="article.clickEDIT(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Sửa</a> 
+						<a onclick="article.clickDELETE(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-remove"></i> Xóa</a>
+					</div>
+					<div class="controls row-item clear">
+						<label class="m-wrap inline span4 lbl-property">
+							<span class="property-product-value">PropertyName4: PropertyValue</span>
+						</label>
+						<a onclick="product.moveUpItem(this,'row-item')" class="btn btn-mini float-right" href="javascript:;"><i class="icon-pencil"></i> Lên</a> 
+						<a onclick="product.moveDownItem(this,'row-item')" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Xuống</a> 
+						<a onclick="article.clickEDIT(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Sửa</a> 
+						<a onclick="article.clickDELETE(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-remove"></i> Xóa</a>
+						
+					</div>
+				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">Thông tin sản phẩm *</label>
@@ -208,7 +268,7 @@ for($i=0; $i<$total; $i++)
 			</div>
 			<div class="control-group">				
 				<div class="controls">
-					<input type="submit" name="btnOK" id="btnOK" class="btn" value="Đăng tin"/>
+					<input type="button" name="btnOK" id="btnOK" class="btn" value="Đăng tin"/>
 					<input type="reset" name="btnReset" id="btnReset" class="btn gray" value="Nhập lại"/>
 				</div>
 			</div>
@@ -225,24 +285,25 @@ include_once('include/_location.inc');
 ?>
 <script language="javascript" type="text/javascript">
     $(document).ready(function () {
+			
 			CKEDITOR.replace( 'txtContent',
 			{
 				height: 400
 			});
 			
-			core.util.deSelectOption('optCity');
-			core.util.deSelectOption('optDistrict');
+			//core.util.deSelectOption('optCity');
+			//core.util.deSelectOption('optDistrict');
 			
 			//init all categories
 			articleType.setAllCategories();
 			
 			core.util.getObjectByID("btnOK").click(function(){
-				return;
-				 //article.postArticle();			
+				//return;
+				 product.postProduct();			
 			});
 			
-			core.util.getObjectByID("post-article").submit(function () {
-                article.postArticle();				
+			core.util.getObjectByID("post-product").submit(function () {
+                product.postProduct();				
 				return false;				
             });
 <?php

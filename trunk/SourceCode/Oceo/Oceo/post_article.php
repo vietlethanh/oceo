@@ -223,7 +223,7 @@ foreach($allTypes as $item)
 			<div class="control-group">
 				<label class="control-label">Tên chương trình KM *</label>
 				<div class="controls">
-					<input type="text" name="txtName" id="txtName" class="text span6 maxlength="255"  
+					<input type="text" name="txtName" id="txtName" class="text span6" maxlength="255"  
 					value="<?php echo $article[global_mapping::Title];?>"/>
 				</div>
 			</div>

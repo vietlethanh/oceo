@@ -98,6 +98,16 @@ class global_mapping
 	const ProductID					= 'ProductID';
 	const ProductName				= 'ProductName';
 	
+	const PropertyID				= 'PropertyID';
+	const PropertyName				= 'PropertyName';
+	const PropertyValue				= 'PropertyValue';
+	const DataTypeID				= 'DataTypeID';
+	
+	const PropertyGroupID			= 'PropertyGroupID';
+	const PropertyGroupName			= 'PropertyGroupName';
+	const PropertyGroupDisplay		= 'PropertyGroupDisplay';
+	
+	const ManufactoryID				= 'ManufactoryID';
 	
 	const Mode						= 'Mode';
 }
