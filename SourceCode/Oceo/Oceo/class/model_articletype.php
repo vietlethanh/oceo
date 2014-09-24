@@ -179,7 +179,7 @@ class Model_ArticleType
 			$whereClause = ' WHERE '.$whereClause;
 		}
 		
-		if($orderBy)
+		if($orderBy && trim($orderBy) != 'Level' )
 		{
 			$orderBy = ' ORDER BY Level,'.$orderBy.'';
 		}
@@ -199,7 +199,7 @@ class Model_ArticleType
 				array($selectField, Model_ArticleType::TBL_SL_ARTICLE_TYPE ,							
 					$whereClause.$orderBy ));
         }
-		//return $strSQL;
+		//echo $strSQL;
 		$arrResult =$this->_objConnection->selectCommand($strSQL);		
 		if(!$arrResult)
 		{

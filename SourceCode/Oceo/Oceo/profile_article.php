@@ -71,35 +71,7 @@ include_once('include/_header.inc');
 										<!--a href="javascript:;" class="reload" title="Reload"></a-->
 									</div>
 									<div class="actions">									
-										<!--div class="btn-group">
-											<a class="btn green" href="#" title="Columns" data-toggle="dropdown">
-												<i class="icon-columns"></i>
-												
-											</a>
-											<div class="dropdown-menu hold-on-click dropdown-checkboxes right column-toggler">
-												<label>
-													<input type="checkbox" checked column-name="Showall">Show all</label>
-												<label>
-													<input type="checkbox" checked column-name="Name">Name</label>
-												<label>
-													<input type="checkbox" checked column-name="Content">Content</label>
-												<label>
-													<input type="checkbox" checked column-name="CreateDate">Create Date</label>
-												<label>
-													<input type="checkbox" checked column-name="ModifiedDate">Modified date</label>
-											</div>
-										</div-->	
-										<!--div class="btn-group">	
-											<a class="btn green" href="#" title="Page Size" data-toggle="dropdown">
-												<i class="icon-list"></i>										
-											</a>
-											<ul class="dropdown-menu right">
-												<li><a href="#">5</a></li>
-												<li><a href="#">10</a></li>
-												<li><a href="#">15</a></li>
-												<li><a href="#">20</a></li>											
-											</ul>
-										</div-->
+										
 									</div>
 								</div>
 								<!---->

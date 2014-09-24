@@ -2,7 +2,7 @@
 /* TODO: Add code here */
 require('config/globalconfig.php');
 
-$_SESSION[global_common::SES_C_CUR_PAGE] = "post_article.php";
+$_SESSION[global_common::SES_C_CUR_PAGE] = "post_product.php";
 
 include_once('include/_permission.inc');
 include_once('include/_header.inc');
@@ -12,32 +12,50 @@ include_once('class/model_comment.php');
 include_once('class/model_user.php');
 include_once('class/model_propertygroup.php');
 include_once('class/model_property.php');
+include_once('class/model_product.php');
+include_once('class/model_manufactory.php');
+include_once('class/model_productproperty.php');
 
 
 $objArticle = new Model_Article($objConnection);
 $objArticleType = new Model_ArticleType($objConnection);
 $objPropertyGroup = new Model_PropertyGroup($objConnection);
 $objProperty = new Model_Property($objConnection);
+$objProduct = new Model_Product($objConnection);
+$objProductProperty = new Model_ProductProperty($objConnection);
+$objManufactory = new Model_Manufactory($objConnection);
+
+//$propertyInfo = $objProduct->getPropertyInfoByID(30);
+
+//print_r($propertyInfo);
+
+
 
 $intMode = 0;//add mode
 $parentTypes = $objArticleType->getAllArticleType(0,null, 'ParentID=0','Level');
-$allTypes = $objArticleType->getAllArticleType(0,null, 'ParentID='.$parentTypes[0][global_mapping::ArticleTypeID] ,'Level');
+$allTypes = $objArticleType->getAllArticleType(0,null, 'ParentID!=0' ,'Level');
 
-$allGroups = $objPropertyGroup->getAllPropertyGroup(0,'*',global_mapping::ArticleTypeID.'=1','`Order`');
+//set default selected section
+$currentParentType = $parentTypes[0][global_mapping::ArticleTypeID];
+
+
+$allGroups = $objPropertyGroup->getAllPropertyGroup(0,'*','', global_mapping::PropertyGroupName);
+
+$allManuFactories = $objManufactory->getAllManufactory(0,'*','', global_mapping::ManufactoryName);
 
 //print_r($allGroups);
 $allGroupIDs = global_common::getArrayColumn($allGroups,global_mapping::PropertyGroupID);
 $strQueryIN = global_mapping::PropertyGroupID .' IN('. global_common::convertToQueryIN($allGroupIDs) .')';
 //echo($allCities);
 $allProperties = $objProperty->getAllProperty(0,'*',$strQueryIN,'`Order`');
-if ($_pgR["aid"])
+if ($_pgR["pid"])
 {
-	$articleID = $_pgR["aid"];
+	$productID = $_pgR["pid"];
 	
-	$article = $objArticle->getArticleByID($articleID);
+	$product = $objProduct->getProductByID($productID);
 	
 	$intMode = 1;//edit mode
-	$createBy = $article[global_mapping::CreatedBy];
+	$createBy = $product[global_mapping::CreatedBy];
 	$currentUserID = $_SESSION[global_common::SES_C_USERINFO][global_mapping::UserID];
 	if($createBy != $currentUserID)
 	{
@@ -45,24 +63,19 @@ if ($_pgR["aid"])
 		return;
 	}
 	//print_r($article[global_mapping::ArticleID]);
-	$currentTypes = $objArticle->getArticleTypesByID($article[global_mapping::ArticleID]);
-	//print_r($currentTypes);
-	$type = $objArticleType->getArticleTypeByID($currentTypes[0]);
+	$currentTypeID = $product[global_mapping::CatalogueID];
+	//print_r($product);
+	$type = $objArticleType->getArticleTypeByID($currentTypeID);
+	//print_r($type);
 	$currentParentType = $type[global_mapping::ParentID];
 	//print_r($currentParentType);
+	//adjust from product id
 	$parentTypes = $objArticleType->getAllArticleType(0,null, 'ParentID=0','Level');
 	
 	$allTypes = $objArticleType->getAllArticleType(0,null, 'ParentID='.$currentParentType ,'Level');
-	//print_r($allTypes);
-	$addresses = global_common::splitString($article[global_mapping::Addresses],';');
-	$districts = global_common::splitString($article[global_mapping::Dictricts],';');
-	$cities = global_common::splitString($article[global_mapping::Cities],';');
 	
-	//print_r($parentTypes);
-	//$intPage = 1;
-	//$total = 0;
-	//$comments = $objComment->getCommentByArticle($intPage,$total,$articleID,'*','',' CreatedDate DESC');
-	//print_r($article);
+	$propertyInfo = $objProduct->getPropertyInfoByID($productID);
+	//echo $product[global_mapping::Description];
 }
 
 ?>
@@ -76,7 +89,7 @@ if ($_pgR["aid"])
 	<form method="POST" class="form-horizontal" id="post-article">
 		<!--Begin Form Input -->
 		<input type="hidden" id="adddocmode" name="adddocmode" value="<?php echo $intMode;?>" />
-		<input type="hidden" id="ArticleID" name="ArticleID" value="<?php echo $articleID;?>" />
+		<input type="hidden" id="ProductID" name="ProductID" value="<?php echo $productID;?>" />
 		<div class="table-post">
 			<div class="control-group">
 				<div class="controls">
@@ -91,7 +104,8 @@ if ($_pgR["aid"])
 			<div class="control-group">
 				<label class="control-label">Lĩnh vực *</label>
 				<div class="controls">	
-					<select class="span6 chosen" name="cmArea" id="cmArea" data-placeholder="Chọn lĩnh vực" tabindex="1" onchange="articleType.bindCategory(this);">
+					<select class="span6 chosen" name="cmArea" id="cmArea" data-placeholder="Chọn lĩnh vực" 
+								tabindex="1" onchange="core.util.bindChosen(this,'cmCategory','ParentID');">
 <?php
 foreach($parentTypes as $item)
 {
@@ -109,65 +123,122 @@ foreach($parentTypes as $item)
 			<div class="control-group">	
 				<label class="control-label">Chuyên Mục *</label>
 				<div class="controls">	
-					<select class="span6 chosen" name="cmCategory" id="cmCategory" data-placeholder="Chọn chuyên mục" multiple="multiple" tabindex="1">
+					<select class="span6 chosen" name="cmCategory" id="cmCategory" data-placeholder="Chọn chuyên mục" 
+						tabindex="1" onchange="core.util.bindChosen(this,'cmManufactory','CategoryID');">
 <?php
 foreach($allTypes as $item)
 {
 	$isSelect = false;
-	//print_r($currentTypes);
-	foreach($currentTypes as $selected)
+	$display='style="display:none"';
+	if($item[global_mapping::ParentID] == $currentParentType)
 	{
-		if($item[global_mapping::ArticleTypeID] == $selected)
+		$display='';
+		//print_r($currentTypes);
+		
+		if($item[global_mapping::ArticleTypeID] == $currentTypeID)
 		{
 			$isSelect=true;
 		}
+		
 	}
-	
 	if($isSelect)
-		echo '			<option selected="selected" value="'.$item[global_mapping::ArticleTypeID].'" >'.$item[global_mapping::ArticleTypeName].'</option>';
+		echo '			<option selected="selected" value="'.$item[global_mapping::ArticleTypeID].
+			'" ParentID="'.$item[global_mapping::ParentID].'" '.$display.'>'.$item[global_mapping::ArticleTypeName].'</option>';
 	else
-		echo '			<option value="'.$item[global_mapping::ArticleTypeID].'" >'.$item[global_mapping::ArticleTypeName].'</option>';
+		echo '			<option value="'.$item[global_mapping::ArticleTypeID].'" ParentID="'.$item[global_mapping::ParentID].'" '.$display.'>'.
+			$item[global_mapping::ArticleTypeName].'</option>';
 }
 ?>
 					</select>
 					<div class="help-inline message"></div>					
 				</div>
 			</div>
-			
+			<div class="control-group">	
+				<label class="control-label">Nhà sản xuất *</label>
+				<div class="controls">	
+					<select class="span6 chosen" name="cmManufactory" id="cmManufactory" data-placeholder="Chọn nhà sản xuất" tabindex="1">
+<?php
+
+foreach($allManuFactories as $item)
+{
+	
+	$isSelect = false;
+	$display='style="display:none"';
+	if($item[global_mapping::CategoryID] == $currentTypeID)
+	{
+		$display='';
+		if($item[global_mapping::ManufactoryID] == $product[global_mapping::ManufactoryID])
+		{
+			$isSelect=true;
+		}
+	}
+	
+	
+	if($isSelect)
+		echo '			<option selected="selected" value="'.$item[global_mapping::ManufactoryID].'" 
+				CategoryID="'.$item[global_mapping::CategoryID].'" '.$display.'>'.$item[global_mapping::ManufactoryName].'</option>';
+	else
+		echo '			<option value="'.$item[global_mapping::ManufactoryID].'" CategoryID="'.$item[global_mapping::CategoryID].'"
+				'.$display.'>'.$item[global_mapping::ManufactoryName].'</option>';
+}
+?>
+					</select>
+					<div class="help-inline message"></div>					
+				</div>
+			</div>
 			<div class="control-group">
 				<label class="control-label">Tên sản phẩm *</label>
 				<div class="controls">
 					<input type="text" name="txtName" id="txtName" class="text span6" maxlength="255"  
-					value="<?php echo $article[global_mapping::Title];?>"/>
+					value="<?php echo $product[global_mapping::ProductName]?>"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">Hình minh họa</label>
 				<div class="controls">
-					<textarea type="text" name="txtImage" id="txtImage" class="text span6" maxlength="255"  
+					<textarea type="text" name="txtImage" id="txtImage" class="text span6" 
 					placeholder="vd: http://i134.photobucket.com/albums/q99/image1.jpg; http://i134.photobucket.com/albums/q99/image1.jpg http://i134.photobucket.com/albums/q99/image3.jpg"  
-					value="<?php echo $article[global_mapping::FileName];?>"></textarea>
+					><?php echo $product[global_mapping::ImageLink] ?></textarea>
 				</div>
 			</div>
 			<div class="control-group property-product">
 				<label class="control-label">Chi tiết kỹ thuật</label>
 				<div class="controls">
 					
-					<select id="optGroup" name="optGroup" class="chosen span2 "  data-placeholder="Chọn nhóm" not-found="Tạo mới" onchange="product.bindGroup(this,'optProperty','PropertyGroupID');">
+					<select id="optGroup" name="optGroup" class="chosen span2 "  data-placeholder="Chọn nhóm" not-found="Tạo mới" onchange="core.util.bindChosen(this,'optProperty','PropertyGroupID');">
 <?php
 foreach($allGroups as $item)
 {
-	echo '			<option value="'.$item[global_mapping::PropertyGroupName].'" PropertyGroupID="'.$item[global_mapping::PropertyGroupID].'">'.$item[global_mapping::PropertyGroupName].'</option>';
+	echo '			<option value="'.$item[global_mapping::PropertyGroupID].'" >'.$item[global_mapping::PropertyGroupName].'</option>';
 }
 ?>
 					</select>
 					<select id="optProperty" name="optProperty"  class="chosen span2" data-placeholder="Chọn thuộc tính" not-found="Tạo mới" >
 <?php
 $display='style="display:none"';
-$display='';
+
 foreach($allProperties as $item)
 {
-	echo '			<option value="'.$item[global_mapping::PropertyName].'" '.$display.'  PropertyGroupID="'.$item[global_mapping::PropertyGroupID].'">'.$item[global_mapping::PropertyName].'</option>';
+	$isExisted = false;
+	foreach($propertyInfo as $iGroup)
+	{
+		//print_r($iGroup);
+		foreach($iGroup['Properties'] as $iProperty)
+		{
+			//echo $iProperty[global_mapping::PropertyID];
+			if($iProperty[global_mapping::PropertyID] == $item[global_mapping::PropertyID])
+			{
+				$isExisted =  true;
+				break;
+			}
+		}
+		if($isExisted)
+		{
+			break;
+		}
+	}
+	if(!$isExisted)
+		echo '			<option value="'.$item[global_mapping::PropertyID].'" '.$display.'  PropertyGroupID="'.$item[global_mapping::PropertyGroupID].'" >'.$item[global_mapping::PropertyName].'</option>';
 }
 ?>
 					</select>	
@@ -178,19 +249,31 @@ foreach($allProperties as $item)
 					<div class="help-inline">Thuộc tính, thành phần, chi tiết kỹ thuật sản phẩm</div>					
 				</div>	
 <?php
-$total = count($addresses);
+$total = count($propertyInfo);
 for($i=0; $i<$total; $i++)
 {
-	echo '		<div class="controls row-item '.($i==0?'no-border':'').'">';
-	echo '			<label class="m-wrap inline span6 lbl-property">';
-	echo '				<span class="property-product-value">'.$addresses[$i].'</span>, <span class="location-district">'.$districts[$i].'</span>, <span class="location-city">'.$cities[$i].'</span>';
-	echo '			<lalel>';
-	echo '			<a onclick="article.clickEDIT(this);" class="btn btn-mini " href="javascript:void(0);"><i class="icon-pencil"></i> Sửa</a> ';
-	echo '			<a onclick="article.clickDELETE(this);" class="btn btn-mini " href="javascript:void(0);"><i class="icon-remove"></i> Xóa</a>';
+	echo '<div class="control-group zone property-group" lbGroupPropertyID="'.$propertyInfo[$i][global_mapping::PropertyGroupID].'" lbGroupPropertyName="'.$propertyInfo[$i][global_mapping::PropertyGroupName].'">';
+	echo '		<div class="controls">';
+	echo '			<h2 class="m-wrap property-zone float-left">'.$propertyInfo[$i][global_mapping::PropertyGroupName].'</h2>';
+	echo '			<a onclick="product.moveUpItem(this,\'property-group\')" class="btn btn-mini float-right" href="javascript:;"><i class="icon-pencil"></i> Lên</a> ';
+	echo '			<a onclick="product.moveDownItem(this,\'property-group\')" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Xuống</a> ';
 	echo '		</div>';
+	foreach($propertyInfo[$i]['Properties'] as $item)
+	{
+		echo	'<div class="controls row-item clear">';
+		echo	'	<label class="m-wrap inline span4 lbl-property">';
+		echo	'		<span class="property-id" lbPropertyID="'.$item[global_mapping::PropertyID].'">'.$item[global_mapping::PropertyName].'</span>: <span class="property-value"> '.$item[global_mapping::PropertyValue].'</span>';
+		echo		'</label>';
+		echo    '	<a onclick="product.moveUpItem(this,\'row-item\')" class="btn btn-mini float-right" href="javascript:;"><i class="icon-pencil"></i> Lên</a> ';
+		echo    '	<a onclick="product.moveDownItem(this,\'row-item\')" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Xuống</a> ';
+		echo	'	<a onclick="product.clickEDIT(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Sửa</a> ';
+		echo	'	<a onclick="product.clickDELETE(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-remove"></i> Xóa</a>';
+		echo	'</div>';
+	}
+	echo '</div>';
 }
 ?>				
-				<div class="control-group zone property-group">
+				<!--div class="control-group zone property-group">
 					<div class="controls">
 						<h2 class="m-wrap property-zone float-left">Group1</h2>
 						<a onclick="product.moveUpItem(this,'property-group')" class="btn btn-mini float-right" href="javascript:;"><i class="icon-pencil"></i> Lên</a> 
@@ -243,12 +326,12 @@ for($i=0; $i<$total; $i++)
 						<a onclick="article.clickDELETE(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-remove"></i> Xóa</a>
 						
 					</div>
-				</div>
+				</div-->
 			</div>
 			<div class="control-group">
 				<label class="control-label">Thông tin sản phẩm *</label>
 				<div class="controls">
-					<textarea class="span6 ckeditor m-wrap" name="txtContent" id="txtContent" rows="10"><?php echo $article[global_mapping::Content];?></textarea>
+					<textarea class="span6 ckeditor m-wrap" name="txtContent" id="txtContent" rows="10"><?php echo $product[global_mapping::Description];?></textarea>
 					<div class="help-inline message"></div>					
 				</div>
 			</div>
