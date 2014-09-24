@@ -54,13 +54,13 @@ class Model_PropertyGroup
 			`PropertyGroupDisplay` = \'{3}\',
 			`ArticleTypeID` = \'{4}\',
 			`Order` = \'{5}\',
-			--`CreatedBy` = \'{6}\',
-			--`CreatedDate` = \'{7}\',
+			#`CreatedBy` = \'{6}\',
+			#`CreatedDate` = \'{7}\',
 			`ModifiedBy` = \'{8}\',
 			`ModifiedDate` = \'{9}\',
-			--`DeletedBy` = \'{10}\',
-			--`DeletedDate` = \'{11}\',
-			--`IsDeleted` = \'{12}\',
+			#`DeletedBy` = \'{10}\',
+			#`DeletedDate` = \'{11}\',
+			#`IsDeleted` = \'{12}\',
 			`Status` = \'{13}\'
 		WHERE `PropertyGroupID` = \'{1}\'  ';
 		   
@@ -183,6 +183,43 @@ class Model_PropertyGroup
 		return $arrResult[0];
 	}
     
+	public function getPropertyGroupByIDs($arrIDs) 
+	{		
+		$arrIDs = global_common::splitString($arrIDs);
+		$strQueryIN = global_common::convertToQueryIN($arrIDs);
+		$whereClause = 'WHERE '.global_mapping::PropertyGroupID.' IN ('.$strQueryIN.')';
+		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE,array('*',
+					self::TBL_SL_PROPERTY_GROUP,$whereClause));
+		//echo $strSQL;
+		$propertyGroups =  $this->_objConnection->selectCommand($strSQL);	
+		
+		if(!$propertyGroups)
+		{
+			global_common::writeLog('get getPropertyGroupByIDs:'.$strSQL,1,$_mainFrame->pPage);
+			return null;
+		}
+		
+		//print_r($arrResult);
+		return $propertyGroups;
+	}
+	
+	public function getPropertyGroupByName($objName,$selectField='*') 
+	{		
+		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+				array($selectField, self::TBL_SL_PROPERTY_GROUP ,							
+					'WHERE PropertyGroupName = \''.$objName.'\' '));
+		//echo '<br>SQL:'.$strSQL;
+		$arrResult =$this->_objConnection->selectCommand($strSQL);		
+		if(!$arrResult)
+		{
+			global_common::writeLog('get sl_property_group ByID:'.$strSQL,1,$_mainFrame->pPage);
+			return null;
+		}
+		//print_r($arrResult);
+		return $arrResult[0];
+	}
+	
+	
     public function getAllPropertyGroup($intPage = 0,$selectField='*',$whereClause='',$orderBy='') 
 	{		
         if($whereClause)
@@ -206,7 +243,7 @@ class Model_PropertyGroup
 				array($selectField, Model_PropertyGroup::TBL_SL_PROPERTY_GROUP ,							
 					$whereClause.$orderBy ));
         }
-		echo '<br>SQL:'.$strSQL;
+		//echo '<br>SQL:'.$strSQL;
 		$arrResult =$this->_objConnection->selectCommand($strSQL);		
 		if(!$arrResult)
 		{

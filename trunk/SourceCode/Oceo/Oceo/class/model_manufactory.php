@@ -4,7 +4,7 @@
  * Modifications will be overwritten when code smith is run
  *
  * PLEASE DO NOT MAKE MODIFICATIONS TO THIS FILE
- * Date Created 5/6/2012
+ * Date Created 5/6/2012 
  *
  */
 
@@ -23,37 +23,41 @@ class Model_Manufactory
     const ACT_CHANGE_PAGE					= 13;
     const ACT_SHOW_EDIT                     = 14;
     const ACT_GET                           = 15;
-    const NUM_PER_PAGE                      = 15;
+    const NUM_PER_PAGE                      = 15;  
     
     const TBL_SL_MANUFACTORY			            = 'sl_manufactory';
 
 	const SQL_INSERT_SL_MANUFACTORY		= 'INSERT INTO `{0}`
 		(
-			ManufactoryID,
-			ManufactoryName,
-			CreatedBy,
-			CreatedDate,
-			ModifiedBy,
-			ModifiedDate,
-			DeletedBy,
-			DeletedDate,
-			IsDeleted
+			`ManufactoryID`,
+			`ManufactoryName`,
+			`CategoryID`,
+			`Order`,
+			`CreatedBy`,
+			`CreatedDate`,
+			`ModifiedBy`,
+			`ModifiedDate`,
+			`DeletedBy`,
+			`DeletedDate`,
+			`IsDeleted`
         )
         VALUES (
-			\'{1}\', \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'{6}\', \'{7}\', \'{8}\', \'{9}\'
+			\'{1}\', \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'{6}\', \'{7}\', \'{8}\', \'{9}\', \'{10}\', \'{11}\'
         );';
         
 	const SQL_UPDATE_SL_MANUFACTORY		= 'UPDATE `{0}`
 		SET  
 			`ManufactoryID` = \'{1}\',
 			`ManufactoryName` = \'{2}\',
-			`CreatedBy` = \'{3}\',
-			`CreatedDate` = \'{4}\',
-			`ModifiedBy` = \'{5}\',
-			`ModifiedDate` = \'{6}\',
-			`DeletedBy` = \'{7}\',
-			`DeletedDate` = \'{8}\',
-			`IsDeleted` = \'{9}\'
+			`CategoryID` = \'{3}\',
+			`Order` = \'{4}\',
+			`CreatedBy` = \'{5}\',
+			`CreatedDate` = \'{6}\',
+			`ModifiedBy` = \'{7}\',
+			`ModifiedDate` = \'{8}\',
+			`DeletedBy` = \'{9}\',
+			`DeletedDate` = \'{10}\',
+			`IsDeleted` = \'{11}\'
 		WHERE `ManufactoryID` = \'{1}\'  ';
 		   
 
@@ -61,6 +65,8 @@ class Model_Manufactory
 
 			`ManufactoryID` ,
 			`ManufactoryName` varchar(50),
+			`CategoryID` ,
+			`Order` ,
 			`CreatedBy` varchar(20),
 			`CreatedDate` ,
 			`ModifiedBy` varchar(20),
@@ -88,14 +94,14 @@ class Model_Manufactory
 	*/
 	public function  Model_Manufactory($objConnection)
 	{
-		$this->_objConnection = $objConnection;
+		$this->_objConnection = $objConnection; 
 		
 	}
     #region
     
     #region Public Functions
     
-    public function insert( $manufactoryname,$createdby,$createddate,$modifiedby,$modifieddate,$deletedby,$deleteddate,$isdeleted)
+    public function insert( $manufactoryname,$categoryid,$order,$createdby,$createddate,$modifiedby,$modifieddate,$deletedby,$deleteddate,$isdeleted)
 	{
 		$intID = global_common::getMaxID(self::TBL_SL_MANUFACTORY);
 		
@@ -103,6 +109,8 @@ class Model_Manufactory
 		$strSQL = global_common::prepareQuery(self::SQL_INSERT_SL_MANUFACTORY,
 				array(self::TBL_SL_MANUFACTORY,$intID,
 						global_common::escape_mysql_string($manufactoryname),
+						global_common::escape_mysql_string($categoryid),
+						global_common::escape_mysql_string($order),
 						global_common::escape_mysql_string($createdby),
 						global_common::escape_mysql_string($createddate),
 						global_common::escape_mysql_string($modifiedby),
@@ -122,13 +130,15 @@ class Model_Manufactory
 		
 	}
     
-    public function update($manufactoryid,$manufactoryname,$createdby,$createddate,$modifiedby,$modifieddate,$deletedby,$deleteddate,$isdeleted)
+    public function update($manufactoryid,$manufactoryname,$categoryid,$order,$createdby,$createddate,$modifiedby,$modifieddate,$deletedby,$deleteddate,$isdeleted)
 	{
 		$strTableName = self::TBL_SL_MANUFACTORY;
 		$strSQL = global_common::prepareQuery(self::SQL_UPDATE_SL_MANUFACTORY,
 				array($strTableName,
 						global_common::escape_mysql_string($manufactoryid),
 						global_common::escape_mysql_string($manufactoryname),
+						global_common::escape_mysql_string($categoryid),
+						global_common::escape_mysql_string($order),
 						global_common::escape_mysql_string($createdby),
 						global_common::escape_mysql_string($createddate),
 						global_common::escape_mysql_string($modifiedby),
@@ -147,8 +157,9 @@ class Model_Manufactory
 		return $intNewID;		
 	}
     
-    public function getManufactoryByID($objID,$selectField='*') 
+    public function getManufactoryByID($objID, $selectField='*') 
 	{		
+        $selectField = $selectField? $selectField : '*'; 
 		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
 				array($selectField, self::TBL_SL_MANUFACTORY ,							
 					'WHERE ManufactoryID = \''.$objID.'\' '));
@@ -164,7 +175,8 @@ class Model_Manufactory
 	}
     
     public function getAllManufactory($intPage = 0,$selectField='*',$whereClause='',$orderBy='') 
-	{		
+	{		    
+        $selectField = $selectField? $selectField : '*'; 
         if($whereClause)
 		{
 			$whereClause = ' WHERE '.$whereClause;
@@ -216,6 +228,8 @@ class Model_Manufactory
                     <thead>
 						<td>ManufactoryID</td>
 						<td>ManufactoryName</td>
+						<td>CategoryID</td>
+						<td>Order</td>
 						<td>CreatedBy</td>
 						<td>CreatedDate</td>
 						<td>ModifiedBy</td>
@@ -231,6 +245,8 @@ class Model_Manufactory
 			$strHTML.='<tr class="'.($i%2==0?'even':'odd').'">
 						<td>'.$arrResult[$i]['ManufactoryID'].'</td>
 						<td>'.$arrResult[$i]['ManufactoryName'].'</td>
+						<td>'.$arrResult[$i]['CategoryID'].'</td>
+						<td>'.$arrResult[$i]['Order'].'</td>
 						<td>'.$arrResult[$i]['CreatedBy'].'</td>
 						<td>'.$arrResult[$i]['CreatedDate'].'</td>
 						<td>'.$arrResult[$i]['ModifiedBy'].'</td>

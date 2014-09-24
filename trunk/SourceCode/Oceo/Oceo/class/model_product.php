@@ -16,94 +16,94 @@ class Model_Product
 {		   
 	#region PRESERVE ExtraMethods For Product
 	#endregion
-    #region Contants	
-    const ACT_ADD							= 10;
-    const ACT_UPDATE						= 11;
-    const ACT_DELETE						= 12;
-    const ACT_CHANGE_PAGE					= 13;
-    const ACT_SHOW_EDIT                     = 14;
-    const ACT_GET                           = 15;
-    const NUM_PER_PAGE                      = 15;
-    
-    const TBL_SL_PRODUCT			            = 'sl_product';
-
+	#region Contants	
+	const ACT_ADD							= 10;
+	const ACT_UPDATE						= 11;
+	const ACT_DELETE						= 12;
+	const ACT_CHANGE_PAGE					= 13;
+	const ACT_SHOW_EDIT                     = 14;
+	const ACT_GET                           = 15;
+	const NUM_PER_PAGE                      = 15;
+	
+	const TBL_SL_PRODUCT			            = 'sl_product';
+	
 	const SQL_INSERT_SL_PRODUCT		= 'INSERT INTO `{0}`
 		(
-			ProductID,
-			ProductName,
-			CatalogueID,
-			ImageLink,
-			ManufactoryID,
-			PaymentModeID,
-			NumberaireID,
-			StorageDate,
-			Price,
-			Amount,
-			Description,
-			CreatedBy,
-			CreatedDate,
-			ModifiedBy,
-			ModifiedDate,
-			DeletedBy,
-			DeletedDate,
-			IsDeleted,
-			Status
-        )
-        VALUES (
-			\'{1}\', \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'{6}\', \'{7}\', \'{8}\', \'{9}\', \'{10}\', \'{11}\', \'{12}\', \'{13}\', \'{14}\', \'{15}\', \'{16}\', \'{17}\', \'{18}\', \'{19}\'
-        );';
-        
+		ProductID,
+		ProductName,
+		CatalogueID,
+		ImageLink,
+		ManufactoryID,
+		PaymentModeID,
+		NumberaireID,
+		StorageDate,
+		Price,
+		Amount,
+		Description,
+		CreatedBy,
+		CreatedDate,
+		ModifiedBy,
+		ModifiedDate,
+		DeletedBy,
+		DeletedDate,
+		IsDeleted,
+		Status
+		)
+		VALUES (
+		\'{1}\', \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'{6}\', \'{7}\', \'{8}\', \'{9}\', \'{10}\', \'{11}\', \'{12}\', \'{13}\', \'{14}\', \'{15}\', \'{16}\', \'{17}\', \'{18}\', \'{19}\'
+		);';
+	
 	const SQL_UPDATE_SL_PRODUCT		= 'UPDATE `{0}`
 		SET  
-			`ProductID` = \'{1}\',
-			`ProductName` = \'{2}\',
-			`CatalogueID` = \'{3}\',
-			`ImageLink` = \'{4}\',
-			`ManufactoryID` = \'{5}\',
-			`PaymentModeID` = \'{6}\',
-			`NumberaireID` = \'{7}\',
-			`StorageDate` = \'{8}\',
-			`Price` = \'{9}\',
-			`Amount` = \'{10}\',
-			`Description` = \'{11}\',
-			--`CreatedBy` = \'{12}\',
-			--`CreatedDate` = \'{13}\',
-			`ModifiedBy` = \'{14}\',
-			`ModifiedDate` = \'{15}\',
-			--`DeletedBy` = \'{16}\',
-			--`DeletedDate` = \'{17}\',
-			--`IsDeleted` = \'{18}\',
-			`Status` = \'{19}\'
+		`ProductID` = \'{1}\',
+		`ProductName` = \'{2}\',
+		`CatalogueID` = \'{3}\',
+		`ImageLink` = \'{4}\',
+		`ManufactoryID` = \'{5}\',
+		`PaymentModeID` = \'{6}\',
+		`NumberaireID` = \'{7}\',
+		`StorageDate` = \'{8}\',
+		`Price` = \'{9}\',
+		`Amount` = \'{10}\',
+		`Description` = \'{11}\',
+		#`CreatedBy` = \'{12}\',
+		#`CreatedDate` = \'{13}\',
+		`ModifiedBy` = \'{14}\',
+		`ModifiedDate` = \'{15}\',
+		#`DeletedBy` = \'{16}\',
+		#`DeletedDate` = \'{17}\',
+		#`IsDeleted` = \'{18}\',
+		`Status` = \'{19}\'
 		WHERE `ProductID` = \'{1}\'  ';
-		   
-
-    const SQL_CREATE_TABLE_SL_PRODUCT		= 'CREATE TABLE `{0}` (
-
-			`ProductID` ,
-			`ProductName` varchar(255),
-			`CatalogueID` varchar(20),
-			`ImageLink` ,
-			`ManufactoryID` varchar(20),
-			`PaymentModeID` varchar(20),
-			`NumberaireID` varchar(20),
-			`StorageDate` ,
-			`Price` ,
-			`Amount` ,
-			`Description` ,
-			`CreatedBy` varchar(20),
-			`CreatedDate` ,
-			`ModifiedBy` varchar(20),
-			`ModifiedDate` ,
-			`DeletedBy` varchar(20),
-			`DeletedDate` ,
-			`IsDeleted` ,
-			`Status` varchar(20),
-			PRIMARY KEY(ProductID)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;';
 	
-    #endregion   
-    
-    #region Variables
+	
+	const SQL_CREATE_TABLE_SL_PRODUCT		= 'CREATE TABLE `{0}` (
+		
+		`ProductID` ,
+		`ProductName` varchar(255),
+		`CatalogueID` varchar(20),
+		`ImageLink` ,
+		`ManufactoryID` varchar(20),
+		`PaymentModeID` varchar(20),
+		`NumberaireID` varchar(20),
+		`StorageDate` ,
+		`Price` ,
+		`Amount` ,
+		`Description` ,
+		`CreatedBy` varchar(20),
+		`CreatedDate` ,
+		`ModifiedBy` varchar(20),
+		`ModifiedDate` ,
+		`DeletedBy` varchar(20),
+		`DeletedDate` ,
+		`IsDeleted` ,
+		`Status` varchar(20),
+		PRIMARY KEY(ProductID)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;';
+	
+	#endregion   
+	
+	#region Variables
 	var $_objConnection;
 	#end region
 	
@@ -121,35 +121,35 @@ class Model_Product
 		$this->_objConnection = $objConnection;
 		
 	}
-    #region
-    
-    #region Public Functions
-    
-    public function insert( $productname,$catalogueid,$imagelink,$manufactoryid,$description,$createdby,$status)
+	#region
+	
+	#region Public Functions
+	
+	public function insert( $productname,$catalogueid,$imagelink,$manufactoryid,$description,$createdby,$status)
 	{
 		$strTableName = self::TBL_SL_PRODUCT;
 		$intID = global_common::getMaxValueofField(global_mapping::ProductID, $strTableName) + 1;
 		$strSQL = global_common::prepareQuery(self::SQL_INSERT_SL_PRODUCT,
 				array(self::TBL_SL_PRODUCT,$intID,
-						global_common::escape_mysql_string($productname),
-						global_common::escape_mysql_string($catalogueid),
-						global_common::escape_mysql_string($imagelink),
-						global_common::escape_mysql_string($manufactoryid),
-						global_common::escape_mysql_string($paymentmodeid),
-						global_common::escape_mysql_string($numberaireid),
-						global_common::escape_mysql_string($storagedate),
-						global_common::escape_mysql_string($price),
-						global_common::escape_mysql_string($amount),
-						global_common::escape_mysql_string($description),
-						global_common::escape_mysql_string($createdby),
-						global_common::nowSQL(),
-						global_common::escape_mysql_string($modifiedby),
-						global_common::escape_mysql_string($modifieddate),
-						global_common::escape_mysql_string($deletedby),
-						global_common::escape_mysql_string($deleteddate),
-						global_common::escape_mysql_string($isdeleted),
-						global_common::escape_mysql_string($status)
-                ));
+					global_common::escape_mysql_string($productname),
+					global_common::escape_mysql_string($catalogueid),
+					global_common::escape_mysql_string($imagelink),
+					global_common::escape_mysql_string($manufactoryid),
+					global_common::escape_mysql_string($paymentmodeid),
+					global_common::escape_mysql_string($numberaireid),
+					global_common::escape_mysql_string($storagedate),
+					global_common::escape_mysql_string($price),
+					global_common::escape_mysql_string($amount),
+					global_common::escape_mysql_string($description),
+					global_common::escape_mysql_string($createdby),
+					global_common::nowSQL(),
+					global_common::escape_mysql_string($modifiedby),
+					global_common::escape_mysql_string($modifieddate),
+					global_common::escape_mysql_string($deletedby),
+					global_common::escape_mysql_string($deleteddate),
+					global_common::escape_mysql_string($isdeleted),
+					global_common::escape_mysql_string($status)
+					));
 		
 		if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_SL_PRODUCT,$this->_objConnection,$strTableName))
 		{
@@ -160,43 +160,43 @@ class Model_Product
 		return $intID;
 		
 	}
-    
+	
 	public function update($productid,$productname,$catalogueid,$imagelink,$manufactoryid,$description,$modifiedby,$status)
 	{
 		$strTableName = self::TBL_SL_PRODUCT;
 		$strSQL = global_common::prepareQuery(self::SQL_UPDATE_SL_PRODUCT,
 				array($strTableName,
-						global_common::escape_mysql_string($productid),
-						global_common::escape_mysql_string($productname),
-						global_common::escape_mysql_string($catalogueid),
-						global_common::escape_mysql_string($imagelink),
-						global_common::escape_mysql_string($manufactoryid),
-						global_common::escape_mysql_string($paymentmodeid),
-						global_common::escape_mysql_string($numberaireid),
-						global_common::escape_mysql_string($storagedate),
-						global_common::escape_mysql_string($price),
-						global_common::escape_mysql_string($amount),
-						global_common::escape_mysql_string($description),
-						null,
-						null,
-						global_common::escape_mysql_string($modifiedby),
-						global_common::nowSQL(),
-						global_common::escape_mysql_string($deletedby),
-						global_common::escape_mysql_string($deleteddate),
-						global_common::escape_mysql_string($isdeleted),
-						global_common::escape_mysql_string($status)
-                ));
-		
+					global_common::escape_mysql_string($productid),
+					global_common::escape_mysql_string($productname),
+					global_common::escape_mysql_string($catalogueid),
+					global_common::escape_mysql_string($imagelink),
+					global_common::escape_mysql_string($manufactoryid),
+					global_common::escape_mysql_string($paymentmodeid),
+					global_common::escape_mysql_string($numberaireid),
+					global_common::escape_mysql_string($storagedate),
+					global_common::escape_mysql_string($price),
+					global_common::escape_mysql_string($amount),
+					global_common::escape_mysql_string($description),
+					null,
+					null,
+					global_common::escape_mysql_string($modifiedby),
+					global_common::nowSQL(),
+					global_common::escape_mysql_string($deletedby),
+					global_common::escape_mysql_string($deleteddate),
+					global_common::escape_mysql_string($isdeleted),
+					global_common::escape_mysql_string($status)
+					));
+		//echo $strSQL;
 		if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_SL_PRODUCT,$this->_objConnection,$strTableName))
 		{
 			//echo $strSQL;
 			global_common::writeLog('Error add sl_product:'.$strSQL,1);
 			return false;
 		}	
-		return $intNewID;		
+		return $productid;		
 	}
-    
-    public function getProductByID($objID,$selectField='*') 
+	
+	public function getProductByID($objID,$selectField='*') 
 	{		
 		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
 				array($selectField, self::TBL_SL_PRODUCT ,							
@@ -211,10 +211,67 @@ class Model_Product
 		//print_r($arrResult);
 		return $arrResult[0];
 	}
-    
-    public function getAllProduct($intPage = 0,$selectField='*',$whereClause='',$orderBy='') 
+	
+	public function getPropertyInfoByID($objID) 
 	{		
-        if($whereClause)
+		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+				array('*', Model_ProductProperty::TBL_SL_PRODUCT_PROPERTY ,							
+					'WHERE ProductID = \''.$objID.'\' '));
+		
+		$arrResult =$this->_objConnection->selectCommand($strSQL);	
+		//echo $strSQL;
+		if(!$arrResult)
+		{
+			global_common::writeLog('get sl_product ByID:'.$strSQL,1,$_mainFrame->pPage);
+			return null;
+		}
+		else
+		{
+			//print_r($arrResult);
+			$propertyIDs = global_common::getArrayColumn($arrResult,global_mapping::PropertyID); 
+			//print_r($propertyIDs);
+			$objProperty = new Model_Property($this->_objConnection);
+			$objPropertyGroup = new Model_PropertyGroup($this->_objConnection);
+			
+			$properties = $objProperty->getPropertyByIDs($propertyIDs);
+			//print_r($properties);
+			$propertyGroupIDs = global_common::getArrayColumn($properties,global_mapping::PropertyGroupID);
+			//print_r($propertyGroupIDs);
+			$propertyGroups = $objPropertyGroup->getPropertyGroupByIDs($propertyGroupIDs);
+			
+			
+			foreach($arrResult as $key => $info)
+			{
+				$arrResult[$info[global_mapping::PropertyID]]=$info;
+				unset($arrResult[$key]);
+			}		
+			//print_r($propertyGroups);
+			$count = count($propertyGroups);
+			
+			for($i=0; $i < $count; $i++)
+			{
+				foreach($properties as $item)
+				{
+					
+					if($item[global_mapping::PropertyGroupID] == $propertyGroups[$i][global_mapping::PropertyGroupID])
+					{
+						//change defaut value  to product property value
+						$item[global_mapping::PropertyValue] = $arrResult[$item[global_mapping::PropertyID]][global_mapping::PropertyValue];
+						$propertyGroups[$i]['Properties'] = $propertyGroups[$i]['Properties']? $propertyGroups[$i]['Properties']: array();
+						$propertyGroups[$i]['Properties'] = array_merge($propertyGroups[$i]['Properties'], array( $item));
+					}
+				}
+			}
+		}
+		//print_r($propertyGroups);
+		return $propertyGroups;
+	}
+	
+	
+	
+	public function getAllProduct($intPage = 0,$selectField='*',$whereClause='',$orderBy='') 
+	{		
+		if($whereClause)
 		{
 			$whereClause = ' WHERE '.$whereClause;
 		}
@@ -223,18 +280,18 @@ class Model_Product
 		{
 			$orderBy = ' ORDER BY '.$orderBy;
 		}
-        if($intPage>0)
-        {
-		    $strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
-				array($selectField, Model_Product::TBL_SL_PRODUCT ,							
-					$whereClause.$orderBy .' limit '.(($intPage-1)* self::NUM_PER_PAGE).','.self::NUM_PER_PAGE));
-        }
-        else
-        {
-            $strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
-				array($selectField, Model_Product::TBL_SL_PRODUCT ,							
-					$whereClause.$orderBy ));
-        }
+		if($intPage>0)
+		{
+			$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+					array($selectField, Model_Product::TBL_SL_PRODUCT ,							
+						$whereClause.$orderBy .' limit '.(($intPage-1)* self::NUM_PER_PAGE).','.self::NUM_PER_PAGE));
+		}
+		else
+		{
+			$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+					array($selectField, Model_Product::TBL_SL_PRODUCT ,							
+						$whereClause.$orderBy ));
+		}
 		//echo '<br>SQL:'.$strSQL;
 		$arrResult =$this->_objConnection->selectCommand($strSQL);		
 		if(!$arrResult)
@@ -245,69 +302,71 @@ class Model_Product
 		//print_r($arrResult);
 		return $arrResult;
 	}
-    
-    public function getListProduct($intPage,$orderBy='ProductID', $whereClause)
+	
+	
+	
+	public function getListProduct($intPage,$orderBy='ProductID', $whereClause)
 	{		
-        if($whereClause)
-        {
-            $whereClause='WHERE'+ $whereClause;						
-        }
-        if($orderBy)
-        {
-            $orderBy='ORDER BY'+ $orderBy;						
-        }
+		if($whereClause)
+		{
+			$whereClause='WHERE'+ $whereClause;						
+		}
+		if($orderBy)
+		{
+			$orderBy='ORDER BY'+ $orderBy;						
+		}
 		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE,array('*',
 					self::TBL_SL_PRODUCT,$orderBy.' '.$whereClause.' limit '.(($intPage-1)* self::NUM_PER_PAGE).','.self::NUM_PER_PAGE));
 		//echo 'sql:'.$strSQL;	
 		$arrResult = $this->_objConnection->selectCommand($strSQL);
 		//print_r($arrResult);
 		$strHTML = '<table class="tbl-list">
-                    <thead>
-						<td>ProductID</td>
-						<td>ProductName</td>
-						<td>CatalogueID</td>
-						<td>ImageLink</td>
-						<td>ManufactoryID</td>
-						<td>PaymentModeID</td>
-						<td>NumberaireID</td>
-						<td>StorageDate</td>
-						<td>Price</td>
-						<td>Amount</td>
-						<td>Description</td>
-						<td>CreatedBy</td>
-						<td>CreatedDate</td>
-						<td>ModifiedBy</td>
-						<td>ModifiedDate</td>
-						<td>DeletedBy</td>
-						<td>DeletedDate</td>
-						<td>IsDeleted</td>
-						<td>Status</td>
-                    </thead>
-                    <tbody>';
+				<thead>
+				<td>ProductID</td>
+				<td>ProductName</td>
+				<td>CatalogueID</td>
+				<td>ImageLink</td>
+				<td>ManufactoryID</td>
+				<td>PaymentModeID</td>
+				<td>NumberaireID</td>
+				<td>StorageDate</td>
+				<td>Price</td>
+				<td>Amount</td>
+				<td>Description</td>
+				<td>CreatedBy</td>
+				<td>CreatedDate</td>
+				<td>ModifiedBy</td>
+				<td>ModifiedDate</td>
+				<td>DeletedBy</td>
+				<td>DeletedDate</td>
+				<td>IsDeleted</td>
+				<td>Status</td>
+				</thead>
+				<tbody>';
 		$icount = count($arrmenu);
 		for($i=0;$i<$icount;$i++)
 		{
 			$strHTML.='<tr class="'.($i%2==0?'even':'odd').'">
-						<td>'.$arrResult[$i]['ProductID'].'</td>
-						<td>'.$arrResult[$i]['ProductName'].'</td>
-						<td>'.$arrResult[$i]['CatalogueID'].'</td>
-						<td>'.$arrResult[$i]['ImageLink'].'</td>
-						<td>'.$arrResult[$i]['ManufactoryID'].'</td>
-						<td>'.$arrResult[$i]['PaymentModeID'].'</td>
-						<td>'.$arrResult[$i]['NumberaireID'].'</td>
-						<td>'.$arrResult[$i]['StorageDate'].'</td>
-						<td>'.$arrResult[$i]['Price'].'</td>
-						<td>'.$arrResult[$i]['Amount'].'</td>
-						<td>'.$arrResult[$i]['Description'].'</td>
-						<td>'.$arrResult[$i]['CreatedBy'].'</td>
-						<td>'.$arrResult[$i]['CreatedDate'].'</td>
-						<td>'.$arrResult[$i]['ModifiedBy'].'</td>
-						<td>'.$arrResult[$i]['ModifiedDate'].'</td>
-						<td>'.$arrResult[$i]['DeletedBy'].'</td>
-						<td>'.$arrResult[$i]['DeletedDate'].'</td>
-						<td><input type="checkbox" onclick="_objProduct.showHide(\''.$arrResult[$i]['ProductID'].'\',\''.$arrResult[$i]['name'].'\',this)" '.($arrResult[$i]['IsDeleted']?'':'checked=checked').' /></td>
-						<td class="lastCell">'.$arrResult[$i]['Status'].'</td>
-					  </tr>';
+					<td>'.$arrResult[$i]['ProductID'].'</td>
+					<td>'.$arrResult[$i]['ProductName'].'</td>
+					<td>'.$arrResult[$i]['CatalogueID'].'</td>
+					<td>'.$arrResult[$i]['ImageLink'].'</td>
+					<td>'.$arrResult[$i]['ManufactoryID'].'</td>
+					<td>'.$arrResult[$i]['PaymentModeID'].'</td>
+					<td>'.$arrResult[$i]['NumberaireID'].'</td>
+					<td>'.$arrResult[$i]['StorageDate'].'</td>
+					<td>'.$arrResult[$i]['Price'].'</td>
+					<td>'.$arrResult[$i]['Amount'].'</td>
+					<td>'.$arrResult[$i]['Description'].'</td>
+					<td>'.$arrResult[$i]['CreatedBy'].'</td>
+					<td>'.$arrResult[$i]['CreatedDate'].'</td>
+					<td>'.$arrResult[$i]['ModifiedBy'].'</td>
+					<td>'.$arrResult[$i]['ModifiedDate'].'</td>
+					<td>'.$arrResult[$i]['DeletedBy'].'</td>
+					<td>'.$arrResult[$i]['DeletedDate'].'</td>
+					<td><input type="checkbox" onclick="_objProduct.showHide(\''.$arrResult[$i]['ProductID'].'\',\''.$arrResult[$i]['name'].'\',this)" '.($arrResult[$i]['IsDeleted']?'':'checked=checked').' /></td>
+					<td class="lastCell">'.$arrResult[$i]['Status'].'</td>
+					</tr>';
 		}
 		$strHTML.='</tbody></table>';
 		
@@ -315,7 +374,7 @@ class Model_Product
 				"_objMenu.changePage")."</div>";
 		return $strHTML;
 	}
-    
-    #endregion   
+	
+	#endregion   
 }
 ?>

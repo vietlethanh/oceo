@@ -39,11 +39,7 @@ if ($_pgR["act"] == Model_Product::ACT_ADD || $_pgR["act"] == Model_Product::ACT
 		$status = 1;
 		if($_pgR["act"] == Model_Product::ACT_ADD)
 		{
-			
-			
 			$createdBy = $c_userInfo[global_mapping::UserID];
-			
-			
 			$resultID = $objProduct->insert($productName,$catalogueID,$imageLink,$manufactoryID,$description,$createdBy,$status);
 			if ($resultID)
 			{
@@ -53,15 +49,38 @@ if ($_pgR["act"] == Model_Product::ACT_ADD || $_pgR["act"] == Model_Product::ACT
 					$group = $item[global_mapping::PropertyGroupID];
 					
 					$groupID = global_common::convertToInt($group);
+					//is new group
 					if($groupID<=0)
 					{
-						$groupID = $objPropertyGroup->insert($group,$group,$catalogueID,$item[global_mapping::Order],$createdBy,null);
+						$searchGroup = $objPropertyGroup->getPropertyGroupByName($group);
+						if($searchGroup)
+						{
+							$groupID = $searchGroup[global_mapping::PropertyGroupID];
+						}
+						else
+						{
+							$groupID = $objPropertyGroup->insert($group,$group,$catalogueID,$item[global_mapping::Order],$createdBy,null);
+						}
 					}
 					
-					$propertyID = $objProperty->insert($groupID,$item[global_mapping::PropertyName],
-							$item[global_mapping::PropertyValue],
-							null,
-							$createdBy,null);
+					$propertyName = $item[global_mapping::PropertyID];
+					$propertyID = global_common::convertToInt($propertyName);
+					//if is real propery name
+					if($propertyID <= 0 )
+					{
+						$searchProperty = $objProperty->getPropertyByName($groupID, $propertyName);
+						if($searchProperty)
+						{
+							$propertyID = $searchProperty[global_mapping::PropertyID];
+						}
+						else
+						{
+							$propertyID = $objProperty->insert($groupID,$propertyName,
+									null,
+									null,
+									$createdBy,null);
+						}
+					}
 					if($propertyID)
 					{
 						$objProductProperty->insert($resultID,$propertyID,$item[global_mapping::PropertyValue],$item[global_mapping::Order]);
@@ -86,29 +105,77 @@ if ($_pgR["act"] == Model_Product::ACT_ADD || $_pgR["act"] == Model_Product::ACT
 		else
 		{
 			$modifiedBy = $c_userInfo[global_mapping::UserID];
-			$articleID = html_entity_decode($_pgR[global_mapping::ArticleID],ENT_COMPAT ,'UTF-8' );
-			$currentArticle = $objArticle->getArticleByID($articleID);
-			$resultID = $objArticle->update($articleID,null,$title,$fileName,$catalogueID, $content,null,$tags,null,null,$currentArticle[global_mapping::CreatedBy],
-					$currentArticle[global_mapping::CreatedDate],$modifiedBy,global_common::nowSQL(),null,null,0,null,null,
-					$currentArticle[global_mapping::RenewedDate], $currentArticle[global_mapping::RenewedNum],
-					$companyName,$companyAddress,$companyWebsite,$companyPhone,$adType,$startDate,$endDate,$happyDays,
-					$startHappyHour,$endHappyHour, $addresses,$dictricts,$cities);
+			$productID = html_entity_decode($_pgR[global_mapping::ProductID],ENT_COMPAT ,'UTF-8' );
+			$resultID = $objProduct->update($productID, $productName,$catalogueID,$imageLink,$manufactoryID,$description,$modifiedBy,null );
 			if ($resultID)
 			{
-				$arrHeader = global_common::getMessageHeaderArr($banCode);//$banCode
-				echo global_common::convertToXML(
-						$arrHeader, array("rs", "inf"), 
-						array(1, 'Cập nhật thành công'), 
-						array( 0, 1 )
-						);
-				return;
+				//delete old property and propery value
+				$isDeleted = global_common::deleteObject($resultID,global_mapping::ProductID,Model_ProductProperty::TBL_SL_PRODUCT_PROPERTY,$objConnection);
+				if($isDeleted)
+				{
+					foreach($properties as $item)
+					{
+						$group = $item[global_mapping::PropertyGroupID];
+						
+						$groupID = global_common::convertToInt($group);
+						//is new group
+						if($groupID<=0)
+						{
+							$searchGroup = $objPropertyGroup->getPropertyGroupByName($group);
+							if($searchGroup)
+							{
+								$groupID = $searchGroup[global_mapping::PropertyGroupID];
+							}
+							else
+							{
+								$groupID = $objPropertyGroup->insert($group,$group,$catalogueID,$item[global_mapping::Order],$createdBy,null);
+							}
+						}
+						
+						$propertyName = $item[global_mapping::PropertyID];
+						$propertyID = global_common::convertToInt($propertyName);
+						//if is real propery name
+						if($propertyID <= 0 )
+						{
+							$searchProperty = $objProperty->getPropertyByName($groupID, $propertyName);
+							if($searchProperty)
+							{
+								$propertyID = $searchProperty[global_mapping::PropertyID];
+							}
+							else
+							{
+								$propertyID = $objProperty->insert($groupID,$propertyName,
+										null,
+										null,
+										$createdBy,null);
+							}
+						}
+						if($propertyID)
+						{
+							$objProductProperty->insert($resultID,$propertyID,$item[global_mapping::PropertyValue],$item[global_mapping::Order]);
+						}
+					}
+					
+					$arrHeader = global_common::getMessageHeaderArr($banCode);//$banCode
+					echo global_common::convertToXML(
+							$arrHeader, array("rs", "inf"), 
+							array(1, 'Cập nhật thành công'), 
+							array( 0, 1 )
+							);
+					return;
+				}
+				else
+				{
+					echo global_common::convertToXML($arrHeader, array("rs","inf"), array(0,"Input data is invalid"), array(0,1));
+					return;
+				}
 			}
 			else
 			{
 				echo global_common::convertToXML($arrHeader, array("rs","inf"), array(0,"Input data is invalid"), array(0,1));
 				return;
 			}
-		}
+		}//end check act
 	}
 	else
 	{

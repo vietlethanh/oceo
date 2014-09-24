@@ -59,10 +59,12 @@ require('config/globalconfig.php');
 <script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('bootstrap-modal/js/bootstrap-modal.js');?>"></script>
 <script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('bootstrap-modal/js/bootstrap-modalmanager.js');?>"></script>
 
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyD99k32UTA3js7a2aaSbAmJxwwO2K5QIpk&sensor=true"></script>
-<script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('gmaps/gmaps.js');?>"></script>
+<!--script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyD99k32UTA3js7a2aaSbAmJxwwO2K5QIpk&sensor=true"></script>
+<script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('gmaps/gmaps.js');?>"></script-->
 
-
+<script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('Jssor.Slider/jssor.core.js');?>"></script>
+<script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('Jssor.Slider/jssor.utils.js');?>"></script>
+<script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('Jssor.Slider/jssor.slider.js');?>"></script>
 
 <link type="text/css" rel="stylesheet"  href="<?php echo $_objSystem->locateJPlugin('theme/css/style.css');?>">
 
@@ -102,9 +104,7 @@ $arrCategories =  $objArticleType->getAllArticleType(0,null,'`ParentID`=0','Leve
 
 <body >
 
-<script type="text/javascript" src="../js2/jssor.core.js"></script>
-<script type="text/javascript" src="../js2/jssor.utils.js"></script>
-<script type="text/javascript" src="../js2/jssor.slider.js"></script>
+
 <div id="main" class="home-page">
     <!--div id="subcontent" -->
     <div id="header" >

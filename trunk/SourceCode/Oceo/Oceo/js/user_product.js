@@ -32,45 +32,10 @@ var product = {
     
     //region Public Functions
     
-    getArticleInfo: function() {
+    getProductInfo: function() {
         core.util.disableControl("btnOK", true);
         var isValid = true;
-		var controlID = 'txtCompanyName';		
-		var companyName = core.util.getObjectValueByID(controlID);
-		 core.util.validateInputTextBox(controlID,'');
-		if(core.util.isNull(companyName)){
-			 core.util.validateInputTextBox(controlID,'Tên đơn vị không được rỗng', isValid);
-			isValid =  false;
-		}else if (companyName.length > 255) {
-			 core.util.validateInputTextBox(controlID,'Tên đơn vị phải ngắn hơn 255 ký tự', isValid);
-			isValid =  false;
-		}
-		
-		controlID = 'txtCompanyAddress';		
-		var companyAddress = core.util.getObjectValueByID(controlID);
-		 core.util.validateInputTextBox(controlID,'');
-		if(core.util.isNull(companyAddress)){
-			 core.util.validateInputTextBox(controlID,'Địa chỉ không được rỗng', isValid);
-			isValid =  false;
-		}else if (companyAddress.length > 255) {
-			 core.util.validateInputTextBox(controlID,'Địa chỉ phải ngắn hơn 255 ký tự', isValid);
-			isValid =  false;
-		}
-		
-		controlID = 'txtCompanyPhone';		
-		var companyPhone = core.util.getObjectValueByID(controlID);
-		 core.util.validateInputTextBox(controlID,'');
-		if(core.util.isNull(companyPhone)){
-			core.util.validateInputTextBox(controlID,'Số điện thoại không được rỗng', isValid);
-			isValid =  false;
-		}else if (!core.util.isPhoneNumber(companyPhone)) {
-			core.util.validateInputTextBox(controlID,'Số điện thoại không hợp lệ', isValid);
-			isValid =  false;
-		}else if (companyPhone.length > 50) {
-			core.util.validateInputTextBox(controlID,'Số điện thoại phải ngắn hơn 50 ký tự', isValid);
-			isValid =  false;
-		}
-		
+	
 		controlID = 'cmArea';		
 		var areas = core.util.getObjectValueByID(controlID);
 		core.util.validateInputTextBox(controlID,'');
@@ -87,83 +52,60 @@ var product = {
 			isValid =  false;
 		}
 		
-		controlID = 'txtAdTypeValue';		
-		var adType = core.util.getObjectValueByID(controlID);
+		controlID = 'cmManufactory';		
+		var manufactory = core.util.getObjectValueByID(controlID);
 		core.util.validateInputTextBox(controlID,'');
-		if(core.util.isNull(adType)){
-			core.util.validateInputTextBox(controlID,'Loại khuyến mãi không được rỗng', isValid);
+		if(core.util.isNull(manufactory)){
+			 core.util.validateInputTextBox(controlID,'Bạn chưa chọn nhà sản xuất', isValid);
 			isValid =  false;
 		}
 		
-		controlID = 'txtStartDate';		
-		var startDate = core.util.getObjectValueByID(controlID);
-		core.util.validateInputTextBox(controlID,'');
-		
-		if (core.util.isNull(startDate)) {
-            core.util.validateInputTextBox(controlID, 'Ngày bắt đầu không được rỗng', isValid);
-            isValid = false;
-        } else if (core.util.validateDateTime(startDate) == false) {
-			 core.util.validateInputTextBox(controlID, 'Ngày bắt đầu không hợp lệ', isValid);
-			 isValid = false;
-        }		
-		
-		controlID = 'txtEndDate';		
-		var endDate = core.util.getObjectValueByID(controlID);
-		core.util.validateInputTextBox(controlID,'');
-		
-		if (core.util.isNull(endDate)) {
-            core.util.validateInputTextBox(controlID, 'Ngày kết thúc không được rỗng', isValid);
-            isValid = false;
-        } else if (core.util.validateDateTime(endDate) == false) {
-			 core.util.validateInputTextBox(controlID, 'Ngày kết thúc không hợp lệ', isValid);
-			 isValid = false;
-        }else if (new Date(core.util.formatDateTimeVN(startDate)) >= new Date(core.util.formatDateTimeVN(endDate)) ) {
-			 core.util.validateInputTextBox(controlID, 'Ngày kết thúc phải sau ngày bắt đầu', isValid);
-			 isValid = false;
-        }	
-		
-		controlID = 'txtHappyFrom';				
-		var happyFrom = core.util.getObjectValueByID(controlID);
-		var happyTo = core.util.getObjectValueByID('txtHappyTo');
-		core.util.validateInputTextBox(controlID,'');
-		if (!core.util.isNull(happyFrom) && !core.util.isNull(happyTo) && !core.util.compareTime(happyFrom,happyTo)) {
-             core.util.validateInputTextBox(controlID, 'Thời gian hết thúc Happy Hours phải sau thời gian bắt đầu Happy Hours', isValid);
-            isValid = false;
-        }	
 		
 		controlID = 'txtName';		
-		var adName = core.util.getObjectValueByID(controlID);
+		var productName = core.util.getObjectValueByID(controlID);
 		core.util.validateInputTextBox(controlID,'');
-		if(core.util.isNull(adName)){
-			core.util.validateInputTextBox(controlID,'Tên khuyến mãi không được rỗng', isValid);
+		if(core.util.isNull(productName)){
+			core.util.validateInputTextBox(controlID,'Tên sản phẩm không được rỗng', isValid);
 			isValid =  false;
-		}else if (adName.length > 255) {
-			 core.util.validateInputTextBox(controlID,'Tên khuyến mãi phải ngắn hơn 255', isValid);
+		}else if (productName.length > 255) {
+			 core.util.validateInputTextBox(controlID,'Tên sản phẩm phải ngắn hơn 255', isValid);
 			isValid =  false;
 		}
-		var btnAdd = core.util.getObjectByClass('address-article .btn-add');
+		var btnAdd = core.util.getObjectByClass('property-product .btn-add');
 		btnAdd.click();
-		controlID = 'txtAddressArticle';
+		controlID = 'txtPropertyValue';
 		core.util.validateInputTextBox(controlID,'');
-		
-		var addresses='';
-		var districts = '';
-		var cities = '';
-		if(core.util.getObjectByClass('location-district').length >=1 )
+		var properties= [];
+	  
+	  
+		var propertyGroupID='';
+		var propertyID = '';
+		var propertyValue = '';
+		if(core.util.getObjectByClass('property-group').length >=1 )
 		{
-			core.util.getObjectByClass('location-address').each(function(){
-				var text = ($(this).text()+"").replace(';',',');
-				addresses += text + ";";
-			})
-			
-			core.util.getObjectByClass('location-district').each(function(){
-				var text = ($(this).text()+"").replace(';',',');
-				districts += text + ";";
-			})
-			
-			core.util.getObjectByClass('location-city').each(function(){
-				var text = ($(this).text()+"").replace(';',',');
-				cities += text + ";";
+			$('.property-group').each(function(){
+				var propertyGroupID = $(this).attr('lbGroupPropertyID');
+				if(typeof(propertyGroupID) == 'undefined' || propertyGroupID== 'undefined' || propertyGroupID=='')
+				{
+				    //get new property group name
+				    propertyGroupID = $(this).attr('lbGroupPropertyName')
+				}
+				$(this).find('.row-item').each( function(){
+				    propertyID = $(this).find('.property-id').attr('lbpropertyid');
+				    if(typeof(propertyID) == 'undefined' || propertyID== 'undefined' || propertyID=='')
+				    {
+				        //get new property name
+				        propertyID = $(this).find('.property-id').text();
+				    }
+				    propertyValue = $(this).find('.property-value').text();
+                    property = 
+                    {
+                        PropertyGroupID: propertyGroupID,
+                        PropertyID: propertyID,
+                        PropertyValue: propertyValue
+                    };
+                    properties.push(property);
+				});
 			})
 		}
 		
@@ -172,6 +114,14 @@ var product = {
 		core.util.validateInputTextBox(controlID,'');
 		if(core.util.isNull(controlID)){
 			core.util.validateInputTextBox(controlID,'Nội dung khuyến mãi không được rỗng', isValid);
+			isValid =  false;
+		}
+
+        controlID = 'txtContent';		
+		var content = CKEDITOR.instances[controlID].getData()
+		core.util.validateInputTextBox(controlID,'');
+		if(core.util.isNull(content)){
+			core.util.validateInputTextBox(controlID,'Thông tin sản phẩm không được rỗng', isValid);
 			isValid =  false;
 		}
 
@@ -184,68 +134,25 @@ var product = {
 			core.util.disableControl("btnOK", false);
             return;
         }
-		var articleInfo = 
+		var productInfo = 
 		{
-			 Title: adName,
-			 Content: content,
-			 Tags:core.util.getObjectValueByID('txtTags'),
-			 CatalogueID:categories,
-			 SectionID: areas,			 
-			 CompanyName:companyName,
-			 CompanyAddress:companyAddress,
-			 CompanyWebsite:core.util.getObjectValueByID('txtCompanySite'),
-			 CompanyPhone:companyPhone,
-			 AdType:adType,
-			 StartDate: startDate,
-			 EndDate: endDate,
-			 HappyDays:core.util.getObjectValueByID('cmHappyDays'),
-			 StartHappyHour: happyFrom,
-			 EndHappyHour: happyTo,
-			 Addresses:addresses,
-			 Dictricts:districts,
-			 Cities: cities,
-			 FileName: core.util.getObjectValueByID('txtImage'),
-			 ArticleID: core.util.getObjectValueByID('ArticleID'),
-			 Mode: core.util.getObjectValueByID('adddocmode')
+		    Description: content,
+            CatalogueID: categories,			 
+            ManufactoryID: manufactory,
+            ProductName: productName,
+            ImageLink: core.util.getObjectValueByID('txtImage'),
+            Properties: properties,
+            ProductID: core.util.getObjectValueByID('ProductID'),
+            Mode: core.util.getObjectValueByID('adddocmode')
 		};
-		return articleInfo;
+		
+		
+		return productInfo;
     },
 	
 	postProduct: function() {  
-	    //var productInfo = this.getProductInfo();
-	    var property = 
-	    {
-	        PropertyGroupID: 'newgroup',
-	        PropertyName: 'name1',
-	        PropertyValue: 'value1'
-	    };
-	    var properties= [];
-	    properties.push(property);
-	    property = 
-	    {
-	        PropertyGroupID: 1,
-	        PropertyName: 'name2',
-	        PropertyValue: 'value2'
-	    };
-	    properties.push(property);
-	    property = 
-	    {
-	        PropertyGroupID: 3,
-	        PropertyName: 'name3',
-	        PropertyValue: 'value3'
-	    };
-	    properties.push(property);
-		var productInfo = 
-		{
-			 Properties: properties,
-			 ProductName:'ProductName',
-			 CatalogueID:'1',
-			 ImageLink: 'ImageLink1,ImageLink2,ImageLin3',
-			 ManufactoryID: '1',
-			 Description:'Description Description Description ',
-			 Mode: core.util.getObjectValueByID('adddocmode')
-		};
-		
+	    var productInfo = this.getProductInfo();
+	    
 		if(core.util.isNull(productInfo))
 		{
 			return false;
@@ -288,21 +195,6 @@ var product = {
 	
 	clearForm: function()
 	{
-		var controlID = 'txtCompanyName';		
-		core.util.clearValue(controlID);
-		
-		
-		controlID = 'txtCompanyAddress';		
-		core.util.clearValue(controlID);
-		
-		controlID = 'txtCompanySite';		
-		core.util.clearValue(controlID);
-		
-		
-		controlID = 'txtCompanyPhone';		
-		core.util.clearValue(controlID);
-		
-		
 		controlID = 'cmArea';	
 		core.util.deSelectOption(controlID);
 		
@@ -310,17 +202,8 @@ var product = {
 		controlID = 'cmCategory';	
 		core.util.deSelectOption(controlID);		
 		
-		controlID = 'txtAdTypeValue';	
-		core.util.clearValue(controlID);
-		
-		controlID = 'txtStartDate';	
-		core.util.clearValue(controlID);		
-					
-		controlID = 'txtEndDate';		
-		core.util.clearValue(controlID);			
-		
-		controlID = 'txtHappyFrom';		
-		core.util.clearValue(controlID);			
+		controlID = 'cmManufactory';	
+		core.util.deSelectOption(controlID);	
 		
 		controlID = 'txtName';		
 		core.util.clearValue(controlID);	
@@ -328,28 +211,21 @@ var product = {
 		controlID = 'txtImage';		
 		core.util.clearValue(controlID);		
 		
-		controlID = 'cmHappyDays';	
-		core.util.deSelectOption(controlID);		
+		controlID = 'optGroup';		
+		core.util.deSelectOption(controlID);
+		controlID = 'optProperty';		
+		core.util.deSelectOption(controlID);
 		
-		controlID = 'txtHappyFrom';		
-		core.util.clearValue(controlID);			
-		
-		controlID = 'txtHappyTo';		
-		core.util.clearValue(controlID);
-		
-		controlID = 'txtAddressArticle';		
+			
+		controlID = 'txtPropertyValue';		
 		core.util.clearValue(controlID);		
-		controlID = 'optCity';		
-		core.util.deSelectOption(controlID);
-		controlID = 'optDistrict';		
-		core.util.deSelectOption(controlID);
-		$('.row-item').remove();
+		
+		$('.property-group').remove();
 					
 		controlID = 'txtContent';		
 		var content = CKEDITOR.instances[controlID].setData('');
 		
-		controlID = 'txtTags';		
-		core.util.clearValue(controlID);		
+				
 	},
 	
 	addProperty: function(obj) {
@@ -358,13 +234,18 @@ var product = {
 		var	propertyValue = core.util.getObjectValueByID('txtPropertyValue');
 		propertyValue = core.util.removeAll(propertyValue,"'");
 		propertyValue = core.util.removeAll(propertyValue,"\"");
-		var	group =  core.util.getObjectValueByID('optGroup');
+		var	group =  $('#optGroup option:selected').text();
 		group = core.util.removeAll(group,"'");
 		group = core.util.removeAll(group,"\"");
-		var	propertyName = core.util.getObjectValueByID('optProperty');
+		var	propertyID = $('#optProperty option:selected').val();
+		var	propertyName = $('#optProperty option:selected').text();
 		propertyName = core.util.removeAll(propertyName,"'");
 		propertyName = core.util.removeAll(propertyName,"\"");
 		core.util.validateInputTextBox('txtPropertyValue','');
+		
+		selecteProperty = $('#optProperty option:selected');
+		//selecteGroup = $('#optGroup option:selected');
+		
 		if (propertyValue == '') {
 			core.util.validateInputTextBox('txtPropertyValue','Bạn chưa nhập giá trị thuộc tính');
 			return;
@@ -374,19 +255,48 @@ var product = {
 		{
 			classNoborder ='no-border';
 		}
-		var newRow = $('<div class="controls row-item '+classNoborder+'">'+
-						'<label class="m-wrap inline span6 lbl-property">'+
-							'<span class="property-group"> ' + group + '</span> ' +
-							'<span class="property-name">' + propertyName + ':</span> ' +
-							'<span class="property-value">' + propertyValue + '</span>' +
-						' </label>' +
-						'<a href="javascript:void(0);" class="btn btn-mini " onclick="product.clickEDIT(this);"><i class="icon-pencil"></i> Sửa</a> ' +
-						'<a href="javascript:void(0);" class="btn btn-mini " onclick="product.clickDELETE(this);"><i class="icon-remove"></i> Xóa</a>'+
-					'</div>'	
-		);
-		root.append(newRow);
+		var isExistedGroup = false;
+        $(".property-group h2.property-zone").each(function(){
+            if($(this).html() == group)
+            {
+                var newRow = $('<div class="controls row-item clear">'+
+						'<label class="m-wrap inline span4 lbl-property">'+
+							 '<span class="property-id" lbPropertyID="'+propertyID+'">'+propertyName+'</span>: <span class="property-value"> '+propertyValue+'</span>'+
+						'</label>'+
+						'<a onclick="product.moveUpItem(this,\'row-item\')" class="btn btn-mini float-right" href="javascript:;"><i class="icon-pencil"></i> Lên</a> '+
+						'<a onclick="product.moveDownItem(this,\'row-item\')" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Xuống</a> '+
+						'<a onclick="product.clickEDIT(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Sửa</a> '+
+						'<a onclick="product.clickDELETE(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-remove"></i> Xóa</a>'+
+					'</div>');
+                $(this).closest('.property-group').append(newRow);
+                isExistedGroup= true;
+                
+            }
+        });
+		if(!isExistedGroup)
+		{
+		    var newRow = $('<div class="control-group zone property-group" lbGroupPropertyID="'+selecteProperty.attr('PropertyGroupID')+'" lbGroupPropertyName="'+group+'">'+
+					        '<div class="controls">'+
+						        '<h2 class="m-wrap property-zone float-left">'+group+'</h2>'+
+						        '<a onclick="product.moveUpItem(this,\'property-group\')" class="btn btn-mini float-right" href="javascript:;"><i class="icon-pencil"></i> Lên</a> '+
+						        '<a onclick="product.moveDownItem(this,\'property-group\')" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Xuống</a> '+
+					        '</div>'+
+					        '<div class="controls row-item clear">'+
+						        '<label class="m-wrap inline span4 lbl-property">'+
+							        '<span class="property-id" lbPropertyID="'+propertyID+'">'+propertyName+'</span>: <span class="property-value"> '+propertyValue+'</span>'+
+						        '</label>'+
+						        '<a onclick="product.moveUpItem(this,\'row-item\')" class="btn btn-mini float-right" href="javascript:;"><i class="icon-pencil"></i> Lên</a> '+
+						        '<a onclick="product.moveDownItem(this,\'row-item\')" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Xuống</a> '+
+						        '<a onclick="product.clickEDIT(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Sửa</a> '+
+						        '<a onclick="product.clickDELETE(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-remove"></i> Xóa</a>'+
+					        '</div>'+
+				        '</div>	');
+		    root.append(newRow);
+		}
+		$('#optProperty option[value="'+propertyID+'"]').remove();
+		$('#optProperty').trigger("liszt:updated");
 		core.util.focusControl('txtPropertyValue');
-		this.clearInputLocation();
+		this.clearInputProperty();
 	},
 	showMap: function(obj)
 	{		
@@ -452,42 +362,32 @@ var product = {
 		
 	},
 	clickDELETE: function (obj) {
+		var root =  $(obj).closest('.property-group');
 		var parent = $(obj).parent();
-		var address =  $.trim(parent.find('.location-address').html());
-		var city =  $.trim(parent.find('.location-city').html());
-		var district =  $.trim(parent.find('.location-district').html());
-		var location = address + ', ' + district+ ', ' + city;
+		var	propertyName = $(parent).find('.property-id').text();
+		propertyName = core.util.removeAll(propertyName,"'");
+		var group =  $.trim($(obj).closest('.property-group').attr('lbGroupPropertyID'));
 		$('<div></div>').appendTo('body')
-		  .html('<div><span class="icon icon-warning-sign"></span><h6>Bạn đang xóa địa điểm '+ location +'?</h6></div>')
+		  .html('<div><span class="icon icon-warning-sign"></span><h6>Bạn đang xóa thuộc tính '+ propertyName +'?</h6></div>')
 		  .dialog({
 			  modal: true,
 			  title: 'Thông báo', 
 			  zIndex: 10000, 
 			  autoOpen: true,
-			  width: 'auto', 
+			  width: '320px', 
 			  resizable: false,
 			  dialogClass: 'ui-dialog-yellow',
-			  /*buttons: {
-				  Yes: function () {
-						
-					  $(this).dialog("close");
-				  },
-				  No: function () {
-					  $(this).dialog("close");
-				  }
-			  },
-			  */
 			  buttons: [
 				{
 					'class' : 'btn red',	
 					"text" : "Xóa",
 					click: function() {
-						if($(obj).parent().hasClass('no-border') && !core.util.isNull($(obj).parent().next('.row-item')))
-						{
-							$(obj).parent().next('.row-item').addClass('no-border');
-						}
-						$(obj).parent().remove();
-						$(this).dialog( "close" );
+                        parent.remove();
+                        if($(root).find('.row-item').length < 1)
+                        {
+                            $(root).remove();
+                        }
+                        $(this).dialog( "close" );
 					}
 				},
 				{
@@ -509,17 +409,18 @@ var product = {
 		
 	},
 	
-	clearInputLocation: function()
+	clearInputProperty: function()
 	{
-		core.util.clearValue('txtAddressArticle');
-		core.util.deSelectOption('optCity');
-		core.util.deSelectOption('optDistrict');
-		core.util.hideOptions('optDistrict');		
+		core.util.clearValue('txtPropertyValue');
+		//core.util.deSelectOption('optGroup');
+		$('#optProperty option[isUpdate="true"]').remove();
+		//core.util.deSelectOption('optProperty');
+		//core.util.hideOptions('optProperty');		
 	},
 	
 	showEditMode: function(isEdit)
 	{
-		var root = $('div.address-article');
+		var root = $('div.property-product');
 		if(isEdit)
 		{
 			root.find('.btn-add').removeClass("display").addClass("no-display");
@@ -534,7 +435,7 @@ var product = {
 	},
 	
 	cancelLocation: function (obj) {
-		this.clearInputLocation();
+		this.clearInputProperty();
 		this.showEditMode(false);
 		var parent = $(obj).parent();
 		var root = $('div.address-article');
@@ -542,45 +443,110 @@ var product = {
 	},
 	clickEDIT: function (obj) {
 		
-		var root = $('div.address-article');
+		var root = $('div.property-product');
 		var parent = $(obj).parent();
 		root.find('.row-item').removeClass('updating');
 		parent.addClass("updating");
-		var address =  $.trim(parent.find('.location-address').html());
-		var city =  $.trim(parent.find('.location-city').html());
-		var district =  $.trim(parent.find('.location-district').html());
+		var group =  $.trim($(obj).closest('.property-group').attr('lbGroupPropertyID'));
+		var property =  $.trim(parent.find('.property-id').attr('lbPropertyID'));
+		var propertyName =  $.trim(parent.find('.property-id').html());
+		var propertyValue =  $.trim(parent.find('.property-value').html());
 		
-		core.util.getObjectByID('txtAddressArticle').val(address);
-		optCity = core.util.getObjectByID('optCity').find('option');
-		$("#optCity option[value='"+city+"']").attr("selected", "selected");
-		$("#optCity").trigger("liszt:updated");
-		$("#optCity").change();
-		core.util.getObjectByID('optDistrict').val(district);		
-		$("#optDistrict").trigger("liszt:updated");
+		core.util.getObjectByID('txtPropertyValue').val(propertyValue);
+		optCity = core.util.getObjectByID('optGroup').find('option');
+		$("#optGroup option[value='"+group+"']").attr("selected", "selected");
+		$("#optGroup").trigger("liszt:updated");
+		$("#optGroup").change();
+		
+		$('#optProperty option[isUpdate="true"]').remove();
+		var newOpt= $('<option isUpdate="true" value="'+property+'" selected=selected PropertyGroupID="'+group+'" >'+propertyName+'</option>');
+		$('#optProperty').append(newOpt);
+		core.util.getObjectByID('optProperty').val(property);		
+		$("#optProperty").trigger("liszt:updated");
 		
 		this.showEditMode(true);
 	},
 
-	updateLocation: function (obj) {
-		var root = $('div.address-article');
+	updateProperty: function (obj) {
+		var root = $('div.property-product');
 		var parent = $(obj).parent();
-		var	address = core.util.getObjectValueByID('txtAddressArticle');
-		var	city =  core.util.getObjectValueByID('optCity');
-		var	district = core.util.getObjectValueByID('optDistrict');
-		core.util.validateInputTextBox('txtAddressArticle','');
-		if (address == '') {
-			core.util.validateInputTextBox('txtAddressArticle','Giá trị thuộc tính');
+		var	propertyValue = core.util.getObjectValueByID('txtPropertyValue');
+		propertyValue = core.util.removeAll(propertyValue,"'");
+		propertyValue = core.util.removeAll(propertyValue,"\"");
+		var	group =  $('#optGroup option:selected').val();
+		var	groupName =  $('#optGroup option:selected').text();
+		var	propertyName = $('#optProperty option:selected').text();
+		propertyName = core.util.removeAll(propertyName,"'");
+		propertyName = core.util.removeAll(propertyName,"\"");
+		var	propertyID = $('#optProperty option:selected').val();
+		core.util.validateInputTextBox('txtPropertyValue','');
+		
+		selecteProperty = $('#optProperty option:selected');
+		//selecteGroup = $('#optGroup option:selected');
+		
+		if (propertyValue == '') {
+			core.util.validateInputTextBox('txtPropertyValue','Bạn chưa nhập giá trị thuộc tính');
 			return;
 		}
 		
 		var rowUpdate = root.find('.row-item.updating');
-		rowUpdate.find('.location-address').html(address);
-		rowUpdate.find('.location-district').html(district);
-		rowUpdate.find('.location-city').html(city);
+		var oldGroup = $.trim($(rowUpdate).closest('.property-group').attr('lbGroupPropertyID'));
 		
-		this.clearInputLocation();		
-		this.showEditMode(false);
-		root.find('.row-item').removeClass('updating');
+		if(oldGroup != group)
+		{
+		   root.find('.row-item.updating').remove();
+		   if($(rowUpdate).closest('.property-group').find('.row-item').length < 1)
+		   {
+		        $(root).find('.property-group[lbGroupPropertyID="'+oldGroup+'"]').remove();
+		        var existedGroup = $(root).find('.property-group[lbGroupPropertyID="'+group+'"]');
+		        if(existedGroup.length > 0)
+		        {
+		          
+		             var newRow = $('<div class="controls row-item clear">'+
+						'<label class="m-wrap inline span4 lbl-property">'+
+							 '<span class="property-id" lbPropertyID="'+propertyID+'">'+propertyName+'</span>: <span class="property-value"> '+propertyValue+'</span>'+
+						'</label>'+
+						'<a onclick="product.moveUpItem(this,\'row-item\')" class="btn btn-mini float-right" href="javascript:;"><i class="icon-pencil"></i> Lên</a> '+
+						'<a onclick="product.moveDownItem(this,\'row-item\')" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Xuống</a> '+
+						'<a onclick="article.clickEDIT(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Sửa</a> '+
+						'<a onclick="article.clickDELETE(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-remove"></i> Xóa</a>'+
+					'</div>');
+                    $(existedGroup).closest('.property-group').append(newRow);
+		        }
+		        else
+		        {
+		              var newRow = $('<div class="control-group zone property-group" lbGroupPropertyID="'+group+'" lbGroupPropertyName="'+groupName+'">'+
+					                '<div class="controls">'+
+						                '<h2 class="m-wrap property-zone float-left">'+groupName+'</h2>'+
+						                '<a onclick="product.moveUpItem(this,\'property-group\')" class="btn btn-mini float-right" href="javascript:;"><i class="icon-pencil"></i> Lên</a> '+
+						                '<a onclick="product.moveDownItem(this,\'property-group\')" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Xuống</a> '+
+					                '</div>'+
+					                '<div class="controls row-item clear">'+
+						                '<label class="m-wrap inline span4 lbl-property">'+
+							                '<span class="property-id" lbPropertyID="'+propertyID+'">'+propertyName+'</span>: <span class="property-value"> '+propertyValue+'</span>'+
+						                '</label>'+
+						                '<a onclick="product.moveUpItem(this,\'row-item\')" class="btn btn-mini float-right" href="javascript:;"><i class="icon-pencil"></i> Lên</a> '+
+						                '<a onclick="product.moveDownItem(this,\'row-item\')" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Xuống</a> '+
+						                '<a onclick="product.clickEDIT(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Sửa</a> '+
+						                '<a onclick="product.clickDELETE(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-remove"></i> Xóa</a>'+
+					                '</div>'+
+				                '</div>	');
+		            root.append(newRow);
+		        }
+		   } 
+		  
+		}
+		else
+		{
+		    rowUpdate.find('.property-id').attr('lbPropertyID',propertyID);
+		    rowUpdate.find('.property-id').html(propertyName);
+		    
+		    rowUpdate.find('.property-value').html(propertyValue);
+    		
+		    this.clearInputProperty();		
+		    this.showEditMode(false);
+		    root.find('.row-item').removeClass('updating');
+		}
 	},
 	loadMap: function(addresses,districts, cities)
 	{		
