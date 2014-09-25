@@ -54,15 +54,15 @@ class Model_Property
 			`PropertyGroupID` = \'{2}\'
 			`PropertyName` = \'{3}\',
 			`PropertyValue` = \'{4}\',
-			--`DataTypeID` = \'{5}\',
-			--`Order` = \'{6}\',
-			--`CreatedBy` = \'{7}\',
-			--`CreatedDate` = \'{8}\',
+			#`DataTypeID` = \'{5}\',
+			#`Order` = \'{6}\',
+			#`CreatedBy` = \'{7}\',
+			#`CreatedDate` = \'{8}\',
 			`ModifiedBy` = \'{9}\',
 			`ModifiedDate` = \'{10}\',
-			--`DeletedBy` = \'{11}\',
-			--`DeletedDate` = \'{12}\',
-			--`IsDeleted` = \'{13}\',
+			#`DeletedBy` = \'{11}\',
+			#`DeletedDate` = \'{12}\',
+			#`IsDeleted` = \'{13}\',
 			`Status` = \'{14}\',
 			
 		WHERE `PropertyID` = \'{1}\'  ';
@@ -131,7 +131,7 @@ class Model_Property
 						global_common::escape_mysql_string($isdeleted),
 						global_common::escape_mysql_string($status)
                 ));
-		
+		//echo $strSQL;
 		if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_SL_PROPERTY,$this->_objConnection,$strTableName))
 		{
 			//echo $strSQL;
@@ -171,9 +171,10 @@ class Model_Property
 		}	
 		return $intNewID;		
 	}
-    
+ 
     public function getPropertyByID($objID,$selectField='*') 
 	{		
+		$selectField = $selectField? $selectField : '*'; 
 		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
 				array($selectField, self::TBL_SL_PROPERTY ,							
 					'WHERE PropertyID = \''.$objID.'\' '));
@@ -188,6 +189,75 @@ class Model_Property
 		return $arrResult[0];
 	}
     
+	public function getPropertyByProduct($productID,$typeID, $selectField='*') 
+	{		
+		$selectField = $selectField? $selectField : '*'; 
+		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+				array($selectField, Model_ProductProperty::TBL_SL_PRODUCT_PROPERTY ,							
+					'WHERE ProductID = \''.$productID.'\' and TypeID = \''.$typeID.'\''));
+		//echo '<br>SQL:'.$strSQL;
+		$arrResult =$this->_objConnection->selectCommand($strSQL);		
+		if(!$arrResult)
+		{
+			
+			global_common::writeLog('get sl_property ByID:'.$strSQL,1,$_mainFrame->pPage);
+			return null;
+		}
+		//print_r($arrResult);
+		$arrPropertyIDs = global_common::getArrayColumn($arrResult,global_mapping::PropertyID);
+		foreach($arrResult as $key => $info)
+		{
+			$arrResult[$info[global_mapping::PropertyID]]=$info;
+			unset($arrResult[$key]);
+		}	
+		$properties = $this->getPropertyByIDs($arrPropertyIDs);
+		$count = count($properties);
+		
+		for($i=0; $i < $count; $i++)
+		{
+			$properties[$i][global_mapping::PropertyValue] = $arrResult[$properties[$i][global_mapping::PropertyID]][global_mapping::PropertyValue];
+		}
+		//print_r($arrResult);
+		return $properties;
+	}
+	
+	public function getPropertyByIDs($arrIDs) 
+	{		
+		$arrIDs = global_common::splitString($arrIDs);
+		$strQueryIN = global_common::convertToQueryIN($arrIDs);
+		$whereClause = 'WHERE '.global_mapping::PropertyID.' IN ('.$strQueryIN.')';
+		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE,array('*',
+					self::TBL_SL_PROPERTY,$whereClause.' order by `Order`'));
+		//echo $strSQL;
+		$properties =  $this->_objConnection->selectCommand($strSQL);	
+		
+		if(!$properties)
+		{
+			global_common::writeLog('get getPropertyByIDs:'.$strSQL,1,$_mainFrame->pPage);
+			return null;
+		}
+		
+		//print_r($arrResult);
+		return $properties;
+	}
+	
+	public function getPropertyByName($groupID,$propertyName,$selectField='*') 
+	{		
+		$selectField = $selectField? $selectField : '*'; 
+		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+				array($selectField, self::TBL_SL_PROPERTY ,							
+					'WHERE '.global_mapping::PropertyGroupID.' = \''.$groupID.'\' and '.global_mapping::PropertyName.' = \''.$propertyName.'\' '));
+		//echo '<br>SQL:'.$strSQL;
+		$arrResult =$this->_objConnection->selectCommand($strSQL);		
+		if(!$arrResult)
+		{
+			global_common::writeLog('get sl_property ByID:'.$strSQL,1,$_mainFrame->pPage);
+			return null;
+		}
+		//print_r($arrResult);
+		return $arrResult[0];
+	}
+	
     public function getAllProperty($intPage = 0,$selectField='*',$whereClause='',$orderBy='') 
 	{		
         if($whereClause)
