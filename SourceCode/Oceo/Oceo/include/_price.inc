@@ -34,18 +34,23 @@ include('include/_social.inc');
 				<table class="table table-bordered table-hover article-profile">
 										<thead>
 											<tr>
-												<th class="span4">Giá bán</th>
+												<th class="span2">Giá bán</th>
 												<th>Tình trạng</th>
+												<th>Mô tả</th>
+												<th>Bộ sản phẩm</th>
 												<th>Người đăng</th>
 												
 											</tr>
 										</thead>
 										<tbody>
 											<tr>
-	<td><a href="#" > Title</a></td>
-	<td class="article-date"> </td>
-	<td class="article-date"> </td>
-</tr>
+												<td><a href="#" > Title</a></td>
+												<td class="">Hàng mới</td>
+												<td class="">Hàng mới mua từ TDDD còn bảo hành</td>
+												<td class="">1 máy, 1 sạc, 1 thẻ nhớ 16GBs, 1 tai nghe</td>
+												<td class=""> <a href="#" class="link">Nickname</a> </td>
+	
+											</tr>
 <?php
 /*foreach($articles as $item)
 {
