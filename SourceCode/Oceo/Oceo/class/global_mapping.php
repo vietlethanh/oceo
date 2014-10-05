@@ -33,7 +33,7 @@ class global_mapping
 	const DeletedBy					= 'DeletedBy';
 	const ArticleID					= 'ArticleID';
 	const Content					= 'Content';
-	const Status					= '`Status`';
+	const Status					= 'Status';
 	const ParentID					= 'ParentID';
 	const Thumbnail					= 'Thumbnail';
 	const Logo						= 'Logo';
@@ -77,7 +77,7 @@ class global_mapping
 	
 	const CityName					= 'CityName';
 	const DistrictName				= 'DistrictName';
-	const Order						= '`Order`';
+	const Order						= 'Order';
 	const CityID					= 'CityID';
 	
 	const RoleID					= 'RoleID';
@@ -110,7 +110,23 @@ class global_mapping
 	const ManufactoryID				= 'ManufactoryID';
 	const ManufactoryName			= 'ManufactoryName';
 	const CategoryID				= 'CategoryID';
-
+	
+	
+	const RetailerID				= 'RetailerID';
+	
+	const ShortDesc					= 'ShortDesc';
+	const Promotion					= 'Promotion';
+	const Price						= 'Price';
+	const ProductStatusID			= 'ProductStatusID';
+	const ProductStatus				= 'ProductStatus';
+	const StatusID					= 'StatusID';
+	const StatusName				= 'StatusName';
+	const Warranty					= 'Warranty';
+	const BoxInfo					= 'BoxInfo';
+	const Retailer					= 'Retailer';
+	const ProductLink				= 'ProductLink';
+	const ExtraInfo					= 'ExtraInfo';
+	const TypeID					= 'TypeID';
 	const Mode						= 'Mode';
 }
 ?>

@@ -239,12 +239,13 @@ class Model_Product
 			//print_r($propertyGroupIDs);
 			$propertyGroups = $objPropertyGroup->getPropertyGroupByIDs($propertyGroupIDs);
 			
-			
+			$temp = array();
 			foreach($arrResult as $key => $info)
 			{
-				$arrResult[$info[global_mapping::PropertyID]]=$info;
+				$temp[$info[global_mapping::PropertyID]]=$info;
 				unset($arrResult[$key]);
-			}		
+			}	
+			$arrResult = $temp;
 			//print_r($propertyGroups);
 			$count = count($propertyGroups);
 			

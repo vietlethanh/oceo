@@ -623,13 +623,13 @@ class Model_Article
 		{
 			$condition = 'WHERE ('.global_mapping::IsDeleted.' IS NULL or '.global_mapping::IsDeleted.' = \'0\') and `'.
 				global_mapping::CreatedBy.'` = \''.$userID.'\' 
-				and '.global_mapping::Status.' = \''.$status.'\' and '.$whereClause;	
+				and `'.global_mapping::Status.'` = \''.$status.'\' and '.$whereClause;	
 		}
 		else
 		{
 			$condition = 'WHERE ('.global_mapping::IsDeleted.' IS NULL or '.global_mapping::IsDeleted.' = \'0\') and `'.
 				global_mapping::CreatedBy.'` = \''.$userID.'\' 
-				and '.global_mapping::Status.' = \''.$status.'\' ';	
+				and `'.global_mapping::Status.'` = \''.$status.'\' ';	
 		}
 		//return $topRow;
 		if(!$topRow)

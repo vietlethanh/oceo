@@ -16,6 +16,18 @@ class global_common
 	
 	/*****************************************************************************
 	* 
+	* Status
+	* 
+	*****************************************************************************/
+	const STATUS_RETAILER_PROPERTY = 9;
+	const STATUS_RETAILER_SHIPPING = 10;
+	const STATUS_PRODUCT_PROPERTY = 11;
+	const SUB_STATUS_GENERAL_PROPERTY = 1;
+	
+	
+	
+	/*****************************************************************************
+	* 
 	* MySQL Error Code
 	* 
 	*****************************************************************************/
@@ -1128,6 +1140,20 @@ class global_common
 		return substr($mySqlDateTime,8,2)."/".substr($mySqlDateTime,5,2)."/".substr($mySqlDateTime,0,4);
 	}
 	
+	function FormatPrice($input)
+	{
+		if($input<0)
+		{
+			return "N/A";
+		}
+		$symbol = 'đ';
+		$symbol_thousand = '.';
+		$decimal_place = 0;
+		$price = number_format($input, $decimal_place, '', $symbol_thousand);
+		return $price.$symbol;
+	}
+	
+	
 	/**
 	 * cat dư lieu text trong chuoi voi so tu cho truoc
 	 *
@@ -1518,6 +1544,31 @@ class global_common
 		}while($iCount <= $iMax);
 		
 		return null;
+	}
+	
+	function getPriceFromURL($url,$pathCode)
+	{	
+		try
+		{
+			$html = file_get_html($url);
+			if($html)
+			{
+				foreach($html->find($pathCode) as $e) 
+					$myContent= $e->innertext ;
+				$myContent = preg_replace('/\D/', '', $myContent);
+				return $myContent;
+			}
+			else
+			{
+				global_common::writeLog("Can't get price from url:".$url);
+			}
+			
+		}
+		catch(exception $ex)
+		{
+			global_common::writeLog("Can't get price from url".$url);
+		}
+		return -1;
 	}
 	
 	/**
@@ -3687,9 +3738,11 @@ class global_common
 	public function mergeUserInfo($arrResult)
 	{
 		$arrUsers= null;
+		
 		if(array_key_exists(global_mapping::CreatedBy,$arrResult[0]))
 		{
 			$arrUsers =  global_common::getArrayColumn($arrResult,global_mapping::CreatedBy);
+			//print_r($arrUsers);
 		}
 		//print_r($arrUsers);
 		if(array_key_exists(global_mapping::ReportedBy,$arrResult[0]))
@@ -3705,7 +3758,7 @@ class global_common
 			//print_r($arrUsers);
 		}
 		//echo array_key_exists(global_mapping::ReportedBy,$arrResult);
-	
+		
 		$arrUserInfo = global_common::getUserInfo($arrUsers,$this->_objConnection);
 		//print_r($arrUserInfo);
 		$count = count($arrResult);
@@ -3763,12 +3816,13 @@ class global_common
 		$arrUserInfo = global_common::getUserDetails($arrUserID, $objConnection);
 		
 		//print_r($arrUserInfo);
+		$result = array();
 		foreach($arrUserInfo as $key => $info)
 		{
-			$arrUserInfo[$info['UserID']]=$info;
+			$result[$info['UserID']]=$info;
 			unset($arrUserInfo[$key]);
 		}		
-		return $arrUserInfo;
+		return $result;
 	}
 	
 	public function getArticleInfo($arrArticleID,$objConnection)
@@ -3777,12 +3831,13 @@ class global_common
 		$arrArticleInfo = global_common::getArticleDetails($arrArticleID, $objConnection);
 		
 		//print_r($arrUserInfo);
+		$result = array();
 		foreach($arrArticleInfo as $key => $info)
 		{
-			$arrArticleInfo[$info[global_mapping::ArticleID]]=$info;
+			$result[$info[global_mapping::ArticleID]]=$info;
 			unset($arrArticleInfo[$key]);
 		}		
-		return $arrArticleInfo;
+		return $result;
 	}
 	
 	
@@ -3795,13 +3850,14 @@ class global_common
 		$whereClause = global_mapping::CommentID.' IN ('.$strQueryIN.')';
 		$arrCommentBad = $objCommentBad->getAllCommentBad(0,'*',$whereClause);
 		
+		$result = array();
 		//print_r($arrUserInfo);
 		foreach($arrCommentBad as $key => $info)
 		{
-			$arrCommentBad[$info[global_mapping::CommentID]]=$info;
+			$temp[$info[global_mapping::CommentID]]=$info;
 			unset($arrCommentBad[$key]);
 		}		
-		return $arrCommentBad;
+		return $result;
 	}
 	
 	
@@ -3855,7 +3911,7 @@ class global_common
 		return $arrArticles;
 		
 	}
-		
+	
 	
 	/**
 	 * lấy thông tin detail của một vài c_user,c_user_detail

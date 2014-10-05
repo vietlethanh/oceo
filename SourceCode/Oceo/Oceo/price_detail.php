@@ -7,8 +7,12 @@ include_once('class/model_article.php');
 include_once('class/model_comment.php');
 include_once('class/model_user.php');
 include_once('class/model_product.php');
+include_once('class/model_retailer.php');
+include_once('class/model_status.php');
 
 $objProduct = new Model_Product($objConnection);
+$objRetailer = new Model_Retailer($objConnection);
+$objStatus = new Model_Status($objConnection);
 $objComment = new Model_Comment($objConnection);
 if ($_pgR["pid"])
 {

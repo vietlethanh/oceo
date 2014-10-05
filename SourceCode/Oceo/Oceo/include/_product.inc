@@ -3,6 +3,10 @@ if ($_pgR["pid"])
 {
 	$productID = $_pgR["pid"];
 	$product = $objProduct->getProductByID($productID, '*','`Status`=1');
+	$productProperties = $objProperty->getPropertyByProduct($productID,global_common::STATUS_PRODUCT_PROPERTY);
+	$exPrices = $objProductPrice->getProductPriceByProduct($productID);
+	$inPrices = $objRetailer->getRetailerByProduct($productID);
+	
 	//$intPage = 1;
 	//$total = 0;
 	//$comments = $objComment->getCommentByArticle($intPage,$total,$articleID,'*','',' CreatedDate DESC');
@@ -270,14 +274,14 @@ if ($_pgR["pid"])
                 				border-width: 0px;
 								top: 2px;
 								left: 2px;
-								width: 95px;
+								width: 76px;
 								height: 62px;
 							}
 							.jssort02 .p:hover .c, .jssort02 .pav:hover .c
 							{
 								top: 0px;
 								left: 0px;
-								width: 97px;
+								width: 78px;
 								height: 64px;
 								border: #fff 1px solid;
 							}
@@ -310,36 +314,23 @@ if ($_pgR["pid"])
 								<h1 class="m-wrap">Tổng quan</h1>
 							</div>
 						</div>
-						<div class="control-group">
-							<label class="control-label">Giá sản phẩm:</label>
-							<div class="controls">	
-								<label class="">9.000.000 VNĐ (Chưa có VAT)</label>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label">Giá sản phẩm:</label>
-							<div class="controls">	
-								<label class="">9.000.000 VNĐ (Chưa có VAT)</label>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label">Giá sản phẩm:</label>
-							<div class="controls">	
-								<label class="">9.000.000 VNĐ (Chưa có VAT)</label>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label">Bảo hành:</label>
-							<div class="controls">	
-								<label class="">3 Tháng</label>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label">Xuất xứ:</label>
-							<div class="controls">	
-								<label class="">Xách tay</label>
-							</div>
-						</div>
+<?php
+foreach($productProperties as $item)
+{
+	//print_r($item);
+	//break;
+	//echo $item[global_mapping::TypeID];
+	if($item[global_mapping::Status] == global_common::SUB_STATUS_GENERAL_PROPERTY)
+	{
+		echo '<div class="control-group">';
+		echo '	<label class="control-label">'.$item[global_mapping::PropertyName].':</label>';
+		echo '	<div class="controls">	';
+		echo '			<label class="">'.$item[global_mapping::PropertyValue].'</label>';
+		echo '	</div>';
+		echo '</div>';
+	}
+}
+?>
 					</div>
 				</form>
 			</div>
@@ -352,7 +343,29 @@ if ($_pgR["pid"])
 								<h1 class="m-wrap">Chi tiết giá bán</h1>
 							</div>
 						</div>
-						<div class="control-group">
+<?php
+foreach($inPrices as $item)
+{
+	echo '<div class="control-group">';
+	echo '	<label class="control-label">'.$item[global_mapping::ProductStatus].':</label>';
+	echo '	<div class="controls">	';
+	echo '		<a href="#" class="link"> Từ '.global_common::FormatPrice($item[global_mapping::Price]).'</a>';
+	echo '	</div>';
+	echo '</div>';
+}
+?>
+<?php
+foreach($exPrices as $item)
+{
+	echo '<div class="control-group">';
+	echo '	<label class="control-label">'.$item[global_mapping::Retailer].':</label>';
+	echo '	<div class="controls">	';
+	echo '		<a href="'.$item[global_mapping::ProductLink].'" target="_blank" class="link">'.global_common::FormatPrice($item[global_mapping::Price]).'</a>';
+	echo '	</div>';
+	echo '</div>';
+}
+?>
+						<!--div class="control-group">
 							<label class="control-label">Hàng mới:</label>
 							<div class="controls">	
 								<a href="#" class="link">9.000.000 VNĐ (Chưa có VAT)</a>
@@ -381,7 +394,7 @@ if ($_pgR["pid"])
 							<div class="controls">	
 								<a href="#" class="link">9.000.000 VNĐ (Chưa có VAT)</a>
 							</div>
-						</div>
+						</div-->
 					</div>
 				</form>
 			</div>		
