@@ -2,13 +2,22 @@
 
 /* TODO: Add code here */
 require('config/globalconfig.php');
+
+include_once('lib/simple_html_dom.php');
 include_once('class/model_articletype.php');
 include_once('class/model_article.php');
 include_once('class/model_comment.php');
 include_once('class/model_user.php');
 include_once('class/model_product.php');
-
+include_once('class/model_productprice.php');
+include_once('class/model_property.php');
+include_once('class/model_productproperty.php');
+include_once('class/model_retailer.php');
+include_once('class/model_status.php');
 $objProduct = new Model_Product($objConnection);
+$objProductPrice = new Model_ProductPrice($objConnection);
+$objProperty = new Model_Property($objConnection);
+$objRetailer = new Model_Retailer($objConnection);
 $objComment = new Model_Comment($objConnection);
 if ($_pgR["pid"])
 {

@@ -3,8 +3,10 @@ if ($_pgR["rid"])
 {
 	$retailerID = $_pgR["rid"];
 	$retailer = $objRetailer->getRetailerByID($retailerID, '*','`Status`=1');
-	$productProperties = $objProperty->getPropertyByProduct($retailerID,9);
-	$shippingProperty = $objProperty->getPropertyByProduct($retailerID,10);
+	//product properties
+	$productProperties = $objProperty->getPropertyByProduct($retailerID,global_common::STATUS_RETAILER_PROPERTY);
+	//shipping properties
+	$shippingProperty = $objProperty->getPropertyByProduct($retailerID,global_common::STATUS_RETAILER_SHIPPING);
 	//$intPage = 1;
 	//$total = 0;
 	//$comments = $objComment->getCommentByArticle($intPage,$total,$articleID,'*','',' CreatedDate DESC');

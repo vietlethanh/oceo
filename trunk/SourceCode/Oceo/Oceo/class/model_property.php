@@ -194,7 +194,7 @@ class Model_Property
 		$selectField = $selectField? $selectField : '*'; 
 		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
 				array($selectField, Model_ProductProperty::TBL_SL_PRODUCT_PROPERTY ,							
-					'WHERE ProductID = \''.$productID.'\' and TypeID = \''.$typeID.'\''));
+					'WHERE ProductID = \''.$productID.'\' and TypeID = \''.$typeID.'\' order by `Order` '));
 		//echo '<br>SQL:'.$strSQL;
 		$arrResult =$this->_objConnection->selectCommand($strSQL);		
 		if(!$arrResult)
@@ -205,17 +205,22 @@ class Model_Property
 		}
 		//print_r($arrResult);
 		$arrPropertyIDs = global_common::getArrayColumn($arrResult,global_mapping::PropertyID);
+		$temp = array();
 		foreach($arrResult as $key => $info)
 		{
-			$arrResult[$info[global_mapping::PropertyID]]=$info;
+			$temp[$info[global_mapping::PropertyID]]=$info;
 			unset($arrResult[$key]);
 		}	
+		$arrResult = $temp;
 		$properties = $this->getPropertyByIDs($arrPropertyIDs);
 		$count = count($properties);
 		
 		for($i=0; $i < $count; $i++)
 		{
 			$properties[$i][global_mapping::PropertyValue] = $arrResult[$properties[$i][global_mapping::PropertyID]][global_mapping::PropertyValue];
+			$properties[$i][global_mapping::Order] = $arrResult[$properties[$i][global_mapping::PropertyID]][global_mapping::Order];
+			$properties[$i][global_mapping::TypeID] = $arrResult[$properties[$i][global_mapping::PropertyID]][global_mapping::TypeID];
+			$properties[$i][global_mapping::Status] = $arrResult[$properties[$i][global_mapping::PropertyID]][global_mapping::Status];
 		}
 		//print_r($arrResult);
 		return $properties;

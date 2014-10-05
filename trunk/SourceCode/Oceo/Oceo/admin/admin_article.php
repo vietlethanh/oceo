@@ -56,11 +56,11 @@ else
 }
 if($inactive =='true')
 {
-	$condidtion .= ' And '.global_mapping::Status.'=0';
+	$condidtion .= ' And `'.global_mapping::Status.'` = 0';
 }
 else
 {
-	$condidtion .=  ' And '.global_mapping::Status.'=1';
+	$condidtion .=  ' And `'.global_mapping::Status.'` = 1';
 }
 $articles = $objArticle->searchArticle(0,$allCatIDs,'','',$condidtion);
 

@@ -2,7 +2,11 @@
 if ($_pgR["pid"])
 {
 	$productID = $_pgR["pid"];
-	$product = $objProduct->getProductByID($productID, '*','`Status`=1');
+	$type = $_pgR["type"];
+	$allRetailers = $objRetailer->getRetailerByProduct($productID,$type,
+			global_mapping::RetailerID.','.global_mapping::ProductStatusID.','.global_mapping::Price.','.
+			global_mapping::ShortDesc.','.global_mapping::Warranty.','.global_mapping::BoxInfo.','.global_mapping::CreatedBy);
+	//$product = $objProduct->getProductByID($productID, '*','`Status`=1');
 	//$intPage = 1;
 	//$total = 0;
 	//$comments = $objComment->getCommentByArticle($intPage,$total,$articleID,'*','',' CreatedDate DESC');
@@ -31,40 +35,42 @@ include('include/_social.inc');
 
 
 			<div class="content">			
+				<div id="retailer-navigate">
+					<a href="#" class="link">Chi tiết sản phẩm</a> => <a href="#" class="link">Hàng mới từ 12.000.000đ</a> | <span>Hàng mới cũ 10.000.000đ</span> | <a href="#" class="link">Hàng refurbished từ 12.000.000đ</a> 
+				</div>
 				<table class="table table-bordered table-hover article-profile">
 										<thead>
 											<tr>
 												<th class="span2">Giá bán</th>
-												<th>Tình trạng</th>
+												<th style="width:120px">Tình trạng</th>
 												<th>Mô tả</th>
-												<th>Bộ sản phẩm</th>
-												<th>Người đăng</th>
+												<th style="width:150px">Bộ sản phẩm</th>
+												<th style="width:150px">Bảo hành</th>
+												<th style="width:120px">Người đăng</th>
 												
 											</tr>
 										</thead>
 										<tbody>
-											<tr>
+											<!--tr>
 												<td><a href="#" > Title</a></td>
 												<td class="">Hàng mới</td>
 												<td class="">Hàng mới mua từ TDDD còn bảo hành</td>
 												<td class="">1 máy, 1 sạc, 1 thẻ nhớ 16GBs, 1 tai nghe</td>
 												<td class=""> <a href="#" class="link">Nickname</a> </td>
 	
-											</tr>
+											</tr-->
 <?php
-/*foreach($articles as $item)
+foreach($allRetailers as $item)
 {
 	echo '								<tr>';
-	echo '									<td><a href="article_detail.php?aid='.$item[global_mapping::ArticleID].'" >'.$item[global_mapping::Title].'</a></td>';
-	echo '									<td class="article-date">'.global_common::formatDateVN($item[global_mapping::StartDate]).'</td>';
-	echo '									<td class="article-date">'.global_common::formatDateVN($item[global_mapping::EndDate]).'</td>';
-	echo '									<td class="article-control">';
-	echo '										<a href="post_article.php?aid='.$item[global_mapping::ArticleID].'" class="btn btn-mini">Sửa</a>';
-	echo '										<a href="javascript:article.refreshArticle(\''.$item[global_mapping::ArticleID].'\')" class="btn btn-mini">Làm mới</a>';
-	echo '										<a href="javascript:article.activeArticle(\''.$item[global_mapping::ArticleID].'\',0)" class="btn btn-mini">Xóa</a>';
-	echo '									</td>';
+	echo '									<td><a href="#" > '.global_common::FormatPrice($item[global_mapping::Price]).'</a></td>';
+	echo '									<td class="">'.$item[global_mapping::ProductStatus].'</td>';
+	echo '									<td class="">'.$item[global_mapping::ShortDesc].'</td>';
+	echo '									<td class="">'.$item[global_mapping::BoxInfo].'</td>';
+	echo '									<td class="">'.$item[global_mapping::Warranty].'</td>';
+	echo '									<td class=""> <a href="#" class="link">'.$item[global_mapping::CreatedBy][global_mapping::UserName].'</a> </td>';
 	echo '								</tr>';
-}*/
+}
 ?>
 										</tbody>
 									</table>
