@@ -1,41 +1,107 @@
 #header
 {
-	height:45px;
+	height:176px;
 	margin-top:0px;
-	border-bottom: 1px solid #fff;
 	margin-bottom: 18px;
 	padding-bottom: 4px;
+	background-color: #FFFFFF; 
+	#top-menu
+	{
+		
+		float:right;
+		line-height: 14px;
+		margin-right: 150px;
+		>ul
+		{
+			border:none;
+			margin: 0;
+			padding: 0;
+			li
+			{
+				/*border-bottom: 1px solid #DBE7E8;*/
+				color: white;
+				float: left;
+				font-size: 1em;
+				font-weight: bolder;
+				height: 14px;
+				padding: 9px 15px;
+				margin: 3px 0;
+				text-align: center;
+				line-height:14px;
+				
+				a
+				{
+					color: $color_body;
+					margin:0;
+					padding:0;
+					border:none;
+					line-height: 12px;
+					font-size:10px;
+				}
+				
+				a:hover
+				{
+					color:$color_hover;
+				}
+			}
+			li:first-child
+			{
+				a
+				{
+					cursor:pointer;
+				}
+			}
+			li:last-child
+			{
+				border-right: none;
+			}
+		}	
+	}
+	#header-banner
+	{
+		clear:both;
+		img
+		{
+			height:50px;
+			margin:  20px 0;
+		}
+	}
 	#header-menu
 	{
+		border-top: 1px solid #fff;
+		border-bottom: 1px solid #fff;
+		clear: both;
 		line-height: 14px;
 		>ul
 		{
+			background-color: beige;
+			border:none;
+			margin: 0;
+			padding: 0;
 			li
 			{
-				/*background: none repeat scroll 0 0 rgba(255, 255, 255, 0.6);
-				border-right: 2px solid $color_body;
-				color: $color_header;
-				float: left;
-				font-size: 1em; 
-				font-weight: bolder; 
-				height: 24px;
-				padding: 10px 9px; 
-				text-align: center;*/
-				
 				border-right: 1px dotted $color_body;
 				color: white;
 				float: left;
 				font-size: 1em;
 				font-weight: bolder;
-				height: 24px;
+				height: 20px;
 				padding: 10px 9px;
+				margin: 1px 0;
 				text-align: center;
 				line-height:17px;
-				width:76px;
+				background-color: none;
 				a
 				{
+					background-color: none;
 					color: $color_body;
+					margin:0;
+					padding:0;
+					border:none;
+					line-height: 15px;
+					cursor:default;
 				}
+				
 				a:hover
 				{
 					color:$color_hover;
@@ -46,9 +112,22 @@
 					margin-top: -5px;
 				}
 			}
+			li.active
+			{
+				a
+				{
+					color:$color_hover;
+				}
+			}
 			li:first-child
 			{
-				
+				padding-top: 5px; 
+				width:52px;
+				border-right: 0px dotted $color_body;
+				a
+				{
+					cursor:pointer;
+				}
 			}
 			li:last-child
 			{
@@ -67,8 +146,22 @@
 			.avatar
 			{
 				width: 35px;
-				height: 35px;
+				height: 25px;
 			}
+			a.dropdown-toggle
+			{
+				padding: 0;
+			}
+		}
+		select
+		{
+			width: 152px;
+			height: 22px;	
+			padding-top:1px;			
+		}
+		li a
+		{
+			padding: 4px 4px 3px 4px;
 		}
 	}
 }

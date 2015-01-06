@@ -16,76 +16,76 @@ class Model_PropertyGroup
 {		   
 	#region PRESERVE ExtraMethods For PropertyGroup
 	#endregion
-    #region Contants	
-    const ACT_ADD							= 10;
-    const ACT_UPDATE						= 11;
-    const ACT_DELETE						= 12;
-    const ACT_CHANGE_PAGE					= 13;
-    const ACT_SHOW_EDIT                     = 14;
-    const ACT_GET                           = 15;
-    const NUM_PER_PAGE                      = 15;
-    
-    const TBL_SL_PROPERTY_GROUP			            = 'sl_property_group';
-
+	#region Contants	
+	const ACT_ADD							= 10;
+	const ACT_UPDATE						= 11;
+	const ACT_DELETE						= 12;
+	const ACT_CHANGE_PAGE					= 13;
+	const ACT_SHOW_EDIT                     = 14;
+	const ACT_GET                           = 15;
+	const NUM_PER_PAGE                      = 15;
+	
+	const TBL_SL_PROPERTY_GROUP			            = 'sl_property_group';
+	
 	const SQL_INSERT_SL_PROPERTY_GROUP		= 'INSERT INTO `{0}`
 		(
-			PropertyGroupID,
-			PropertyGroupName,
-			PropertyGroupDisplay,
-			ArticleTypeID,
-			`Order`,
-			CreatedBy,
-			CreatedDate,
-			ModifiedBy,
-			ModifiedDate,
-			DeletedBy,
-			DeletedDate,
-			IsDeleted,
-			`Status`
-        )
-        VALUES (
-			\'{1}\', \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'{6}\', \'{7}\', \'{8}\', \'{9}\', \'{10}\', \'{11}\', \'{12}\', \'{13}\'
-        );';
-        
+		PropertyGroupID,
+		PropertyGroupName,
+		PropertyGroupDisplay,
+		ArticleTypeID,
+		`Order`,
+		CreatedBy,
+		CreatedDate,
+		ModifiedBy,
+		ModifiedDate,
+		DeletedBy,
+		DeletedDate,
+		IsDeleted,
+		`Status`
+		)
+		VALUES (
+		\'{1}\', \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'{6}\', \'{7}\', \'{8}\', \'{9}\', \'{10}\', \'{11}\', \'{12}\', \'{13}\'
+		);';
+	
 	const SQL_UPDATE_SL_PROPERTY_GROUP		= 'UPDATE `{0}`
 		SET  
-			`PropertyGroupID` = \'{1}\',
-			`PropertyGroupName` = \'{2}\',
-			`PropertyGroupDisplay` = \'{3}\',
-			`ArticleTypeID` = \'{4}\',
-			`Order` = \'{5}\',
-			#`CreatedBy` = \'{6}\',
-			#`CreatedDate` = \'{7}\',
-			`ModifiedBy` = \'{8}\',
-			`ModifiedDate` = \'{9}\',
-			#`DeletedBy` = \'{10}\',
-			#`DeletedDate` = \'{11}\',
-			#`IsDeleted` = \'{12}\',
-			`Status` = \'{13}\'
+		`PropertyGroupID` = \'{1}\',
+		`PropertyGroupName` = \'{2}\',
+		`PropertyGroupDisplay` = \'{3}\',
+		`ArticleTypeID` = \'{4}\',
+		`Order` = \'{5}\',
+		#`CreatedBy` = \'{6}\',
+		#`CreatedDate` = \'{7}\',
+		`ModifiedBy` = \'{8}\',
+		`ModifiedDate` = \'{9}\',
+		#`DeletedBy` = \'{10}\',
+		#`DeletedDate` = \'{11}\',
+		#`IsDeleted` = \'{12}\',
+		`Status` = \'{13}\'
 		WHERE `PropertyGroupID` = \'{1}\'  ';
-		   
-
-    const SQL_CREATE_TABLE_SL_PROPERTY_GROUP		= 'CREATE TABLE `{0}` (
-
-			`PropertyGroupID` ,
-			`PropertyGroupName` varchar(255),
-			`PropertyGroupDisplay` varchar(255),
-			`ArticleTypeID` ,
-			`Order` ,
-			`CreatedBy` varchar(20),
-			`CreatedDate` ,
-			`ModifiedBy` varchar(20),
-			`ModifiedDate` ,
-			`DeletedBy` varchar(20),
-			`DeletedDate` ,
-			`IsDeleted` ,
-			`Status` varchar(20),
-			PRIMARY KEY(PropertyGroupID)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;';
 	
-    #endregion   
-    
-    #region Variables
+	
+	const SQL_CREATE_TABLE_SL_PROPERTY_GROUP		= 'CREATE TABLE `{0}` (
+		
+		`PropertyGroupID` ,
+		`PropertyGroupName` varchar(255),
+		`PropertyGroupDisplay` varchar(255),
+		`ArticleTypeID` ,
+		`Order` ,
+		`CreatedBy` varchar(20),
+		`CreatedDate` ,
+		`ModifiedBy` varchar(20),
+		`ModifiedDate` ,
+		`DeletedBy` varchar(20),
+		`DeletedDate` ,
+		`IsDeleted` ,
+		`Status` varchar(20),
+		PRIMARY KEY(PropertyGroupID)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;';
+	
+	#endregion   
+	
+	#region Variables
 	var $_objConnection;
 	#end region
 	
@@ -103,30 +103,30 @@ class Model_PropertyGroup
 		$this->_objConnection = $objConnection;
 		
 	}
-    #region
-    
-    #region Public Functions
-    
-    public function insert( $propertygroupname,$propertygroupdisplay,$articletypeid,$order,$createdby,$status)
+	#region
+	
+	#region Public Functions
+	
+	public function insert( $propertygroupname,$propertygroupdisplay,$articletypeid,$order,$createdby,$status)
 	{
-				
+		
 		$strTableName = self::TBL_SL_PROPERTY_GROUP;
 		$intID = global_common::getMaxValueofField(global_mapping::PropertyGroupID, $strTableName) + 1;
 		$strSQL = global_common::prepareQuery(self::SQL_INSERT_SL_PROPERTY_GROUP,
 				array(self::TBL_SL_PROPERTY_GROUP,$intID,
-						global_common::escape_mysql_string($propertygroupname),
-						global_common::escape_mysql_string($propertygroupdisplay),
-						global_common::escape_mysql_string($articletypeid),
-						global_common::escape_mysql_string($order),
-						global_common::escape_mysql_string($createdby),
-						global_common::nowSQL(),
-						global_common::escape_mysql_string($modifiedby),
-						global_common::escape_mysql_string($modifieddate),
-						global_common::escape_mysql_string($deletedby),
-						global_common::escape_mysql_string($deleteddate),
-						global_common::escape_mysql_string($isdeleted),
-						global_common::escape_mysql_string($status)
-                ));
+					global_common::escape_mysql_string($propertygroupname),
+					global_common::escape_mysql_string($propertygroupdisplay),
+					global_common::escape_mysql_string($articletypeid),
+					global_common::escape_mysql_string($order),
+					global_common::escape_mysql_string($createdby),
+					global_common::nowSQL(),
+					global_common::escape_mysql_string($modifiedby),
+					global_common::escape_mysql_string($modifieddate),
+					global_common::escape_mysql_string($deletedby),
+					global_common::escape_mysql_string($deleteddate),
+					global_common::escape_mysql_string($isdeleted),
+					global_common::escape_mysql_string($status)
+					));
 		
 		if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_SL_PROPERTY_GROUP,$this->_objConnection,$strTableName))
 		{
@@ -137,26 +137,26 @@ class Model_PropertyGroup
 		return $intID;
 		
 	}
-    
-    public function update($propertygroupid,$propertygroupname,$propertygroupdisplay,$articletypeid,$order,$modifiedby,$status)
+	
+	public function update($propertygroupid,$propertygroupname,$propertygroupdisplay,$articletypeid,$order,$modifiedby,$status)
 	{
 		$strTableName = self::TBL_SL_PROPERTY_GROUP;
 		$strSQL = global_common::prepareQuery(self::SQL_UPDATE_SL_PROPERTY_GROUP,
 				array($strTableName,
-						global_common::escape_mysql_string($propertygroupid),
-						global_common::escape_mysql_string($propertygroupname),
-						global_common::escape_mysql_string($propertygroupdisplay),
-						global_common::escape_mysql_string($articletypeid),
-						global_common::escape_mysql_string($order),
-						global_common::escape_mysql_string($createdby),
-						global_common::escape_mysql_string($createddate),
-						global_common::escape_mysql_string($modifiedby),
-						global_common::nowSQL(),
-						global_common::escape_mysql_string($deletedby),
-						global_common::escape_mysql_string($deleteddate),
-						global_common::escape_mysql_string($isdeleted),
-						global_common::escape_mysql_string($status)
-                ));
+					global_common::escape_mysql_string($propertygroupid),
+					global_common::escape_mysql_string($propertygroupname),
+					global_common::escape_mysql_string($propertygroupdisplay),
+					global_common::escape_mysql_string($articletypeid),
+					global_common::escape_mysql_string($order),
+					global_common::escape_mysql_string($createdby),
+					global_common::escape_mysql_string($createddate),
+					global_common::escape_mysql_string($modifiedby),
+					global_common::nowSQL(),
+					global_common::escape_mysql_string($deletedby),
+					global_common::escape_mysql_string($deleteddate),
+					global_common::escape_mysql_string($isdeleted),
+					global_common::escape_mysql_string($status)
+					));
 		
 		if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_SL_PROPERTY_GROUP,$this->_objConnection,$strTableName))
 		{
@@ -166,8 +166,12 @@ class Model_PropertyGroup
 		}	
 		return $intNewID;		
 	}
-    
-    public function getPropertyGroupByID($objID,$selectField='*') 
+	public function getMaxPropertyGroupID() 
+	{
+		$strTableName = self::TBL_SL_PROPERTY_GROUP;
+		return global_common::getMaxValueofField(global_mapping::PropertyGroupID, $strTableName) ;
+	}
+	public function getPropertyGroupByID($objID,$selectField='*') 
 	{		
 		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
 				array($selectField, self::TBL_SL_PROPERTY_GROUP ,							
@@ -182,7 +186,7 @@ class Model_PropertyGroup
 		//print_r($arrResult);
 		return $arrResult[0];
 	}
-    
+	
 	public function getPropertyGroupByIDs($arrIDs) 
 	{		
 		$arrIDs = global_common::splitString($arrIDs);
@@ -220,29 +224,33 @@ class Model_PropertyGroup
 	}
 	
 	
-    public function getAllPropertyGroup($intPage = 0,$selectField='*',$whereClause='',$orderBy='') 
+	public function getAllPropertyGroup($intPage = 0,$selectField='*',$whereClause='',$orderBy='') 
 	{		
-        if($whereClause)
+		if($whereClause)
 		{
 			$whereClause = ' WHERE '.$whereClause;
 		}
 		
 		if($orderBy)
 		{
-			$orderBy = ' ORDER BY '.$orderBy;
+			$orderBy = ' ORDER BY '.$orderBy.' ,`Order`';
 		}
-        if($intPage>0)
-        {
-		    $strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
-				array($selectField, Model_PropertyGroup::TBL_SL_PROPERTY_GROUP ,							
-					$whereClause.$orderBy .' limit '.(($intPage-1)* self::NUM_PER_PAGE).','.self::NUM_PER_PAGE));
-        }
-        else
-        {
-            $strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
-				array($selectField, Model_PropertyGroup::TBL_SL_PROPERTY_GROUP ,							
-					$whereClause.$orderBy ));
-        }
+		else
+		{
+			$orderBy = ' ORDER BY `Order`';
+		}
+		if($intPage>0)
+		{
+			$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+					array($selectField, Model_PropertyGroup::TBL_SL_PROPERTY_GROUP ,							
+						$whereClause.$orderBy .' limit '.(($intPage-1)* self::NUM_PER_PAGE).','.self::NUM_PER_PAGE));
+		}
+		else
+		{
+			$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+					array($selectField, Model_PropertyGroup::TBL_SL_PROPERTY_GROUP ,							
+						$whereClause.$orderBy ));
+		}
 		//echo '<br>SQL:'.$strSQL;
 		$arrResult =$this->_objConnection->selectCommand($strSQL);		
 		if(!$arrResult)
@@ -253,57 +261,57 @@ class Model_PropertyGroup
 		//print_r($arrResult);
 		return $arrResult;
 	}
-    
-    public function getListPropertyGroup($intPage,$orderBy='PropertyGroupID', $whereClause)
+	
+	public function getListPropertyGroup($intPage,$orderBy='PropertyGroupID', $whereClause)
 	{		
-        if($whereClause)
-        {
-            $whereClause='WHERE'+ $whereClause;						
-        }
-        if($orderBy)
-        {
-            $orderBy='ORDER BY'+ $orderBy;						
-        }
+		if($whereClause)
+		{
+			$whereClause='WHERE'+ $whereClause;						
+		}
+		if($orderBy)
+		{
+			$orderBy='ORDER BY'+ $orderBy;						
+		}
 		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE,array('*',
 					self::TBL_SL_PROPERTY_GROUP,$orderBy.' '.$whereClause.' limit '.(($intPage-1)* self::NUM_PER_PAGE).','.self::NUM_PER_PAGE));
 		//echo 'sql:'.$strSQL;	
 		$arrResult = $this->_objConnection->selectCommand($strSQL);
 		//print_r($arrResult);
 		$strHTML = '<table class="tbl-list">
-                    <thead>
-						<td>PropertyGroupID</td>
-						<td>PropertyGroupName</td>
-						<td>PropertyGroupDisplay</td>
-						<td>ArticleTypeID</td>
-						<td>Order</td>
-						<td>CreatedBy</td>
-						<td>CreatedDate</td>
-						<td>ModifiedBy</td>
-						<td>ModifiedDate</td>
-						<td>DeletedBy</td>
-						<td>DeletedDate</td>
-						<td>IsDeleted</td>
-						<td>Status</td>
-                    </thead>
-                    <tbody>';
+				<thead>
+				<td>PropertyGroupID</td>
+				<td>PropertyGroupName</td>
+				<td>PropertyGroupDisplay</td>
+				<td>ArticleTypeID</td>
+				<td>Order</td>
+				<td>CreatedBy</td>
+				<td>CreatedDate</td>
+				<td>ModifiedBy</td>
+				<td>ModifiedDate</td>
+				<td>DeletedBy</td>
+				<td>DeletedDate</td>
+				<td>IsDeleted</td>
+				<td>Status</td>
+				</thead>
+				<tbody>';
 		$icount = count($arrmenu);
 		for($i=0;$i<$icount;$i++)
 		{
 			$strHTML.='<tr class="'.($i%2==0?'even':'odd').'">
-						<td>'.$arrResult[$i]['PropertyGroupID'].'</td>
-						<td>'.$arrResult[$i]['PropertyGroupName'].'</td>
-						<td>'.$arrResult[$i]['PropertyGroupDisplay'].'</td>
-						<td>'.$arrResult[$i]['ArticleTypeID'].'</td>
-						<td>'.$arrResult[$i]['Order'].'</td>
-						<td>'.$arrResult[$i]['CreatedBy'].'</td>
-						<td>'.$arrResult[$i]['CreatedDate'].'</td>
-						<td>'.$arrResult[$i]['ModifiedBy'].'</td>
-						<td>'.$arrResult[$i]['ModifiedDate'].'</td>
-						<td>'.$arrResult[$i]['DeletedBy'].'</td>
-						<td>'.$arrResult[$i]['DeletedDate'].'</td>
-						<td><input type="checkbox" onclick="_objPropertyGroup.showHide(\''.$arrResult[$i]['PropertyGroupID'].'\',\''.$arrResult[$i]['name'].'\',this)" '.($arrResult[$i]['IsDeleted']?'':'checked=checked').' /></td>
-						<td class="lastCell">'.$arrResult[$i]['Status'].'</td>
-					  </tr>';
+					<td>'.$arrResult[$i]['PropertyGroupID'].'</td>
+					<td>'.$arrResult[$i]['PropertyGroupName'].'</td>
+					<td>'.$arrResult[$i]['PropertyGroupDisplay'].'</td>
+					<td>'.$arrResult[$i]['ArticleTypeID'].'</td>
+					<td>'.$arrResult[$i]['Order'].'</td>
+					<td>'.$arrResult[$i]['CreatedBy'].'</td>
+					<td>'.$arrResult[$i]['CreatedDate'].'</td>
+					<td>'.$arrResult[$i]['ModifiedBy'].'</td>
+					<td>'.$arrResult[$i]['ModifiedDate'].'</td>
+					<td>'.$arrResult[$i]['DeletedBy'].'</td>
+					<td>'.$arrResult[$i]['DeletedDate'].'</td>
+					<td><input type="checkbox" onclick="_objPropertyGroup.showHide(\''.$arrResult[$i]['PropertyGroupID'].'\',\''.$arrResult[$i]['name'].'\',this)" '.($arrResult[$i]['IsDeleted']?'':'checked=checked').' /></td>
+					<td class="lastCell">'.$arrResult[$i]['Status'].'</td>
+					</tr>';
 		}
 		$strHTML.='</tbody></table>';
 		
@@ -311,7 +319,7 @@ class Model_PropertyGroup
 				"_objMenu.changePage")."</div>";
 		return $strHTML;
 	}
-    
-    #endregion   
+	
+	#endregion   
 }
 ?>

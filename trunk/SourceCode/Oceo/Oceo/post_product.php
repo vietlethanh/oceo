@@ -15,6 +15,7 @@ include_once('class/model_property.php');
 include_once('class/model_product.php');
 include_once('class/model_manufactory.php');
 include_once('class/model_productproperty.php');
+include_once('class/model_datatype.php');
 
 
 $objArticle = new Model_Article($objConnection);
@@ -39,7 +40,7 @@ $allTypes = $objArticleType->getAllArticleType(0,null, 'ParentID!=0' ,'Level');
 $currentParentType = $parentTypes[0][global_mapping::ArticleTypeID];
 
 
-$allGroups = $objPropertyGroup->getAllPropertyGroup(0,'*','', global_mapping::PropertyGroupName);
+$allGroups = $objPropertyGroup->getAllPropertyGroup(0,'*','', '');
 
 $allManuFactories = $objManufactory->getAllManufactory(0,'*','', global_mapping::ManufactoryName);
 
@@ -48,6 +49,7 @@ $allGroupIDs = global_common::getArrayColumn($allGroups,global_mapping::Property
 $strQueryIN = global_mapping::PropertyGroupID .' IN('. global_common::convertToQueryIN($allGroupIDs) .')';
 //echo($allCities);
 $allProperties = $objProperty->getAllProperty(0,'*',$strQueryIN,'`Order`');
+//print_r($allProperties);
 if ($_pgR["pid"])
 {
 	$productID = $_pgR["pid"];
@@ -82,10 +84,14 @@ if ($_pgR["pid"])
 
 <script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('ckeditor/ckeditor.js');?>"></script>
 <script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('ckeditor/adapters/jquery.js');?>"></script>
+<script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('bootstrap-better-Typeahead/js/bootstrap3-typeahead.min.js');?>"></script>
+<script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('bootstrap-better-Typeahead/js/bootstrap-better-typeahead.js');?>"></script>
+<link type="text/css" rel="stylesheet"  href="<?php echo $_objSystem->locateJPlugin('bootstrap-better-Typeahead/css/bootstrap-better-typeahead.css');?>">
+
 <script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_product.js');?>"></script>
 <script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_articletype.js');?>"></script>
 
-<div id="post-product" class="span10">
+<div id="post-product" class="">
 	<form method="POST" class="form-horizontal" id="post-article">
 		<!--Begin Form Input -->
 		<input type="hidden" id="adddocmode" name="adddocmode" value="<?php echo $intMode;?>" />
@@ -124,7 +130,7 @@ foreach($parentTypes as $item)
 				<label class="control-label">Chuyên Mục *</label>
 				<div class="controls">	
 					<select class="span6 chosen" name="cmCategory" id="cmCategory" data-placeholder="Chọn chuyên mục" 
-						tabindex="1" onchange="core.util.bindChosen(this,'cmManufactory','CategoryID');">
+						tabindex="1" onchange="core.util.bindChosen(this,'cmManufactory','CategoryID');core.util.bindChosen(this,'optGroup','CategoryID');">
 <?php
 foreach($allTypes as $item)
 {
@@ -196,24 +202,24 @@ foreach($allManuFactories as $item)
 			<div class="control-group">
 				<label class="control-label">Hình minh họa</label>
 				<div class="controls">
-					<textarea type="text" name="txtImage" id="txtImage" class="text span6" 
-					placeholder="vd: http://i134.photobucket.com/albums/q99/image1.jpg; http://i134.photobucket.com/albums/q99/image1.jpg http://i134.photobucket.com/albums/q99/image3.jpg"  
-					><?php echo $product[global_mapping::ImageLink] ?></textarea>
+					<textarea  name="txtImage" id="txtImage" class="m-wrap span6" maxlength="255"  rows="2" placeholder="vd: http://i134.photobucket.com/albums/left.jpg; http://i134.photobucket.com/albums/right.jpg;"><?php echo $product[global_mapping::ImageLink];?></textarea>
 				</div>
 			</div>
-			<div class="control-group property-product">
+			<div class="control-group property-product parent">
 				<label class="control-label">Chi tiết kỹ thuật</label>
 				<div class="controls">
 					
 					<select id="optGroup" name="optGroup" class="chosen span2 "  data-placeholder="Chọn nhóm" not-found="Tạo mới" onchange="core.util.bindChosen(this,'optProperty','PropertyGroupID');">
 <?php
+$display='style="display:none"';
 foreach($allGroups as $item)
 {
-	echo '			<option value="'.$item[global_mapping::PropertyGroupID].'" >'.$item[global_mapping::PropertyGroupName].'</option>';
+	echo '			<option value="'.$item[global_mapping::PropertyGroupID].'" CategoryID="'.$item[global_mapping::ArticleTypeID].'" '.$display.'>'.$item[global_mapping::PropertyGroupName].'</option>';
 }
 ?>
 					</select>
-					<select id="optProperty" name="optProperty"  class="chosen span2" data-placeholder="Chọn thuộc tính" not-found="Tạo mới" >
+					<select id="optProperty" name="optProperty"  class="chosen span2" data-placeholder="Chọn thuộc tính" not-found="Tạo mới" 
+							onchange="product.bindValueField(this,'txtPropertyValue');">
 <?php
 $display='style="display:none"';
 
@@ -238,15 +244,22 @@ foreach($allProperties as $item)
 		}
 	}
 	if(!$isExisted)
-		echo '			<option value="'.$item[global_mapping::PropertyID].'" '.$display.'  PropertyGroupID="'.$item[global_mapping::PropertyGroupID].'" >'.$item[global_mapping::PropertyName].'</option>';
+		echo '			<option value="'.$item[global_mapping::PropertyID].'" '.$display.'  PropertyGroupID="'.$item[global_mapping::PropertyGroupID].'" 
+				Values="'.$item[global_mapping::PropertyValue].'" DataType="'.$item[global_mapping::DataTypeID][global_mapping::InputType].'" 
+				Suffix="'.$item[global_mapping::DataTypeID][global_mapping::Suffix].'">'.$item[global_mapping::PropertyName].'</option>';
 }
 ?>
 					</select>	
-					<input type="text" name="txtPropertyValue" id="txtPropertyValue" class="text m-wrap  span3" maxlength="255" placeholder="" />
+					<input type="text" name="txtPropertyValue" id="txtPropertyValue" class="text m-wrap  span3" 
+						maxlength="255" placeholder="" style="width:130px" />
+					<label id="lbSuffix" class= m-wrap" style="display: inline-block;cursor: pointer;vertical-align: top;margin-top: 13px;margin-right: 7px;font-size: 10px;"></label> 
+					
+					<input type="checkbox" class="m-wrap" name="ckImportant" id="ckImportant" style="vertical-align: top;margin: 9px 0;" />
+					<label for="ckImportant" class= m-wrap" style="display: inline-block;cursor: pointer;vertical-align: top;margin-top: 5px;">Nổi bật</label> 
 					<a href="javascript:void(0);" class="btn btn-mini btn-add" onclick="product.addProperty(this)"/><i class="icon-plus"></i> Thêm</a>
-					<a href="javascript:void(0);" class="btn btn-mini btn-update no-display" onclick="product.updateProperty(this)"/><i class="icon-ok"></i> Cập nhật</a>
-					<a href="javascript:void(0);" class="btn  btn-mini btn-cancel no-display" onclick="product.cancelProperty(this)"/></i> Hủy bỏ</a>
-					<div class="help-inline">Thuộc tính, thành phần, chi tiết kỹ thuật sản phẩm</div>					
+					<a href="javascript:void(0);" class="btn btn-mini btn-update no-display" onclick="product.updateProperty(this)" style="vertical-align: top"/><i class="icon-ok"></i> Cập nhật</a>
+					<a href="javascript:void(0);" class="btn  btn-mini btn-cancel no-display" onclick="product.cancelProperty(this)" style="vertical-align: top"/></i> Hủy bỏ</a>
+					<div class="help-inline">Thuộc tính, thành phần, chi tiết kỹ thuật sản phẩm. Thuộc tính quan trọng sẽ hiển thị phần tổng quát sản phẩm</div>					
 				</div>	
 <?php
 $total = count($propertyInfo);
@@ -262,7 +275,7 @@ for($i=0; $i<$total; $i++)
 	{
 		echo	'<div class="controls row-item clear">';
 		echo	'	<label class="m-wrap inline span4 lbl-property">';
-		echo	'		<span class="property-id" lbPropertyID="'.$item[global_mapping::PropertyID].'">'.$item[global_mapping::PropertyName].'</span>: <span class="property-value"> '.$item[global_mapping::PropertyValue].'</span>';
+		echo	'		<span class="property-id" lbPropertyID="'.$item[global_mapping::PropertyID].'">'.$item[global_mapping::PropertyName].'</span>: <span class="property-value"> '.$item[global_mapping::PropertyValue].'</span><span class="prop-important">'.($item[global_mapping::Status]?' * ':'').'</span>';
 		echo		'</label>';
 		echo    '	<a onclick="product.moveUpItem(this,\'row-item\')" class="btn btn-mini float-right" href="javascript:;"><i class="icon-pencil"></i> Lên</a> ';
 		echo    '	<a onclick="product.moveDownItem(this,\'row-item\')" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Xuống</a> ';
@@ -351,6 +364,9 @@ for($i=0; $i<$total; $i++)
 			</div>
 			<div class="control-group">				
 				<div class="controls">
+				<a href="<?php echo $_SESSION[global_common::SES_LAST_PAGE]?>" class="lbtn">
+						  <i class="icon-circle-arrow-left"></i> Trở lại
+					</a>
 					<input type="button" name="btnOK" id="btnOK" class="btn" value="Đăng tin"/>
 					<input type="reset" name="btnReset" id="btnReset" class="btn gray" value="Nhập lại"/>
 				</div>
@@ -374,8 +390,8 @@ include_once('include/_location.inc');
 				height: 400
 			});
 			
-			//core.util.deSelectOption('optCity');
-			//core.util.deSelectOption('optDistrict');
+			core.util.deSelectOption("optGroup");
+			core.util.deSelectOption("optProperty");
 			
 			//init all categories
 			articleType.setAllCategories();
@@ -389,13 +405,16 @@ include_once('include/_location.inc');
                 product.postProduct();				
 				return false;				
             });
+			
 <?php
-if($intMode)
+if(!$intMode)
 {
-	if($article[global_mapping::StartHappyHour])
-		echo '$("#txtHappyFrom").val(\''.$article[global_mapping::StartHappyHour].'\');';
-	if($article[global_mapping::EndHappyHour])
-		echo '$("#txtHappyTo").val(\''.$article[global_mapping::EndHappyHour].'\');';
+	echo 'core.util.deSelectOption("cmCategory");';
+	echo 'core.util.deSelectOption("cmManufactory");';
+}
+else
+{
+	echo '$("#cmCategory").change()';
 }
 			?>
     });

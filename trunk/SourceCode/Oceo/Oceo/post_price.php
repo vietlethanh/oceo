@@ -7,58 +7,48 @@ $_SESSION[global_common::SES_C_CUR_PAGE] = "post_article.php";
 include_once('include/_permission.inc');
 include_once('include/_header.inc');
 include_once('class/model_articletype.php');
-include_once('class/model_article.php');
+include_once('class/model_product.php');
 include_once('class/model_comment.php');
 include_once('class/model_user.php');
 include_once('class/model_city.php');
 include_once('class/model_district.php');
+include_once('class/model_status.php');
+include_once('class/model_retailer.php');
 
-$objArticle = new Model_Article($objConnection);
+$objProduct = new Model_Product($objConnection);
 $objArticleType = new Model_ArticleType($objConnection);
 $objCity = new Model_City($objConnection);
 $objDistrict = new Model_District($objConnection);
+$objStatus = new Model_Status($objConnection);
+$objRetailer = new Model_Retailer($objConnection);
+$productStatuses = $objStatus->getAllStatus(0,'*',global_mapping::Type.'='.global_common::STATUS_PRODUCT_TYPE);
 $intMode = 0;//add mode
-$parentTypes = $objArticleType->getAllArticleType(0,null, 'ParentID=0','Level');
-$allTypes = $objArticleType->getAllArticleType(0,null, 'ParentID='.$parentTypes[0][global_mapping::ArticleTypeID] ,'Level');
 
 $allCities = $objCity->getAllCity();
+	
 //echo 'get city:';
 //echo($allCities);
-$allDistricts = $objDistrict->getAllDistrict();
-
-if ($_pgR["aid"])
+if ($_pgR["pid"])
 {
-	$articleID = $_pgR["aid"];
+	$currentProduct = $objProduct->getProductByID($_pgR["pid"]);
+}
+if ($_pgR["rid"])
+{
+	$retailerID = $_pgR["rid"];
 	
-	$article = $objArticle->getArticleByID($articleID);
+	$retailter = $objRetailer->getRetailerByID($retailerID);
 	
 	$intMode = 1;//edit mode
-	$createBy = $article[global_mapping::CreatedBy];
+	$createBy = $retailter[global_mapping::CreatedBy];
 	$currentUserID = $_SESSION[global_common::SES_C_USERINFO][global_mapping::UserID];
 	if($createBy != $currentUserID)
 	{
 		global_common::redirectByScript("index.php");
 		return;
 	}
-	//print_r($article[global_mapping::ArticleID]);
-	$currentTypes = $objArticle->getArticleTypesByID($article[global_mapping::ArticleID]);
-	//print_r($currentTypes);
-	$type = $objArticleType->getArticleTypeByID($currentTypes[0]);
-	$currentParentType = $type[global_mapping::ParentID];
-	//print_r($currentParentType);
-	$parentTypes = $objArticleType->getAllArticleType(0,null, 'ParentID=0','Level');
-	
-	$allTypes = $objArticleType->getAllArticleType(0,null, 'ParentID='.$currentParentType ,'Level');
-	//print_r($allTypes);
-	$addresses = global_common::splitString($article[global_mapping::Addresses],';');
-	$districts = global_common::splitString($article[global_mapping::Dictricts],';');
-	$cities = global_common::splitString($article[global_mapping::Cities],';');
-	
-	//print_r($parentTypes);
-	//$intPage = 1;
-	//$total = 0;
-	//$comments = $objComment->getCommentByArticle($intPage,$total,$articleID,'*','',' CreatedDate DESC');
-	//print_r($article);
+	$currentProduct = $objProduct->getProductByID($retailter[global_mapping::ProductID]);
+	$currentProductType = $retailter[global_mapping::ProductStatusID];
+	$currentPrice = $retailter[global_mapping::Price];
 }
 
 ?>
@@ -67,12 +57,14 @@ if ($_pgR["aid"])
 <script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('ckeditor/adapters/jquery.js');?>"></script>
 <script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_product.js');?>"></script>
 <script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_articletype.js');?>"></script>
+<script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_retailer.js');?>"></script>
 
-<div id="post-price" class="span10">
+<div id="post-price" class="">
 	<form method="POST" class="form-horizontal" id="post-article">
 		<!--Begin Form Input -->
 		<input type="hidden" id="adddocmode" name="adddocmode" value="<?php echo $intMode;?>" />
-		<input type="hidden" id="ArticleID" name="ArticleID" value="<?php echo $articleID;?>" />
+		<input type="hidden" id="RetailerID" name="RetailerID" value="<?php echo $retailerID;?>" />
+		<input type="hidden" id="ProductID" name="ProductID" value="<?php echo $currentProduct[global_mapping::ProductID];?>" />
 		<div class="table-post">
 			<div class="control-group">
 				<div class="controls">
@@ -81,20 +73,27 @@ if ($_pgR["aid"])
 			</div>
 			<div class="control-group zone">
 				<div class="controls">
-					<h2 class="m-wrap zone-title">Thông tin giá sản phẩm</h2>
+					<h2 class="m-wrap zone-title">Thông tin tổng quát</h2>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Tên sản phẩm</label>
+				<div class="controls">
+				
+					<a href="<?php echo global_common::buildProductLink($currentProduct[global_mapping::ProductID]) ?>" target="_blank" class="m-wrap"><?php echo $currentProduct[global_mapping::ProductName] ?></a>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">Hình thức sản phẩm *</label>
 				<div class="controls">	
-					<select class="span6 chosen" name="cmArea" id="cmArea" data-placeholder="Chọn lĩnh vực" tabindex="1" onchange="articleType.bindCategory(this);">
+					<select class="span6 chosen" name="cmProductStatus" id="cmProductStatus" data-placeholder="Chọn lĩnh vực" tabindex="1" onchange="articleType.bindCategory(this);">
 <?php
-foreach($parentTypes as $item)
+foreach($productStatuses as $item)
 {
-	if($item[global_mapping::ArticleTypeID] == $currentParentType)
-		echo '			<option selected="selected" value="'.$item[global_mapping::ArticleTypeID].'" >'.$item[global_mapping::ArticleTypeName].'</option>';
+	if($item[global_mapping::StatusID] == $retailter[global_mapping::ProductStatusID])
+		echo '			<option selected="selected" value="'.$item[global_mapping::StatusID].'" >'.$item[global_mapping::StatusName].'</option>';
 	else
-		echo '			<option value="'.$item[global_mapping::ArticleTypeID].'" >'.$item[global_mapping::ArticleTypeName].'</option>';
+		echo '			<option value="'.$item[global_mapping::StatusID].'" >'.$item[global_mapping::StatusName].'</option>';
 	
 }
 ?>
@@ -103,86 +102,72 @@ foreach($parentTypes as $item)
 				</div>
 			</div>	
 			<div class="control-group">
-				<label class="control-label">Giá bán</label>
+				<label class="control-label">Tình trạng sản phẩm</label>
 				<div class="controls">
-					<input type="text" name="txtImage" id="txtImage" class="text span6 maxlength="255"  
-					placeholder="vd: http://i134.photobucket.com/albums/q99/45748_0_square_1a.jpg"  
-					value="<?php echo $article[global_mapping::FileName];?>"/>
+					<input type="text" name="txtStatusDetail" id="txtStatusDetail" class="text span6 maxlength="12"  placeholder=""  
+					value="<?php echo $retailter[global_mapping::StatusDetail];?>"/>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Khu vực *</label>
+				<div class="controls">	
+					<select class="span6 chosen" name="cmCity" id="cmCity" data-placeholder="Chọn thành phố" tabindex="1" >
+<?php
+foreach($allCities as $item)
+{
+	if($item[global_mapping::CityID] == $retailter[global_mapping::CityID])
+		echo '			<option selected="selected" value="'.$item[global_mapping::CityID].'" >'.$item[global_mapping::CityName].'</option>';
+	else
+		echo '			<option value="'.$item[global_mapping::CityID].'" >'.$item[global_mapping::CityName].'</option>';
+	
+}
+?>
+					</select>
+					<div class="help-inline message"></div>
+				</div>
+			</div>	
+			<div class="control-group">
+				<label class="control-label">Giá bán (VNĐ) *</label>
+				<div class="controls">
+					<input type="text" name="txtPrice" id="txtPrice" class="text span6 maxlength="12"  
+					placeholder="vd: 10,000,000"  
+					value="<?php echo $retailter[global_mapping::Price];?>"/>
 				</div>
 			</div>
 			<div class="control-group">
 				<label class="control-label">Hình minh họa</label>
 				<div class="controls">
-					<input type="text" name="txtImage" id="txtImage" class="text span6" maxlength="255"  
-					placeholder="vd: http://i134.photobucket.com/albums/q99/45748_0_square_1a.jpg"  
-					value="<?php echo $article[global_mapping::FileName];?>"/>
-				</div>
-			</div>
-			<div class="control-group zone">
-				<div class="controls">
-					<h2 class="m-wrap zone-title">Thông tin giao hàng</h2>
-				</div>
-			</div>
-			<div class="control-group">	
-				<label class="control-label">Hình thức giao hàng *</label>
-				<div class="controls">	
-					<select class="span6 chosen" name="cmCategory" id="cmCategory" data-placeholder="Chọn chuyên mục" multiple="multiple" tabindex="1">
-<?php
-foreach($allTypes as $item)
-{
-	$isSelect = false;
-	//print_r($currentTypes);
-	foreach($currentTypes as $selected)
-	{
-		if($item[global_mapping::ArticleTypeID] == $selected)
-		{
-			$isSelect=true;
-		}
-	}
-	
-	if($isSelect)
-		echo '			<option selected="selected" value="'.$item[global_mapping::ArticleTypeID].'" >'.$item[global_mapping::ArticleTypeName].'</option>';
-	else
-		echo '			<option value="'.$item[global_mapping::ArticleTypeID].'" >'.$item[global_mapping::ArticleTypeName].'</option>';
-}
-?>
-					</select>
-					<div class="help-inline message"></div>					
-				</div>
-			</div>
-			
-			<div class="control-group">
-				<label class="control-label">Thời gian giao hàng</label>
-				<div class="controls">
-					<input type="text" name="txtName" id="txtName" class="text span6" maxlength="255"  
-					value="<?php echo $article[global_mapping::Title];?>"/>
+					<textarea  name="txtImage" id="txtImage" class="m-wrap span6" maxlength="255"  rows="2" placeholder="vd: http://i134.photobucket.com/albums/left.jpg; http://i134.photobucket.com/albums/right.jpg;"><?php echo $retailter[global_mapping::ImageLink];?></textarea>
 				</div>
 			</div>
 			<div class="control-group">
-				<label class="control-label">Chi phí giao hàng</label>
+				<label class="control-label">Bộ sản phẩm</label>
 				<div class="controls">
-					<input type="text" name="txtName" id="txtName" class="text span6" maxlength="255"  
-					value="<?php echo $article[global_mapping::Title];?>"/>
+					<textarea  name="txtBoxInfo" id="txtBoxInfo" class="m-wrap span6" maxlength="255"  rows="2" placeholder=""><?php echo $retailter[global_mapping::BoxInfo];?></textarea>
 				</div>
 			</div>
-			
+			<div class="control-group">
+				<label class="control-label">Thông tin giao hàng</label>
+				<div class="controls">
+					<textarea  name="txtShipDesc" id="txtShipDesc" class="m-wrap span6" maxlength="255"  rows="2"><?php echo $retailter[global_mapping::ShippingDesc];?></textarea>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Tổng quát sản phẩm</label>
+				<div class="controls">
+					<textarea  name="txtShortDesc" id="txtShortDesc" class="m-wrap span6" maxlength="255"  rows="2" placeholder=""><?php echo $retailter[global_mapping::ShortDesc];?></textarea>
+				</div>
+			</div>
 			<div class="control-group zone">
 				<div class="controls">
 					<h2 class="m-wrap zone-title">Thông tin chi tiết</h2>
 				</div>
-			</div>
-			
+			</div>			
 			<div class="control-group">
 				<label class="control-label"></label>
 				<div class="controls">
-					<textarea class="span6 ckeditor m-wrap" name="txtContent" id="txtContent" rows="10"><?php echo $article[global_mapping::Content];?></textarea>
+					<textarea class="span6 ckeditor m-wrap" name="txtContent" id="txtContent" rows="10"><?php echo $retailter[global_mapping::Description];?></textarea>
 					<div class="help-inline message"></div>					
-				</div>
-			</div>
-			<div class="control-group no-display">
-				<label class="control-label">Tags </label>
-				<div class="controls">
-					<textarea id='txtTags' name='txtTags' class="m-wrap span6" rows="2"></textarea>
 				</div>
 			</div>
 			<div class="control-group">
@@ -195,10 +180,10 @@ foreach($allTypes as $item)
 			</div>
 			<div class="control-group">				
 				<div class="controls">
-					<a href="javascript:;" class="lbtn">
+					<a href="<?php echo $_SESSION[global_common::SES_LAST_PAGE]?>" class="lbtn">
 						  <i class="icon-circle-arrow-left"></i> Trở lại
 					</a>
-					<input type="submit" name="btnOK" id="btnOK" class="btn" value="Hoàn tất"/>
+					<input type="button" name="btnOK" id="btnOK" class="btn" value="Hoàn tất"/>
 					<input type="reset" name="btnReset" id="btnReset" class="btn gray" value="Nhập lại"/>
 				</div>
 			</div>
@@ -215,6 +200,7 @@ include_once('include/_location.inc');
 ?>
 <script language="javascript" type="text/javascript">
     $(document).ready(function () {
+			$('#txtPrice').mask('000,000,000,000', {reverse: true});
 			CKEDITOR.replace( 'txtContent',
 			{
 				height: 400
@@ -227,22 +213,22 @@ include_once('include/_location.inc');
 			articleType.setAllCategories();
 			
 			core.util.getObjectByID("btnOK").click(function(){
-				return;
-				 //article.postArticle();			
+				//return;
+				  retailer.postPrice();
 			});
 			
 			core.util.getObjectByID("post-article").submit(function () {
-                article.postArticle();				
+                retailer.postPrice();				
 				return false;				
             });
 <?php
-if($intMode)
-{
-	if($article[global_mapping::StartHappyHour])
-		echo '$("#txtHappyFrom").val(\''.$article[global_mapping::StartHappyHour].'\');';
-	if($article[global_mapping::EndHappyHour])
-		echo '$("#txtHappyTo").val(\''.$article[global_mapping::EndHappyHour].'\');';
-}
+//if($intMode)
+//{
+//	if($article[global_mapping::StartHappyHour])
+//		echo '$("#txtHappyFrom").val(\''.$article[global_mapping::StartHappyHour].'\');';
+//	if($article[global_mapping::EndHappyHour])
+//		echo '$("#txtHappyTo").val(\''.$article[global_mapping::EndHappyHour].'\');';
+//}
 			?>
     });
 </script>

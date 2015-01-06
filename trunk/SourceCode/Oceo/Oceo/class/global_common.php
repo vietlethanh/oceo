@@ -16,6 +16,15 @@ class global_common
 	
 	/*****************************************************************************
 	* 
+	* General Statuses
+	* 
+	*****************************************************************************/
+	const STATUS_ACTIVE = 100;
+	const STATUS_INACTIVE = 101;
+	
+	
+	/*****************************************************************************
+	* 
 	* Status
 	* 
 	*****************************************************************************/
@@ -25,6 +34,23 @@ class global_common
 	const SUB_STATUS_GENERAL_PROPERTY = 1;
 	
 	
+	/*****************************************************************************
+	* 
+	* Type Status
+	* 
+	*****************************************************************************/
+	const STATUS_PRODUCT_TYPE = 10;
+	const STATUS_PRODUCT_PRICE = 30;
+	
+	
+	/*****************************************************************************
+	* 
+	* Product Type Status
+	* 
+	*****************************************************************************/
+	const STATUS_PRODUCT_NEW = 1;
+	const STATUS_PRODUCT_USED = 2;
+	const STATUS_PRODUCT_Refurbished = 3;
 	
 	/*****************************************************************************
 	* 
@@ -48,6 +74,7 @@ class global_common
 	 *****************************************************************************/
 	const SES_C_USERINFO						= 'CUSER_INFO';
 	const SES_C_CUR_PAGE						= 'CCUR_PAGE';
+	const SES_LAST_PAGE							= 'LAST_PAGE';
 	const SES_CHANGE_PASS						= 'CHANGE_PASS_CODE'; // check vercode for forgot pass
 	const SES_IS_AUTHENTICATED_CODE				= 'IS_AUTHENTICATED_CODE';
 	const SES_SIMILAR_SEARCH_CONTENT			= 'SIMILAR_SEARCH_CONTENT';
@@ -3496,15 +3523,21 @@ class global_common
 	 * @return int 1:Cập nhật thành công hay 0:thất bại
 	 *
 	 */
-	public function updateDeleteFlag($ContentID,$IDName,$strTableName,$status,$objConnection)
+	public function updateDeleteFlag($ContentID,$IDName,$deletedBy,$strTableName,$status,$objConnection)
 	{
-		$strSQL = self::prepareQuery(self::SQL_UPDATE_BY_CONDITION,array($strTableName,"delete_flag=$status","$IDName='$ContentID'"));
+		//const SQL_UPDATE_BY_CONDITION				= "UPDATE `{0}` SET {1} WHERE {2};";
+		$strSQL = self::prepareQuery(self::SQL_UPDATE_BY_CONDITION,array(
+					$strTableName,
+					'IsDeleted='.$status.','.global_mapping::DeletedBy.'='.$deletedBy.','.global_mapping::DeletedDate.'=\''.global_common::nowDateSQL().'\'',
+					$IDName.'='.$ContentID));
+		//echo $strSQL;
 		if ($objConnection->executeSQL($strSQL)==-1)
 		{
 			return 0;
 		}
 		return 1;
 	}
+	
 	
 	/**
 	 * Phương thức cập nhật delete_flag
@@ -4051,6 +4084,77 @@ class global_common
 	{
 		return $_SERVER["HTTP_HOST"];
 	}
+	
+	public function buildProductLink($productID)
+	{
+		return 'product_detail.php?pid='.$productID;
+	}
+	
+	public function buildPriceLink($productID,$type)
+	{
+		return 'price_detail.php?pid='.$productID.'&type='.$type;
+	}
+	
+	public function buildPathProduct($connection, $productID,$type)
+	{
+		$objRetailer = new Model_Retailer($connection);
+		$inPrices = $objRetailer->getRetailerByProduct($productID);
+		//'<a href="#" class="link">Chi tiết sản phẩm</a> => 
+		//<a href="#" class="link">Hàng mới từ 12.000.000đ</a> | 
+		//<span>Hàng mới cũ 10.000.000đ</span> | <a href="#" class="link">Hàng refurbished từ 12.000.000đ</a> ';
+		$path = '<a href="'.global_common::buildProductLink($productID).'" class="link">Chi tiết sản phẩm</a> =>';
+		$priceNew = 0;
+		$priceUsed = 0;
+		$priceRefur = 0;
+		foreach($inPrices as $item)
+		{
+			if($item[global_mapping::ProductStatusID] ==  global_common::STATUS_PRODUCT_NEW)
+			{
+				$priceNew = global_common::FormatPrice($item[global_mapping::Price]);
+			}
+			if($item[global_mapping::ProductStatusID] ==  global_common::STATUS_PRODUCT_USED)
+			{
+				$priceUsed = global_common::FormatPrice($item[global_mapping::Price]);
+			}
+			if($item[global_mapping::ProductStatusID] ==  global_common::STATUS_PRODUCT_Refurbished)
+			{
+				$priceRefur = global_common::FormatPrice($item[global_mapping::Price]);
+			}
+		}
+		
+		if($type == global_common::STATUS_PRODUCT_NEW)
+		{
+			$path .= '<a href="'.global_common::buildPriceLink($productID,global_common::STATUS_PRODUCT_NEW).'" class="link active">Hàng mới từ '.$priceNew.'</a> | ';
+		}
+		else
+		{
+			$path .= '<a href="'.global_common::buildPriceLink($productID,global_common::STATUS_PRODUCT_NEW).'" class="link">Hàng mới từ '.$priceNew.'</a> | ';
+		}
+		
+		if($type == global_common::STATUS_PRODUCT_USED)
+		{
+			$path .= '<a href="'.global_common::buildPriceLink($productID,global_common::STATUS_PRODUCT_USED).'" class="link active">Hàng cũ từ '.$priceUsed.'</a> | ';
+		}
+		else
+		{
+			$path .= '<a href="'.global_common::buildPriceLink($productID,global_common::STATUS_PRODUCT_USED).'" class="link">Hàng cũ từ '.$priceUsed.'</a> | ';
+		}
+		
+		if($type == global_common::STATUS_PRODUCT_Refurbished)
+		{
+			$path .= '<a href="'.global_common::buildPriceLink($productID,global_common::STATUS_PRODUCT_Refurbished).'" class="link active">Hàng Refurbished từ '.$priceRefur.'</a>';
+		}
+		else
+		{
+			$path .= '<a href="'.global_common::buildPriceLink($productID,global_common::STATUS_PRODUCT_Refurbished).'" class="link">Hàng Refurbished từ '.$priceRefur.'</a>';
+		}
+		return $path;
+	}
+	public function buildRetailerLink($retailerID)
+	{
+		return 'retailer_detail.php?rid='.$retailerID;
+	}
+	
 	#end region
 	
 }

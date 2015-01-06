@@ -29,9 +29,9 @@ light grey: #fafafa;
 /***
 Import fonts
 ***/
-
+/*
 @import url(//fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
-
+*/
 
 /* overides metro scrolbars in IE10 and makes them look like a default scrollbar */
 @-ms-viewport{ 

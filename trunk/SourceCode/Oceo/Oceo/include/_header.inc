@@ -31,6 +31,7 @@
 <link type="text/css" rel="stylesheet"  href="<?php echo $_objSystem->locateJPlugin('bootstrap-timepicker/compiled/timepicker.css');?>"/>
 
 <script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('jquery-inputmask/jquery.inputmask.bundle.min.js');?>"></script>
+<script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('jQuery-Mask-Plugin-master/jquery.mask.min.js');?>"></script>
 
 <link type="text/css" rel="stylesheet"  href="<?php echo $_objSystem->locateJPlugin('jquery-multi-select/css/multi-select-metro.css');?>"/>
 <script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('jquery-multi-select/js/jquery.multi-select.js');?>"></script>
@@ -65,6 +66,11 @@
 <script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('selectize.js-master/dist/js/standalone/selectize.js"');?>"></script>
 <link type="text/css" rel="stylesheet"  href="<?php echo $_objSystem->locateJPlugin('selectize.js-master/dist/css/selectize.default.css');?>">
 
+<script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('Jssor.Slider/jssor.core.js');?>"></script>
+<script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('Jssor.Slider/jssor.utils.js');?>"></script>
+<script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('Jssor.Slider/jssor.slider.js');?>"></script>
+<script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_slide_load.js');?>"></script>
+
 
 <link type="text/css" rel="stylesheet"  href="<?php echo $_objSystem->locateJPlugin('theme/css/style.css');?>">
 
@@ -81,47 +87,37 @@
 <script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_user.js');?>"></script>
 
 
-<script>
+	
+	<script>
 		jQuery(document).ready(function() {
 			// initiate layout and plugins
 			App.init();
 			FormComponents.init();
+			
+			$('.nav-tabs > li > a').hover( function(){
+			  $(this).tab('show');
+		   });
 		});
+		
 	</script>
 </head>
 <?php
+include_once('class/model_city.php');
+//get catId from _article.inc
+//$catID = $_pgR['cid'];
+$objCity = new Model_City($objConnection);
 
-/* TODO: Add code here */
-include_once('class/model_articletype.php');
-include_once('class/model_article.php');
-
-$objArticleType = new model_ArticleType($objConnection);
-$arrCategories =  $objArticleType->getAllArticleType(0,null,'`ParentID`=0','Level');
-
-
+$allCities = $objCity->getAllCity();
 ?>
 
 <body >
 <div id="main" >
     <!--div id="subcontent" -->
     <div id="header" >
-		<div id="header-menu">
-			<ul>
-			<li>
-				<a href="index.php"><img class="m-logo" src="images/logo.png"></img></a>
-			</li>
-<?php
-foreach($arrCategories as $item)
-{
-	echo '	<li>';
-	echo '		<a href="article_list.php?cid='.$item[global_mapping::ArticleTypeID].'">'.str_replace('-',' ',$item[global_mapping::ArticleTypeName]).'</a>';	
-	echo '	</li>';
-}
-	?>
-			</ul>
-		</div>
+		
 		 <div id="div-login" align="right" style=""  class="navbar navbar-inverse navbar-fixed-top">
-			<ul class="nav pull-right">		
+			<ul class="nav pull-right">	
+			
 <?php 
 
 if (global_common::isCLogin())
@@ -138,7 +134,8 @@ if (global_common::isCLogin())
 					</a>
 					<ul class="dropdown-menu">
 						<li><a href="profile.php"><i class="icon-user"></i> Thông tin cá nhân</a></li>
-						<li><a href="profile_article.php"><i class="icon-reorder"></i> Quản lý khuyến mãi</a></li>
+						<li><a href="profile_price.php"><i class="icon-reorder"></i> Quản lý đăng bán</a></li>
+						<li><a href="profile_product.php"><i class="icon-reorder"></i> Quản lý sản phẩm</a></li>
 						<li class="divider"></li>
 						<li><a href="javascript:user.logout();"><i class="icon-signout"></i> Đăng xuất</a></li>
 					</ul>
@@ -164,8 +161,66 @@ else{
 }
 				?>
 				<!-- END USER LOGIN DROPDOWN -->
+				<li>
+			<label>
+			<select id="optCity" name="ct" onchange="article.bindDistrict(this);">
+				<option value="">Tỉnh/Thành Phố</option>
+<?php
+foreach($allCities as $item)
+{
+	if($item[global_mapping::CityName] == $city)
+	{
+		$selectCityID = $item[global_mapping::CityID];
+		echo '			<option value="'.$item[global_mapping::CityName].'" selected="selected" CityID="'.$item[global_mapping::CityID].'">'.$item[global_mapping::CityName].'</option>';
+	}
+	else
+		echo '			<option value="'.$item[global_mapping::CityName].'" CityID="'.$item[global_mapping::CityID].'">'.$item[global_mapping::CityName].'</option>';
+}
+					?>
+				</select>
+			</label>	
+			</li>
 				</ul>
 		 </div>
+		<div id="top-menu">
+			<ul>
+				<li>
+					<a href="#">Giới thiệu</a>
+					
+				</li>
+				<li><a href="#">Giải đáp</a></li>
+				<li>	<a href="#">Qui định</a></li>
+				<li>	<a href="#">Liên hệ</a></li>
+			</ul>
+		</div>
+		<div id="header-banner">
+			<img src="images/slogan.png"/>
+		</div>
+		<div id="header-menu">
+			<ul  class="nav nav-tabs">
+			<li>
+				<a href="index.php"><img class="m-logo" src="images/logo.png"></img></a>
+			</li>
+<?php
+//$_arrCategories get from main view
+foreach($_arrCategories as $item)
+{
+	if($_currentParentCatID == $item[global_mapping::ArticleTypeID])
+	{
+		echo '	<li  class="active">';
+	}
+	else
+	{
+		echo '	<li>';
+	}
+	
+	echo '		<a href="#tab'.$item[global_mapping::ArticleTypeID].'" data-toggle="tab">'.str_replace('-',' ',$item[global_mapping::ArticleTypeName]).'</a>';	
+	echo '	</li>';
+}
+	?>
+			</ul>
+		</div>
+		
 		<p></p>
     </div>
 	<div class="wrapper">

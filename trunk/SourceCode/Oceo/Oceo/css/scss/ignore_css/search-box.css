@@ -1,21 +1,21 @@
 /*
 Syntax error: Undefined variable: "$color_body".
-        on line 11 of ./search-box.scss
+        on line 12 of ./search-box.scss
 
-6: 	width: 100%;
-7: 	input[type='text']
-8: 	{
-9: 		background: none repeat scroll 0 0 gray;
-10: 		border: medium none;
-11: 		color: $color_body;
-12: 		font-weight: bold;
-13: 		opacity: 0.7;
-14: 		padding: 10px;
-15: 		width: 350px;
-16: 		margin-bottom: 0;
+7: 	width: 100%;
+8: 	input[type='text']#txtkeyword
+9: 	{
+10: 		background: none repeat scroll 0 0 gray;
+11: 		border: medium none;
+12: 		color: $color_body;
+13: 		font-weight: bold;
+14: 		opacity: 0.7;
+15: 		padding: 10px 50px;
+16: 		width: 577px; 
+17: 		margin-bottom: 0;
 
 Backtrace:
-./search-box.scss:11
+./search-box.scss:12
 C:/Ruby193/lib/ruby/gems/1.9.1/gems/sass-3.2.12/lib/sass/script/variable.rb:49:in `_perform'
 C:/Ruby193/lib/ruby/gems/1.9.1/gems/sass-3.2.12/lib/sass/script/node.rb:40:in `perform'
 C:/Ruby193/lib/ruby/gems/1.9.1/gems/sass-3.2.12/lib/sass/tree/visitors/perform.rb:298:in `visit_prop'
@@ -70,4 +70,4 @@ C:/Ruby193/lib/ruby/gems/1.9.1/gems/sass-3.2.12/vendor/listen/lib/listen/adapter
 body:before {
   white-space: pre;
   font-family: monospace;
-  content: "Syntax error: Undefined variable: \"$color_body\".\A         on line 11 of ./search-box.scss\A \A 6: 	width: 100%;\A 7: 	input[type='text']\A 8: 	{\A 9: 		background: none repeat scroll 0 0 gray;\A 10: 		border: medium none;\A 11: 		color: $color_body;\A 12: 		font-weight: bold;\A 13: 		opacity: 0.7;\A 14: 		padding: 10px;\A 15: 		width: 350px;\A 16: 		margin-bottom: 0;"; }
+  content: "Syntax error: Undefined variable: \"$color_body\".\A         on line 12 of ./search-box.scss\A \A 7: 	width: 100%;\A 8: 	input[type='text']#txtkeyword\A 9: 	{\A 10: 		background: none repeat scroll 0 0 gray;\A 11: 		border: medium none;\A 12: 		color: $color_body;\A 13: 		font-weight: bold;\A 14: 		opacity: 0.7;\A 15: 		padding: 10px 50px;\A 16: 		width: 577px; \A 17: 		margin-bottom: 0;"; }

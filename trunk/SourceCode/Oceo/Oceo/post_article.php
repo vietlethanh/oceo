@@ -68,7 +68,7 @@ if ($_pgR["aid"])
 <script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_article.js');?>"></script>
 <script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_articletype.js');?>"></script>
 
-<div id="post-page" class="span10">
+<div id="post-page" class="">
 	<form method="POST" class="form-horizontal" id="post-article">
 		<!--Begin Form Input -->
 		<input type="hidden" id="adddocmode" name="adddocmode" value="<?php echo $intMode;?>" />

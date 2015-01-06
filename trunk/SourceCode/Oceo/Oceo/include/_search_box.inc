@@ -19,51 +19,41 @@ $selectCityID = "";
 
 ?>
 <div id="search-box">
-	<form method="get" action="article_list.php" id="formSearch">
+	<form method="get" action="products.php" id="formSearch">
 	   <input type="hidden" name="cid" value="<?php echo $catID ?>"/>	
-		<label>
-			<select id="optCity" name="ct" onchange="article.bindDistrict(this);">
-				<option value="">Tỉnh/Thành Phố</option>
-<?php
-foreach($allCities as $item)
-{
-	if($item[global_mapping::CityName] == $city)
-	{
-		$selectCityID = $item[global_mapping::CityID];
-		echo '			<option value="'.$item[global_mapping::CityName].'" selected="selected" CityID="'.$item[global_mapping::CityID].'">'.$item[global_mapping::CityName].'</option>';
-	}
-	else
-		echo '			<option value="'.$item[global_mapping::CityName].'" CityID="'.$item[global_mapping::CityID].'">'.$item[global_mapping::CityName].'</option>';
-}
-?>
-			</select>
-		</label>
-		<label>
-			<select id="optDistrict" name="ds">
-				<option CityID="0" value="">Quận/Huyện</option>
-<?php
-$display='style="display:none"';
-foreach($allDistricts as $item)
-{
-	if($selectCityID == $item[global_mapping::CityID])
-	{
-		if($item[global_mapping::DistrictName] == $district)
-		{
-			echo '<option value="'.$item[global_mapping::DistrictName].'" selected="selected" CityID="'.$item[global_mapping::CityID].'">'.$item[global_mapping::DistrictName].'</option>';
-		}
-		else
-		{
-			echo '<option value="'.$item[global_mapping::DistrictName].'"  CityID="'.$item[global_mapping::CityID].'">'.$item[global_mapping::DistrictName].'</option>';
-		}
-	}
-	else
-		echo ' <option value="'.$item[global_mapping::DistrictName].'" '.$display.'  CityID="'.$item[global_mapping::CityID].'">'.$item[global_mapping::DistrictName].'</option>';
-}
-?>
-			</select>
-		</label>
+		
 		<input type="text" id="txtkeyword" name="kw" value="<?php echo $keyword ?>" placeholder="Tìm kiếm..."> 
 		<input type="button" class="btnSearch"  onclick="article.validateKeyword();"/>	
-		<a href="post_article.php" class="btn btn-large btn-post">Đăng Tim Mới</a>
+		<a href="post_search.php?pid=<?php echo $_currentProductID ?>" class="btn btn-large btn-post">Đăng Bán</a>
+		<div class="clear"></div>
+		
+		<div class="box-filter">
+<?php 
+
+
+//echo $item[global_mapping::PropertyName];
+echo '<select class="select2" name="manu" data-placeholder="Nhà Sản Xuất" style="min-width:150px">';
+echo '<option value=""></option>';
+foreach($allManuFactories as $item)
+{
+	echo '		<option value="'.$item[global_mapping::ManufactoryID].'">'.global_common::formatOutputText($item[global_mapping::ManufactoryName]).'</option>';
+}
+echo '	</select>';
+//print_r($topProperties);
+foreach($topProperties as $item)
+{
+	
+	//echo $item[global_mapping::PropertyName];
+	echo '<select class="select2" name="property['.$item[global_mapping::PropertyID].']" 
+			data-placeholder="'.global_common::formatOutputText($item[global_mapping::PropertyName]).'" style="min-width:150px">';
+	echo '<option value=""></option>';
+	foreach($item[global_mapping::PropertyValue] as $value)
+	{
+		echo '		<option value="'.global_common::formatOutputText($value) .'">'.global_common::formatOutputText($value).'</option>';
+	}
+	echo '	</select>';
+}
+		?>
+		</div>
 	</form>
 </div>

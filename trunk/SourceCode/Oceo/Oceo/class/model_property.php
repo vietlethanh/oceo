@@ -293,6 +293,22 @@ class Model_Property
 			global_common::writeLog('get All sl_property:'.$strSQL,1,$_mainFrame->pPage);
 			return null;
 		}
+		
+		$objDataType = new Model_Datatype($this->_objConnection);
+		
+		$allDataType = $objDataType->getAllDatatype();
+		$dataTypes = array();
+		foreach($allDataType as $key => $info)
+		{
+			$dataTypes[$info[global_mapping::DataTypeID]]=$info;
+			unset($dataTypes[$key]);
+		}	
+		
+		$count = count($arrResult);
+		for($index=0;$index < $count;$index++)
+		{
+			$arrResult[$index][global_mapping::DataTypeID] = $dataTypes[$arrResult[$index][global_mapping::DataTypeID]];
+		}
 		//print_r($arrResult);
 		return $arrResult;
 	}

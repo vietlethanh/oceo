@@ -2,51 +2,41 @@
 $objArticleType = new model_ArticleType($objConnection);
 $objArticleType = new model_ArticleType($objConnection);
 $objArticle = new model_Article($objConnection);
-
+//$_parentCatID get from parent page
+$allCats = $objArticleType->getAllArticleType(0,null,'ParentID='.$_parentCatID,null);
 if($_pgR["cid"])
 {
 	$parentID = 0;
 	$catID = $_pgR["cid"];
-	$cat = $objArticleType->getArticleTypeByID($catID);
-	if($cat[global_mapping::ParentID] == '0' || $cat[global_mapping::ParentID] == 0)
-	{
-		$parentID = $cat[global_mapping::ArticleTypeID];
-		$parentCat = $cat;
-	}
-	else
-	{
-		$parentID = $cat[global_mapping::ParentID];
-		$parentCat = $objArticleType->getArticleTypeByID($parentID);
-	}
 	$strCats = global_common::convertToQueryIN($catID);
-	$allCats = $objArticleType->getAllArticleType(0,null,'ParentID='.$parentID,null);
 }
 elseif($_pgR["aid"])
 {
 	$articleID = $_pgR["aid"];
 	$cats = $objArticle->getArticleTypesByID($articleID);
 	$strCats = global_common::convertToQueryIN($cats);
-	$catID = $cats[0];
-	$cat = $objArticleType->getArticleTypeByID($catID);
-	$parentID = $cat[global_mapping::ParentID];
-	$parentCat = $objArticleType->getArticleTypeByID($parentID);
-	$allCats = $objArticleType->getAllArticleType(0,null,'ParentID='.$parentID,null);
 }
-else{
-	$allCats = $objArticleType->getAllArticleType(0,null,'ParentID=1',null);
+elseif($_pgR["pid"])
+{
+	$catID = $_currentProduct[global_mapping::CatalogueID];
+	$strCats = global_common::convertToQueryIN($catID);
 }
-
+elseif($_pgR["rid"])
+{
+	$catID = $_currentProduct[global_mapping::CatalogueID];
+	$strCats = global_common::convertToQueryIN($catID);
+}
 ?>
 <div id="left-sider">
 	
 	<ul>
 <?php 
-$link = 'article_list.php?cid='.$parentCat[global_mapping::ArticleTypeID];
-echo '<a href="'.$link.'">	'.$parentCat[global_mapping::ArticleTypeName].'</a>';
+$link = 'products.php?cid='.$parentCat[global_mapping::ArticleTypeID];
+//echo '<a href="#">	'.$parentCat[global_mapping::ArticleTypeName].'</a>';
 foreach($allCats as $item)
 {
 	$classActive = '';
-	$link = 'article_list.php?cid='.$item[global_mapping::ArticleTypeID];
+	$link = 'products.php?cid='.$item[global_mapping::ArticleTypeID];
 	if(strpos($strCats,'\''.$item[global_mapping::ArticleTypeID].'\'') !== false)
 	{
 		$classActive = 'active';

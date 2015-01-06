@@ -17,67 +17,91 @@ class Model_Retailer
 	#region PRESERVE ExtraMethods For Retailer
 	#endregion
 	#region Contants	
-	const ACT_ADD							= 10;
-	const ACT_UPDATE						= 11;
-	const ACT_DELETE						= 12;
-	const ACT_CHANGE_PAGE					= 13;
-	const ACT_SHOW_EDIT                     = 14;
-	const ACT_GET                           = 15;
-	const NUM_PER_PAGE                      = 15;
+	const ACT_ADD_PRICE							= 110;
+	const ACT_UPDATE_PRICE						= 111;
+	const ACT_DELETE_PRICE						= 112;
+	const ACT_CHANGE_PAGE						= 113;
+	const ACT_SHOW_EDIT							= 114;
+	const ACT_GET_PRICE                         = 115;
+	const ACT_ACTIVE_RETAILER                   = 116;
+	
+	const NUM_PER_PAGE							= 15;
 	
 	const TBL_SL_RETAILER			            = 'sl_retailer';
 	
 	const SQL_INSERT_SL_RETAILER		= 'INSERT INTO `{0}`
 		(
-		RetailerID,
-		ProductID,
-		ProductStatusID,
-		Price,
-		Amount,
-		Remaining,
-		ImageLink,
-		ShipTypeID,
-		ShipingCost,
-		ShippingDay,
-		PaymentModeID,
-		Description,
-		CreatedBy,
-		CreatedDate,
-		ModifiedBy,
-		ModifiedDate,
-		DeletedBy,
-		DeletedDate,
-		IsDeleted,
-		StatusID,
-		Status
+		`RetailerID`,
+		`ProductID`,
+		`ProductStatusID`,
+		`StatusDetail`,
+		`Price`,
+		`Amount`,
+		`Remaining`,
+		`ImageLink`,
+		`CityID`,
+		`DistrictID`,
+		`ShipTypeID`,
+		`ShipingCost`,
+		`ShippingDay`,
+		`ShippingDesc`,
+		`PaymentModeID`,
+		`BoxInfo`,
+		`Warranty`,
+		`Promotion`,
+		`ShortDesc`,
+		`Description`,
+		`CreatedBy`,
+		`CreatedDate`,
+		`ModifiedBy`,
+		`ModifiedDate`,
+		`DeletedBy`,
+		`DeletedDate`,
+		`IsDeleted`,
+		`StatusID`,
+		`Status`
 		)
 		VALUES (
-		\'{1}\', \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'{6}\', \'{7}\', \'{8}\', \'{9}\', \'{10}\', \'{11}\', \'{12}\', \'{13}\', \'{14}\', \'{15}\', \'{16}\', \'{17}\', \'{18}\', \'{19}\', \'{20}\', \'{21}\'
+		\'{1}\', \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'{6}\', \'{7}\', \'{8}\', \'{9}\', \'{10}\', \'{11}\', \'{12}\', \'{13}\', \'{14}\', \'{15}\', \'{16}\', \'{17}\', \'{18}\', \'{19}\', \'{20}\', \'{21}\', \'{22}\', \'{23}\', \'{24}\', \'{25}\', \'{26}\', \'{27}\', \'{28}\', \'{29}\'
 		);';
-	
 	const SQL_UPDATE_SL_RETAILER		= 'UPDATE `{0}`
 		SET  
 		`RetailerID` = \'{1}\',
 		`ProductID` = \'{2}\',
 		`ProductStatusID` = \'{3}\',
-		`Price` = \'{4}\',
-		`Amount` = \'{5}\',
-		--`Remaining` = \'{6}\',
-		`ImageLink` = \'{7}\',
-		`ShipTypeID` = \'{8}\',
-		`ShipingCost` = \'{9}\',
-		`ShippingDay` = \'{10}\',
-		`PaymentModeID` = \'{11}\',
-		`Description` = \'{12}\',
-		--`CreatedBy` = \'{13}\',
-		--`CreatedDate` = \'{14}\',
-		`ModifiedBy` = \'{15}\',
-		`ModifiedDate` = \'{16}\',
-		--`DeletedBy` = \'{17}\',
-		--`DeletedDate` = \'{18}\',
-		--`IsDeleted` = \'{19}\',
-		`StatusID` = \'{20}\',
-		`Status` = \'{21}\'
+		`StatusDetail` = \'{4}\',
+		`Price` = \'{5}\',
+		`Amount` = \'{6}\',
+		`Remaining` = \'{7}\',
+		`ImageLink` = \'{8}\',
+		`CityID` = \'{9}\',
+		`DistrictID` = \'{10}\',
+		`ShipTypeID` = \'{11}\',
+		`ShipingCost` = \'{12}\',
+		`ShippingDay` = \'{13}\',
+		`ShippingDesc` = \'{14}\',
+		`PaymentModeID` = \'{15}\',
+		`BoxInfo` = \'{16}\',
+		`Warranty` = \'{17}\',
+		`Promotion` = \'{18}\',
+		`ShortDesc` = \'{19}\',
+		`Description` = \'{20}\',
+		#`CreatedBy` = \'{21}\',
+		#`CreatedDate` = \'{22}\',
+		`ModifiedBy` = \'{23}\',
+		`ModifiedDate` = \'{24}\',
+		#`DeletedBy` = \'{25}\',
+		#`DeletedDate` = \'{26}\',
+		#`IsDeleted` = \'{27}\',
+		`StatusID` = \'{28}\',
+		`Status` = \'{29}\'
+		WHERE `RetailerID` = \'{1}\'  ';
+	
+	
+	//status : Deactivate;  Active; Bad content> referenced from sl_status: type:1-General Statuses
+	const SQL_ACTIVE_SL_RETAILER		= 'UPDATE `{0}`
+		SET  		
+		`StatusID` = \'{2}\'		
 		WHERE `RetailerID` = \'{1}\'  ';
 	
 	
@@ -93,7 +117,12 @@ class Model_Retailer
 		`ShipTypeID` ,
 		`ShipingCost` ,
 		`ShippingDay` ,
+		`ShippingDesc` varchar(256),
 		`PaymentModeID` ,
+		`BoxInfo` varchar(256),
+		`Warranty` varchar(256),
+		`Promotion` ,
+		`ShortDesc` varchar(255),
 		`Description` ,
 		`CreatedBy` ,
 		`CreatedDate` ,
@@ -131,25 +160,33 @@ class Model_Retailer
 	
 	#region Public Functions
 	
-	public function insert( $productid,$productstatusid,$price,$amount,$imagelink,$shiptypeid,$shipingcost,$shippingday,$paymentmodeid,$description,$createdby,$statusid,$status)
+	public function insert($productid,$productstatusid,$statusDetail,$price,$imagelink,$cityid,$shippingdesc,$boxinfo, $shortdesc, $description,$createdby,$status)
 	{	
 		$strTableName = self::TBL_SL_RETAILER;
-		$intID = global_common::getMaxValueofField(global_mapping::UserID, $strTableName) + 1;
+		$intID = global_common::getMaxValueofField(global_mapping::RetailerID, $strTableName) + 1;
 		
 		$strSQL = global_common::prepareQuery(self::SQL_INSERT_SL_RETAILER,
 				array(self::TBL_SL_RETAILER,$intID,
 					global_common::escape_mysql_string($productid),
 					global_common::escape_mysql_string($productstatusid),
+					global_common::escape_mysql_string($statusDetail),
 					global_common::escape_mysql_string($price),
 					global_common::escape_mysql_string($amount),
 					global_common::escape_mysql_string($remaining),
 					global_common::escape_mysql_string($imagelink),
+					global_common::escape_mysql_string($cityid),
+					global_common::escape_mysql_string($districtid),
 					global_common::escape_mysql_string($shiptypeid),
 					global_common::escape_mysql_string($shipingcost),
 					global_common::escape_mysql_string($shippingday),
+					global_common::escape_mysql_string($shippingdesc),
 					global_common::escape_mysql_string($paymentmodeid),
+					global_common::escape_mysql_string($boxinfo),
+					global_common::escape_mysql_string($warranty),
+					global_common::escape_mysql_string($promotion),
+					global_common::escape_mysql_string($shortdesc),
 					global_common::escape_mysql_string($description),
-					global_common::escape_mysql_string($createdby),
+					$createdby,
 					global_common::nowSQL(),
 					global_common::escape_mysql_string($modifiedby),
 					global_common::escape_mysql_string($modifieddate),
@@ -159,7 +196,7 @@ class Model_Retailer
 					global_common::escape_mysql_string($statusid),
 					global_common::escape_mysql_string($status)
 					));
-		
+		//echo $strSQL;
 		if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_SL_RETAILER,$this->_objConnection,$strTableName))
 		{
 			//echo $strSQL;
@@ -170,7 +207,7 @@ class Model_Retailer
 		
 	}
 	
-	public function update($retailerid,$productid,$productstatusid,$price,$amount,$imagelink,$shiptypeid,$shipingcost,$shippingday,$paymentmodeid,$description,$modifiedby,$statusid,$status)
+	public function update($retailerid,$productid,$productstatusid,$statusDetail,$price,$imagelink,$cityid,$shippingdesc,$boxinfo, $shortdesc,$description,$modifiedby,$status)
 	{
 		$strTableName = self::TBL_SL_RETAILER;
 		$strSQL = global_common::prepareQuery(self::SQL_UPDATE_SL_RETAILER,
@@ -178,14 +215,22 @@ class Model_Retailer
 					global_common::escape_mysql_string($retailerid),
 					global_common::escape_mysql_string($productid),
 					global_common::escape_mysql_string($productstatusid),
+					global_common::escape_mysql_string($statusDetail),
 					global_common::escape_mysql_string($price),
 					global_common::escape_mysql_string($amount),
 					global_common::escape_mysql_string($remaining),
 					global_common::escape_mysql_string($imagelink),
+					global_common::escape_mysql_string($cityid),
+					global_common::escape_mysql_string($districtid),
 					global_common::escape_mysql_string($shiptypeid),
 					global_common::escape_mysql_string($shipingcost),
 					global_common::escape_mysql_string($shippingday),
+					global_common::escape_mysql_string($shippingdesc),
 					global_common::escape_mysql_string($paymentmodeid),
+					global_common::escape_mysql_string($boxinfo),
+					global_common::escape_mysql_string($warranty),
+					global_common::escape_mysql_string($promotion),
+					global_common::escape_mysql_string($shortdesc),
 					global_common::escape_mysql_string($description),
 					global_common::escape_mysql_string($createdby),
 					global_common::escape_mysql_string($createddate),
@@ -197,14 +242,13 @@ class Model_Retailer
 					global_common::escape_mysql_string($statusid),
 					global_common::escape_mysql_string($status)
 					));
-		
 		if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_SL_RETAILER,$this->_objConnection,$strTableName))
 		{
 			//echo $strSQL;
-			global_common::writeLog('Error add sl_retailer:'.$strSQL,1);
+			global_common::writeLog('Error update sl_retailer:'.$strSQL,1);
 			return false;
 		}	
-		return $intNewID;		
+		return $retailerid;		
 	}
 	
 	public function getRetailerByID($objID,$selectField='*') 
@@ -219,8 +263,17 @@ class Model_Retailer
 			global_common::writeLog('get sl_retailer ByID:'.$strSQL,1,$_mainFrame->pPage);
 			return null;
 		}
+		$retailer = $arrResult[0];
+		$objStatus = new Model_Status($this->_objConnection);
+		$objCity = new Model_City($this->_objConnection);
+		
+		$city = $objCity->getCityByID($retailer[global_mapping::CityID]);
+		$retailer[global_mapping::CityName] = $city[global_mapping::CityName];
+		
+		$status = $objStatus->getStatusByID($retailer[global_mapping::ProductStatusID]);		
+		$retailer[global_mapping::StatusName] = $status[global_mapping::StatusName];
 		//print_r($arrResult);
-		return $arrResult[0];
+		return $retailer;
 	}
 	
 	public function getRetailerByProduct($productID,$type,$selectField='*') 
@@ -263,6 +316,72 @@ class Model_Retailer
 		$arrResult = global_common::mergeUserInfo($arrResult);
 		//print_r($arrResult);
 		return $arrResult;
+	}
+	
+	public function getRetailerByUser($userID,$selectField='*') 
+	{		
+		
+		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+				array($selectField, self::TBL_SL_RETAILER ,							
+					'WHERE '.global_mapping::CreatedBy.' = \''.$userID.'\' and ('.global_mapping::IsDeleted.' IS NULL or '.global_mapping::IsDeleted.' = \'0\') '));
+		
+		//echo '<br>SQL:'.$strSQL;
+		$arrResult =$this->_objConnection->selectCommand($strSQL);		
+		if(!$arrResult)
+		{
+			global_common::writeLog('get sl_retailer ByID:'.$strSQL,1,$_mainFrame->pPage);
+			return null;
+		}
+		
+		$productIDs = global_common::getArrayColumn($arrResult,global_mapping::ProductID); 
+		//print_r($productIDs);
+		$productIDs = array_unique($productIDs);
+		
+		$objProduct = new Model_Product($this->_objConnection);
+		
+		$products = $objProduct->getProductByIDs($productIDs);
+		$temp = array();
+		foreach($products as $key => $info)
+		{
+			$temp[$info[global_mapping::ProductID]]=$info;
+			unset($products[$key]);
+		}	
+		$products = $temp;
+		//print_r($products);
+		$objStatus = new Model_Status($this->_objConnection);
+		$allStatus = $objStatus->getAllStatus();
+		$statuses = array();
+		foreach($allStatus as $key => $info)
+		{
+			$statuses[$info[global_mapping::StatusID]]=$info;
+			unset($allStatus[$key]);
+		}	
+		
+		$count = count($arrResult);
+		
+		for($i=0; $i < $count; $i++)
+		{
+			$arrResult[$i][global_mapping::ProductStatus] = $statuses[$arrResult[$i][global_mapping::ProductStatusID]][global_mapping::StatusName];
+			$arrResult[$i][global_mapping::ProductName] = $products[$arrResult[$i][global_mapping::ProductID]][global_mapping::ProductName];
+		}
+		
+		$arrResult = global_common::mergeUserInfo($arrResult);
+		//print_r($arrResult);
+		return $arrResult;
+	}
+	
+	public function activeRetailer($retailerID, $statusID)
+	{
+		$strTableName = self::TBL_SL_RETAILER;
+		$strSQL = global_common::prepareQuery(self::SQL_ACTIVE_SL_RETAILER,array($strTableName,global_common::escape_mysql_string($retailerID),$statusID));
+		//echo $strSQL;
+		if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_SL_RETAILER,$this->_objConnection,$strTableName))
+		{
+			//echo $strSQL;
+			global_common::writeLog('Error activeRetailer sl_retailer:'.$strSQL,1);
+			return false;
+		}	
+		return $retailerID;	
 	}
 	
 	

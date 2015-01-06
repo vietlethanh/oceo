@@ -134,6 +134,7 @@ class Model_User
 		$userID = $userInfo[global_mapping::UserID];
 		$sysPassword = $userInfo[global_mapping::Password];
 		$userpassword = md5($userID.md5($password));
+		//echo $userpassword;
 		if($userpassword == $sysPassword){
 			if(!$userInfo[global_mapping::Avatar])
 			{
@@ -155,10 +156,11 @@ class Model_User
 	{
 		$strTableName = self::TBL_SL_USER;
 		$intID = global_common::getMaxValueofField(global_mapping::UserID, $strTableName) + 1;
+		//echo $intID;
 		$password = md5($intID.md5($password));
 		
 		$strSQL = global_common::prepareQuery(self::SQL_INSERT_SL_USER,
-				array(self::TBL_SL_USER,null,
+				array(self::TBL_SL_USER,$intID,
 					global_common::escape_mysql_string($username),
 					global_common::escape_mysql_string($password),
 					global_common::escape_mysql_string($fullname),
