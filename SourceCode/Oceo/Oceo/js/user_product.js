@@ -81,6 +81,7 @@ var product = {
 		var propertyGroupID='';
 		var propertyID = '';
 		var propertyValue = '';
+		var status = 0;//property no important
 		if(core.util.getObjectByClass('property-group').length >=1 )
 		{
 			$('.property-group').each(function(){
@@ -91,18 +92,24 @@ var product = {
 				    propertyGroupID = $(this).attr('lbGroupPropertyName')
 				}
 				$(this).find('.row-item').each( function(){
+				    status = 0;
 				    propertyID = $(this).find('.property-id').attr('lbpropertyid');
 				    if(typeof(propertyID) == 'undefined' || propertyID== 'undefined' || propertyID=='')
 				    {
 				        //get new property name
 				        propertyID = $(this).find('.property-id').text();
 				    }
-				    propertyValue = $(this).find('.property-value').text();
+				    propertyValue = $.trim($(this).find('.property-value').text());
+				    if($.trim($(this).find('.prop-important').text()) != '')
+				    {
+				        status = 1;
+				    }
                     property = 
                     {
                         PropertyGroupID: propertyGroupID,
                         PropertyID: propertyID,
-                        PropertyValue: propertyValue
+                        PropertyValue: propertyValue,
+                        Status: status
                     };
                     properties.push(property);
 				});
@@ -170,20 +177,20 @@ var product = {
             function(respone, info){
                 console.log(info);
 				var strRespond = core.util.parserXML(respone);
-				//if (parseInt(strRespond[1]['rs']) == 1) {
-				//	core.ui.showInfoBar(1, strRespond[1]["inf"]);	
-				//	core.util.goTo("PostSucess.php");
+				if (parseInt(strRespond[1]['rs']) == 1) {
+					core.ui.showInfoBar(1, strRespond[1]["inf"]);	
+					//core.util.goTo("PostSucess.php");
 					//article.clearForm();
 					core.util.disableControl("btnOK", false);
 					//if(articleInfo.Mode=='1' || articleInfo.Mode==1)
 					//{
 					//	core.util.redirect('profile_article.php')
 					//}
-                //}
-                //else{
-                 //   core.ui.showInfoBar(2, strRespond[1]["inf"]);	
-				//	core.util.disableControl("btnOK", false);
-                //}
+                }
+                else{
+                   core.ui.showInfoBar(2, strRespond[1]["inf"]);	
+					core.util.disableControl("btnOK", false);
+                }
             },
             function()
             {
@@ -244,7 +251,20 @@ var product = {
 		core.util.validateInputTextBox('txtPropertyValue','');
 		
 		selecteProperty = $('#optProperty option:selected');
-		//selecteGroup = $('#optGroup option:selected');
+		if (typeof("selecteProperty") != 'undefined')
+		{
+		    switch(selecteProperty.attr("datatype"))
+		    {
+		        case core.dataType.Number:
+		        {
+		            if($.isNumeric(propertyValue) == false)
+		            {
+		                core.util.validateInputTextBox('txtPropertyValue','Dữ liệu nhập không hợp lệ');
+		                return;
+		            }
+		        }
+		    }
+		}
 		
 		if (propertyValue == '') {
 			core.util.validateInputTextBox('txtPropertyValue','Bạn chưa nhập giá trị thuộc tính');
@@ -255,13 +275,24 @@ var product = {
 		{
 			classNoborder ='no-border';
 		}
+		isImportant = $('#ckImportant').is(':checked');
+		//selecteGroup = $('#optGroup option:selected');
+		var propImportant = '';
+		if(isImportant)
+		{
+		    propImportant = " <span class='prop-important'> * </span> ";
+		}
+		else
+		{
+		    propImportant = " <span class='prop-important'></span> ";
+		}
 		var isExistedGroup = false;
         $(".property-group h2.property-zone").each(function(){
             if($(this).html() == group)
             {
                 var newRow = $('<div class="controls row-item clear">'+
 						'<label class="m-wrap inline span4 lbl-property">'+
-							 '<span class="property-id" lbPropertyID="'+propertyID+'">'+propertyName+'</span>: <span class="property-value"> '+propertyValue+'</span>'+
+							 '<span class="property-id" lbPropertyID="'+propertyID+'">'+propertyName+'</span>: <span class="property-value"> '+propertyValue+'</span>'+ propImportant+
 						'</label>'+
 						'<a onclick="product.moveUpItem(this,\'row-item\')" class="btn btn-mini float-right" href="javascript:;"><i class="icon-pencil"></i> Lên</a> '+
 						'<a onclick="product.moveDownItem(this,\'row-item\')" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Xuống</a> '+
@@ -283,7 +314,7 @@ var product = {
 					        '</div>'+
 					        '<div class="controls row-item clear">'+
 						        '<label class="m-wrap inline span4 lbl-property">'+
-							        '<span class="property-id" lbPropertyID="'+propertyID+'">'+propertyName+'</span>: <span class="property-value"> '+propertyValue+'</span>'+
+							        '<span class="property-id" lbPropertyID="'+propertyID+'">'+propertyName+'</span>: <span class="property-value"> '+propertyValue+'</span>'+ propImportant+
 						        '</label>'+
 						        '<a onclick="product.moveUpItem(this,\'row-item\')" class="btn btn-mini float-right" href="javascript:;"><i class="icon-pencil"></i> Lên</a> '+
 						        '<a onclick="product.moveDownItem(this,\'row-item\')" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Xuống</a> '+
@@ -293,180 +324,13 @@ var product = {
 				        '</div>	');
 		    root.append(newRow);
 		}
-		$('#optProperty option[value="'+propertyID+'"]').remove();
+		$('#optProperty option[value="'+propertyID+'"]').attr("isUsed","true");
+		$('#optProperty option[value="'+propertyID+'"]').hide();
 		$('#optProperty').trigger("liszt:updated");
 		core.util.focusControl('txtPropertyValue');
 		this.clearInputProperty();
 	},
-	showMap: function(obj)
-	{		
-		/*
-		$modal.on('click', '.update', function(){
-		  $modal.modal('loading');
-		  setTimeout(function(){
-		    $modal
-		      .modal('loading')
-		      .find('.modal-body')
-		        .prepend('<div class="alert alert-info fade in">' +
-		          'Updated!<button type="button" class="close" data-dismiss="alert"></button>' +
-		        '</div>');
-		  }, 1000);
-		}); 
-		*/
-		
-		var parent = $(obj).parent();
-		var address =  $.trim(parent.find('.location-address').html());
-		var city =  $.trim(parent.find('.location-city').html());
-		var district =  $.trim(parent.find('.location-district').html());
-		var location = address + ', ' + district + ', ' + city;
-		
-		$('#popup-location').modal();
-		$('#popup-location').on('shown', function () {
-			var map = new GMaps({
-				el: '#map',
-				lat: core.constant.LatDefault,
-				lng: core.constant.LongDefault
-			});
-			GMaps.geocode({
-			  address: location,
-			  callback: function(results, status){
-				if(status=='OK'){
-					var latlng = results[0].geometry.location;
-					google.maps.event.trigger(map, "resize");
-					map.setCenter(latlng.lat(), latlng.lng());
-					map.addMarker({
-						lat: latlng.lat(),
-						lng: latlng.lng()
-					});
-					
-				}
-			  }
-			});
-			/*GMaps.geocode({
-			  address: "1 Bui Thi Xuan, Quan 1, HCM",
-			  callback: function(results, status){
-				if(status=='OK'){
-					var latlng = results[0].geometry.location;
-					google.maps.event.trigger(map, "resize");
-					map.setCenter(latlng.lat(), latlng.lng());
-					map.addMarker({
-						lat: latlng.lat(),
-						lng: latlng.lng()
-					});
-					
-				}
-			  }
-			});
-			*/			
-		})
-		
-	},
-	clickDELETE: function (obj) {
-		var root =  $(obj).closest('.property-group');
-		var parent = $(obj).parent();
-		var	propertyName = $(parent).find('.property-id').text();
-		propertyName = core.util.removeAll(propertyName,"'");
-		var group =  $.trim($(obj).closest('.property-group').attr('lbGroupPropertyID'));
-		$('<div></div>').appendTo('body')
-		  .html('<div><span class="icon icon-warning-sign"></span><h6>Bạn đang xóa thuộc tính '+ propertyName +'?</h6></div>')
-		  .dialog({
-			  modal: true,
-			  title: 'Thông báo', 
-			  zIndex: 10000, 
-			  autoOpen: true,
-			  width: '320px', 
-			  resizable: false,
-			  dialogClass: 'ui-dialog-yellow',
-			  buttons: [
-				{
-					'class' : 'btn red',	
-					"text" : "Xóa",
-					click: function() {
-                        parent.remove();
-                        if($(root).find('.row-item').length < 1)
-                        {
-                            $(root).remove();
-                        }
-                        $(this).dialog( "close" );
-					}
-				},
-				{
-					'class' : 'btn btn-gray',
-					"text" : "Không",
-					click: function() {
-						$(this).dialog( "close" );
-					}
-				}
-			  ],
-			  open: function(event, ui) { 
-					//hide close button.
-					$(this).parent().children().children('.ui-dialog-titlebar-close').hide();
-				},
-			  close: function (event, ui) {
-				  $(this).remove();
-			  }
-		});		
-		
-	},
 	
-	clearInputProperty: function()
-	{
-		core.util.clearValue('txtPropertyValue');
-		//core.util.deSelectOption('optGroup');
-		$('#optProperty option[isUpdate="true"]').remove();
-		//core.util.deSelectOption('optProperty');
-		//core.util.hideOptions('optProperty');		
-	},
-	
-	showEditMode: function(isEdit)
-	{
-		var root = $('div.property-product');
-		if(isEdit)
-		{
-			root.find('.btn-add').removeClass("display").addClass("no-display");
-			root.find('.btn-update').removeClass("no-display").addClass("display");
-			root.find('.btn-cancel').removeClass("no-display").addClass("display");
-		}else
-		{
-			root.find('.btn-add').removeClass("no-display").addClass("display");
-			root.find('.btn-update').removeClass("display").addClass("no-display");
-			root.find('.btn-cancel').removeClass("display").addClass("no-display");
-		}
-	},
-	
-	cancelLocation: function (obj) {
-		this.clearInputProperty();
-		this.showEditMode(false);
-		var parent = $(obj).parent();
-		var root = $('div.address-article');
-		root.find('.row-item').removeClass('updating');
-	},
-	clickEDIT: function (obj) {
-		
-		var root = $('div.property-product');
-		var parent = $(obj).parent();
-		root.find('.row-item').removeClass('updating');
-		parent.addClass("updating");
-		var group =  $.trim($(obj).closest('.property-group').attr('lbGroupPropertyID'));
-		var property =  $.trim(parent.find('.property-id').attr('lbPropertyID'));
-		var propertyName =  $.trim(parent.find('.property-id').html());
-		var propertyValue =  $.trim(parent.find('.property-value').html());
-		
-		core.util.getObjectByID('txtPropertyValue').val(propertyValue);
-		optCity = core.util.getObjectByID('optGroup').find('option');
-		$("#optGroup option[value='"+group+"']").attr("selected", "selected");
-		$("#optGroup").trigger("liszt:updated");
-		$("#optGroup").change();
-		
-		$('#optProperty option[isUpdate="true"]').remove();
-		var newOpt= $('<option isUpdate="true" value="'+property+'" selected=selected PropertyGroupID="'+group+'" >'+propertyName+'</option>');
-		$('#optProperty').append(newOpt);
-		core.util.getObjectByID('optProperty').val(property);		
-		$("#optProperty").trigger("liszt:updated");
-		
-		this.showEditMode(true);
-	},
-
 	updateProperty: function (obj) {
 		var root = $('div.property-product');
 		var parent = $(obj).parent();
@@ -488,10 +352,34 @@ var product = {
 			core.util.validateInputTextBox('txtPropertyValue','Bạn chưa nhập giá trị thuộc tính');
 			return;
 		}
-		
+		if (typeof("selecteProperty") != 'undefined')
+		{
+		    switch(selecteProperty.attr("datatype"))
+		    {
+		        case core.dataType.Number:
+		        {
+		            if($.isNumeric(propertyValue) == false)
+		            {
+		                core.util.validateInputTextBox('txtPropertyValue','Dữ liệu nhập không hợp lệ');
+		                return;
+		            }
+		        }
+		    }
+		}
 		var rowUpdate = root.find('.row-item.updating');
 		var oldGroup = $.trim($(rowUpdate).closest('.property-group').attr('lbGroupPropertyID'));
+		isImportant = $('#ckImportant').is(':checked');
+		//selecteGroup = $('#optGroup option:selected');
 		
+		var propImportant = '';
+		if(isImportant)
+		{
+		    propImportant = " <span class='prop-important'> * </span> ";
+		}
+		else
+		{
+		    propImportant = " <span class='prop-important'></span> ";
+		}
 		if(oldGroup != group)
 		{
 		   root.find('.row-item.updating').remove();
@@ -504,7 +392,7 @@ var product = {
 		          
 		             var newRow = $('<div class="controls row-item clear">'+
 						'<label class="m-wrap inline span4 lbl-property">'+
-							 '<span class="property-id" lbPropertyID="'+propertyID+'">'+propertyName+'</span>: <span class="property-value"> '+propertyValue+'</span>'+
+							 '<span class="property-id" lbPropertyID="'+propertyID+'">'+propertyName+'</span>: <span class="property-value"> '+propertyValue+'</span>'+propImportant +
 						'</label>'+
 						'<a onclick="product.moveUpItem(this,\'row-item\')" class="btn btn-mini float-right" href="javascript:;"><i class="icon-pencil"></i> Lên</a> '+
 						'<a onclick="product.moveDownItem(this,\'row-item\')" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Xuống</a> '+
@@ -542,12 +430,150 @@ var product = {
 		    rowUpdate.find('.property-id').html(propertyName);
 		    
 		    rowUpdate.find('.property-value').html(propertyValue);
+		    if(isImportant)
+		    {
+		        rowUpdate.find('.prop-important').html(' * ');
+		        //propImportant = " <span class='prop-important'>*</span> ";
+		    }
+		    else
+		    {
+		         rowUpdate.find('.prop-important').html('');
+		    }
+		    
     		
 		    this.clearInputProperty();		
 		    this.showEditMode(false);
 		    root.find('.row-item').removeClass('updating');
 		}
 	},
+	
+	clickEDIT: function (obj) {
+		
+		var root = $('div.property-product');
+		var parent = $(obj).parent();
+		root.find('.row-item').removeClass('updating');
+		parent.addClass("updating");
+		var group =  $.trim($(obj).closest('.property-group').attr('lbGroupPropertyID'));
+		var property =  $.trim(parent.find('.property-id').attr('lbPropertyID'));
+		var propertyName =  $.trim(parent.find('.property-id').html());
+		var propertyValue =  $.trim(parent.find('.property-value').html());
+		var important = $.trim(parent.find('.prop-important').html());
+		var isImportant =false;
+		if(important != "")
+		{
+		    isImportant= true;
+		}
+		//console.log("prop:"+isImportant+":"+important);
+		$('#ckImportant').prop('checked', isImportant);
+		core.util.getObjectByID('txtPropertyValue').val(propertyValue);
+		optCity = core.util.getObjectByID('optGroup').find('option');
+		$("#optGroup option[value='"+group+"']").attr("selected", "selected");
+		$("#optGroup").trigger("liszt:updated");
+		$("#optGroup").change();
+		
+		$('#optProperty option[isUpdate="true"]').hide();
+		$('#optProperty option[value="'+property+'"]').attr("isUpdate","true");
+		$('#optProperty option[value="'+property+'"]').attr("selected","selected");
+		$('#optProperty option[value="'+property+'"]').show();
+		
+		//var newOpt= $('<option isUpdate="true" value="'+property+'" selected=selected PropertyGroupID="'+group+'" >'+propertyName+'</option>');
+		//$('#optProperty').append(newOpt);
+		//core.util.getObjectByID('optProperty').val(property);		
+		$("#optProperty").trigger("liszt:updated");
+		$('#optProperty').change();
+		
+		this.showEditMode(true);
+	},	
+	
+	clickDELETE: function (obj) {
+		var root =  $(obj).closest('.property-group');
+		var parent = $(obj).parent();
+		var	propertyName = $(parent).find('.property-id').text();
+		propertyName = core.util.removeAll(propertyName,"'");
+		var property =  $.trim(parent.find('.property-id').attr('lbPropertyID'));
+		var group =  $.trim($(obj).closest('.property-group').attr('lbGroupPropertyID'));
+		$('<div></div>').appendTo('body')
+		  .html('<div><span class="icon icon-warning-sign"></span><h6>Bạn đang xóa thuộc tính '+ propertyName +'?</h6></div>')
+		  .dialog({
+			  modal: true,
+			  title: 'Thông báo', 
+			  zIndex: 10000, 
+			  autoOpen: true,
+			  width: '320px', 
+			  resizable: false,
+			  dialogClass: 'ui-dialog-yellow',
+			  buttons: [
+				{
+					'class' : 'btn red',	
+					"text" : "Xóa",
+					click: function() {
+					   
+		                $('#optProperty option[value="'+property+'"]').attr("isUpdate","");
+		                $('#optProperty option[value="'+property+'"]').attr("isUsed","");
+		                $('#optProperty option[value="'+property+'"]').attr("selected","");
+		                $("#optGroup").change();
+                        parent.remove();
+                        if($(root).find('.row-item').length < 1)
+                        {
+                            $(root).remove();
+                        }
+                        $(this).dialog( "close" );
+					}
+				},
+				{
+					'class' : 'btn btn-gray',
+					"text" : "Không",
+					click: function() {
+						$(this).dialog( "close" );
+					}
+				}
+			  ],
+			  open: function(event, ui) { 
+					//hide close button.
+					$(this).parent().children().children('.ui-dialog-titlebar-close').hide();
+				},
+			  close: function (event, ui) {
+				  $(this).remove();
+			  }
+		});		
+		
+	},
+	
+	clearInputProperty: function()
+	{
+		$('#ckImportant').prop('checked', false);
+		core.util.clearValue('txtPropertyValue');
+		$('#txtPropertyValue').typeahead("destroy");
+		$('.typeahead').trigger('blur');
+		//core.util.deSelectOption('optGroup');
+		$('#optProperty option[isUpdate="true"]').hide();
+		core.util.deSelectOption('optProperty');
+		//core.util.hideOptions('optProperty');
+	},
+	
+	showEditMode: function(isEdit)
+	{
+		var root = $('div.property-product');
+		if(isEdit)
+		{
+			root.find('.btn-add').removeClass("display").addClass("no-display");
+			root.find('.btn-update').removeClass("no-display").addClass("display");
+			root.find('.btn-cancel').removeClass("no-display").addClass("display");
+		}else
+		{
+			root.find('.btn-add').removeClass("no-display").addClass("display");
+			root.find('.btn-update').removeClass("display").addClass("no-display");
+			root.find('.btn-cancel').removeClass("display").addClass("no-display");
+		}
+	},
+	
+	cancelProperty: function (obj) {
+		this.clearInputProperty();
+		this.showEditMode(false);
+		var root = $('div.property-product');
+	    root.find('.row-item').removeClass('updating');
+	},
+	
 	loadMap: function(addresses,districts, cities)
 	{		
 		var addresses = addresses.split(';');
@@ -639,6 +665,37 @@ var product = {
 		control.trigger("liszt:updated");
 	},
 	
+	bindValueField: function(obj,controlID)
+	{
+		me = this;
+		var selectedProperty = $(obj).find("option:selected");
+		suffix = $(selectedProperty).attr("Suffix");
+		values = $(selectedProperty).attr("Values");
+	    if(typeof(suffix) != 'undefined' && suffix!='')
+	    {
+	        $("#lbSuffix").text(suffix);
+	    }
+	    else
+	    {
+	        $("#lbSuffix").text('');
+	    }
+	  
+	    if(typeof(values) != 'undefined' && values!='')
+	    {
+	        arrValue = values.split(',');
+            $("#"+controlID).typeahead({
+                minLength: 0,
+                source: arrValue
+            });
+            $("#"+controlID).on('focus', $("#"+controlID).typeahead.bind( $("#"+controlID), 'lookup')); 
+	    }
+	    else
+	    {
+	         $("#"+controlID).typeahead("destroy");
+	    }
+	},
+	
+	
 	activeArticle: function(articleID,isActivate)
 	{
 		var articleInfo = 
@@ -708,5 +765,68 @@ var product = {
 		{
 			core.util.getObjectByID("formSearch").submit();
 		}
+	},
+	showMap: function(obj)
+	{		
+		/*
+		$modal.on('click', '.update', function(){
+		  $modal.modal('loading');
+		  setTimeout(function(){
+		    $modal
+		      .modal('loading')
+		      .find('.modal-body')
+		        .prepend('<div class="alert alert-info fade in">' +
+		          'Updated!<button type="button" class="close" data-dismiss="alert"></button>' +
+		        '</div>');
+		  }, 1000);
+		}); 
+		*/
+		
+		var parent = $(obj).parent();
+		var address =  $.trim(parent.find('.location-address').html());
+		var city =  $.trim(parent.find('.location-city').html());
+		var district =  $.trim(parent.find('.location-district').html());
+		var location = address + ', ' + district + ', ' + city;
+		
+		$('#popup-location').modal();
+		$('#popup-location').on('shown', function () {
+			var map = new GMaps({
+				el: '#map',
+				lat: core.constant.LatDefault,
+				lng: core.constant.LongDefault
+			});
+			GMaps.geocode({
+			  address: location,
+			  callback: function(results, status){
+				if(status=='OK'){
+					var latlng = results[0].geometry.location;
+					google.maps.event.trigger(map, "resize");
+					map.setCenter(latlng.lat(), latlng.lng());
+					map.addMarker({
+						lat: latlng.lat(),
+						lng: latlng.lng()
+					});
+					
+				}
+			  }
+			});
+			/*GMaps.geocode({
+			  address: "1 Bui Thi Xuan, Quan 1, HCM",
+			  callback: function(results, status){
+				if(status=='OK'){
+					var latlng = results[0].geometry.location;
+					google.maps.event.trigger(map, "resize");
+					map.setCenter(latlng.lat(), latlng.lng());
+					map.addMarker({
+						lat: latlng.lat(),
+						lng: latlng.lng()
+					});
+					
+				}
+			  }
+			});
+			*/			
+		})
+		
 	},
 }

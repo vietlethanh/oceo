@@ -207,6 +207,9 @@ label {
 .block {
   display: block !important; }
 
+label.checkbox {
+  cursor: pointer; }
+
 .input-text-invalid {
   border: 2px solid red  !important; }
 
@@ -314,6 +317,13 @@ label {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none; }
+
+a.active {
+  color: #e63002; }
+
+.product-navigate {
+  font-weight: bold;
+  margin: 10px 0 20px 0; }
 
 /*********** end common ************/
 /*********** custom plugin************/
@@ -444,47 +454,106 @@ table.table {
 /*********** end header ************/
 /*********** header ************/
 #header {
-  height: 45px;
+  height: 176px;
   margin-top: 0px;
-  border-bottom: 1px solid #fff;
   margin-bottom: 18px;
-  padding-bottom: 4px; }
+  padding-bottom: 4px;
+  background-color: #FFFFFF; }
+  #header #top-menu {
+    float: right;
+    line-height: 14px;
+    margin-right: 150px; }
+    #header #top-menu > ul {
+      border: none;
+      margin: 0;
+      padding: 0; }
+      #header #top-menu > ul li {
+        /*border-bottom: 1px solid #DBE7E8;*/
+        color: white;
+        float: left;
+        font-size: 1em;
+        font-weight: bolder;
+        height: 14px;
+        padding: 9px 15px;
+        margin: 3px 0;
+        text-align: center;
+        line-height: 14px; }
+        #header #top-menu > ul li a {
+          color: black;
+          margin: 0;
+          padding: 0;
+          border: none;
+          line-height: 12px;
+          font-size: 10px; }
+        #header #top-menu > ul li a:hover {
+          color: #ffbc00; }
+      #header #top-menu > ul li:first-child a {
+        cursor: pointer; }
+      #header #top-menu > ul li:last-child {
+        border-right: none; }
+  #header #header-banner {
+    clear: both; }
+    #header #header-banner img {
+      height: 50px;
+      margin: 20px 0; }
   #header #header-menu {
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    clear: both;
     line-height: 14px; }
-    #header #header-menu > ul li {
-      /*background: none repeat scroll 0 0 rgba(255, 255, 255, 0.6);
-      border-right: 2px solid $color_body;
-      color: $color_header;
-      float: left;
-      font-size: 1em; 
-      font-weight: bolder; 
-      height: 24px;
-      padding: 10px 9px; 
-      text-align: center;*/
-      border-right: 1px dotted black;
-      color: white;
-      float: left;
-      font-size: 1em;
-      font-weight: bolder;
-      height: 24px;
-      padding: 10px 9px;
-      text-align: center;
-      line-height: 17px;
-      width: 76px; }
-      #header #header-menu > ul li a {
-        color: black; }
-      #header #header-menu > ul li a:hover {
+    #header #header-menu > ul {
+      background-color: beige;
+      border: none;
+      margin: 0;
+      padding: 0; }
+      #header #header-menu > ul li {
+        border-right: 1px dotted black;
+        color: white;
+        float: left;
+        font-size: 1em;
+        font-weight: bolder;
+        height: 20px;
+        padding: 10px 9px;
+        margin: 1px 0;
+        text-align: center;
+        line-height: 17px;
+        background-color: none; }
+        #header #header-menu > ul li a {
+          background-color: none;
+          color: black;
+          margin: 0;
+          padding: 0;
+          border: none;
+          line-height: 15px;
+          cursor: default; }
+        #header #header-menu > ul li a:hover {
+          color: #ffbc00; }
+        #header #header-menu > ul li img.m-logo {
+          height: 40px;
+          margin-top: -5px; }
+      #header #header-menu > ul li.active a {
         color: #ffbc00; }
-      #header #header-menu > ul li img.m-logo {
-        height: 40px;
-        margin-top: -5px; }
-    #header #header-menu > ul li:last-child {
-      border-right: none; }
+      #header #header-menu > ul li:first-child {
+        padding-top: 5px;
+        width: 52px;
+        border-right: 0px dotted black; }
+        #header #header-menu > ul li:first-child a {
+          cursor: pointer; }
+      #header #header-menu > ul li:last-child {
+        border-right: none; }
   #header #div-login label {
     display: inline; }
   #header #div-login .dropdown.user .avatar {
     width: 35px;
-    height: 35px; }
+    height: 25px; }
+  #header #div-login .dropdown.user a.dropdown-toggle {
+    padding: 0; }
+  #header #div-login select {
+    width: 152px;
+    height: 22px;
+    padding-top: 1px; }
+  #header #div-login li a {
+    padding: 4px 4px 3px 4px; }
 
 #admin-header {
   border-bottom: 1px solid #FFFFFF;
@@ -525,7 +594,7 @@ table.table {
       #left-sider > ul li a:hover {
         color: #ffbc00; }
     #left-sider > ul li.active a {
-      color: #ffdc40; }
+      color: #e63002; }
     #left-sider > ul li.active a:hover {
       color: #ffbc00; }
 
@@ -847,6 +916,8 @@ table.table {
   #post-price .table-post .ad-value {
     margin-top: 3px;
     vertical-align: top; }
+  #post-price .table-post .controls a.m-wrap {
+    line-height: 32px; }
   #post-price .table-post .controls .row-item {
     margin-bottom: 0px;
     border-top: 1px solid #e5e5e5;
@@ -931,16 +1002,41 @@ table.table {
   border: none;
   display: inline-block;
   margin-left: 52px;
+  margin-top: 35px;
   width: 100%;
+  /*select#optCity, select#optDistrict
+  {
+  	padding: 5px 9px; 
+  	margin: 0;
+  	-webkit-border-radius:0px;
+  	-moz-border-radius:0px;
+  	border-radius:0px;
+  	-webkit-box-shadow: 0 0px 0 #ccc, 0 0px #fff inset;
+  	-moz-box-shadow: 0 0px 0 #ccc, 0 0px #fff inset;
+  	box-shadow: 0 0px 0 #ccc, 0 0px #fff inset;
+  	background: gray;
+  	color:$color_body;
+  	border:none;
+  	outline:none;
+  	display: inline-block;
+  	-webkit-appearance:none;
+  	-moz-appearance:none;
+  	appearance:none;
+  	cursor:pointer;		
+  	width:150px;
+  	height: 40px;
+  	
+  }
+  */
   /* Targetting Webkit browsers only. FF will show the dropdown arrow with so much padding. */ }
-  #search-box input[type='text'] {
+  #search-box input[type='text']#txtkeyword {
     background: none repeat scroll 0 0 gray;
     border: medium none;
     color: black;
     font-weight: bold;
     opacity: 0.7;
-    padding: 10px;
-    width: 350px;
+    padding: 10px 50px;
+    width: 577px;
     margin-bottom: 0; }
   #search-box ::-webkit-input-placeholder {
     /* WebKit browsers */
@@ -964,26 +1060,6 @@ table.table {
     background: url("../images/search25.png") right top repeat;
     border: none;
     cursor: pointer; }
-  #search-box select#optCity, #search-box select#optDistrict {
-    padding: 5px 9px;
-    margin: 0;
-    -webkit-border-radius: 0px;
-    -moz-border-radius: 0px;
-    border-radius: 0px;
-    -webkit-box-shadow: 0 0px 0 #ccc, 0 0px #fff inset;
-    -moz-box-shadow: 0 0px 0 #ccc, 0 0px #fff inset;
-    box-shadow: 0 0px 0 #ccc, 0 0px #fff inset;
-    background: gray;
-    color: black;
-    border: none;
-    outline: none;
-    display: inline-block;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    cursor: pointer;
-    width: 150px;
-    height: 40px; }
   @media screen and (-webkit-min-device-pixel-ratio: 0) {
     #search-box select {
       padding-right: 18px; } }
@@ -1018,6 +1094,11 @@ table.table {
     height: 35px; }
   #search-box .btn-post {
     margin-left: 103px; }
+  #search-box .box-filter {
+    margin-top: 15px;
+    margin-left: -46px; }
+    #search-box .box-filter .select2 {
+      margin-right: 7px; }
 
 /*********** end seach box ************/
 /*********** footer ************/
@@ -1310,15 +1391,17 @@ table.table {
         margin-left: 160px; }
     #product #product-detail #product-property .form-horizontal .control-header {
       display: table; }
-    #product #product-detail #product-property .form-horizontal .control-group:nth-child(even) {
+    #product #product-detail #product-property .form-horizontal .property-zone .control-group:nth-child(even) {
       background: #DFD0D6; }
-    #product #product-detail #product-property .form-horizontal .control-group .group-name {
-      padding: 10px; }
-    #product #product-detail #product-property .form-horizontal .control-group .control-label {
-      margin: 0;
-      padding: 0; }
-    #product #product-detail #product-property .form-horizontal .control-group .controls {
-      margin-left: 180px; }
+    #product #product-detail #product-property .form-horizontal .control-group {
+      margin-bottom: 0px; }
+      #product #product-detail #product-property .form-horizontal .control-group .group-name {
+        padding: 10px; }
+      #product #product-detail #product-property .form-horizontal .control-group .control-label {
+        margin: 0;
+        padding: 0; }
+      #product #product-detail #product-property .form-horizontal .control-group .controls {
+        margin-left: 180px; }
     #product #product-detail #product-content {
       clear: both;
       margin: 2px 0px;
@@ -1406,6 +1489,66 @@ table.table {
             float: right; }
       #product #product-detail #comment-content #comment-list .item .comment-controls {
         float: right; }
+
+/*********** end product ************/
+/*********** product ************/
+#product-list {
+  margin-top: 30px; }
+  #product-list #products {
+    display: inline-block;
+    background-clip: padding-box;
+    border: 5px solid rgba(113, 108, 104, 0.3);
+    margin: 1px;
+    vertical-align: top;
+    width: 80%; }
+    #product-list #products .item {
+      width: 181px;
+      display: inline-block;
+      vertical-align: top;
+      margin: 10px; }
+      #product-list #products .item .info {
+        position: relative; }
+      #product-list #products .item .name {
+        color: #0099ff;
+        font-size: 1.2em;
+        font-weight: bold; }
+      #product-list #products .item .artcile-title {
+        font-weight: bold; }
+      #product-list #products .item .price {
+        float: right;
+        margin-right: 6px;
+        margin-top: -24px;
+        background: red; }
+        #product-list #products .item .price a, #product-list #products .item .price a:focus, #product-list #products .item .price a:hover, #product-list #products .item .price a:active, #product-list #products .item .price a:visited {
+          color: black !important; }
+      #product-list #products .item .product-thumbnail {
+        min-height: 171px;
+        border: 5px solid; }
+        #product-list #products .item .product-thumbnail img {
+          max-height: 180px; }
+      #product-list #products .item img {
+        -webkit-transition: box-shadow 0.5s ease;
+        -moz-transition: box-shadow 0.5s ease;
+        -o-transition: box-shadow 0.5s ease;
+        -ms-transition: box-shadow 0.5s ease;
+        transition: box-shadow 0.5s ease;
+        width: 100%; }
+  #product-list #advertises {
+    display: inline-block;
+    width: 18%; }
+    #product-list #advertises .advertise {
+      margin: 0 0 5px 0; }
+      #product-list #advertises .advertise img.partner {
+        height: 200px;
+        /*margin: 5px 0;*/
+        width: 100%; }
+  #product-list ul {
+    list-style-type: none; }
+    #product-list ul li {
+      display: inline; }
+      #product-list ul li img:hover {
+        -webkit-box-shadow: 0px 0px 7px rgba(255, 255, 255, 0.9);
+        box-shadow: 0px 0px 7px rgba(255, 255, 255, 0.9); }
 
 /*********** end product ************/
 /*********** company-list ************/

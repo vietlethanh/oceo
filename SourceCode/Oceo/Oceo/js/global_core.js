@@ -31,7 +31,10 @@ core.constant = {
 	LongDefault: 111.943130,
 	AgeAbove: 5,
 };
-
+core.dataType=
+{
+    Number: "Number"
+}
 core.request = {
 	status:
 	{
@@ -540,6 +543,76 @@ core.util = {
 
     redirect: function(url) {
         window.location.href = url;
+    },
+    
+    bindChosen: function(obj,childID,attName)  
+    {
+        me = this;
+	
+		var selectedParent = $(obj).find("option:selected");
+		var parentValue = selectedParent.val();
+		childControl = core.util.getObjectByID(childID);
+		childControl.val('');
+		var elementOpts = childControl.find("option");
+		elementOpts.each(function(index){
+			if($(this).attr(attName) != "0")
+			{
+				if($(this).attr(attName) == parentValue && $(this).attr('isUsed') != 'true' )
+				{
+					$(this).css("display","");
+				}
+				else
+				{
+					$(this).hide();
+				}
+			}
+		});
+		
+		$("#"+childID+" option["+attName+"=0]").attr('selected', 'selected');
+		childControl.trigger("liszt:updated");
+		childControl.change();
+    },
+    messageDialog: function()
+    {
+    },
+    
+    confirmDialog: function(msg, func)
+    {
+        $('<div></div>').appendTo('body')
+		  .html('<div><span class="icon icon-warning-sign"></span><h6>'+msg+'</h6></div>')
+		  .dialog({
+			  modal: true,
+			  title: 'Thông báo', 
+			  zIndex: 10000, 
+			  autoOpen: true,
+			  width: 'auto', 
+			  resizable: false,
+			  dialogClass: 'ui-dialog-yellow',
+			  buttons: [
+				        {
+					        'class' : 'btn red',	
+					        "text" : "Xóa",
+					        click: function() {
+					            func();
+						        $(this).dialog( "close" );
+					        }
+				        },
+				        {
+					        'class' : 'btn btn-gray',
+					        "text" : "Không",
+					        click: function() {
+						        $(this).dialog( "close" );
+					        }
+				        }
+			          ],
+			  open: function(event, ui) { 
+					//hide close button.
+					$(this).parent().children().children('.ui-dialog-titlebar-close').hide();
+				},
+			  close: function (event, ui) {
+				  $(this).remove();
+			  }
+		});		
     },
 };
 

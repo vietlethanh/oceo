@@ -102,6 +102,9 @@ class global_mapping
 	const PropertyName				= 'PropertyName';
 	const PropertyValue				= 'PropertyValue';
 	const DataTypeID				= 'DataTypeID';
+	const Suffix					= 'Suffix';
+	const InputType					= 'InputType';
+	const SelectType				= 'SelectType';
 	
 	const PropertyGroupID			= 'PropertyGroupID';
 	const PropertyGroupName			= 'PropertyGroupName';
@@ -128,5 +131,9 @@ class global_mapping
 	const ExtraInfo					= 'ExtraInfo';
 	const TypeID					= 'TypeID';
 	const Mode						= 'Mode';
+	
+	const ShippingDesc				= 'ShippingDesc';
+	const StatusDetail				= 'StatusDetail';
+	
 }
 ?>

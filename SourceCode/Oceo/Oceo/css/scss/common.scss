@@ -132,6 +132,12 @@ label
 {
 	display: block !important; 
 }
+
+label.checkbox
+{
+	cursor: pointer;
+}
+
 .input-text-invalid{border: 2px solid red  !important} 
 .clear{clear:both  !important}
 .center{text-align:center  !important}
@@ -233,4 +239,15 @@ label
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+a.active
+{
+	color: $color_active;
+}
+
+.product-navigate
+{
+	font-weight: bold;
+	margin: 10px 0 20px 0;
 }

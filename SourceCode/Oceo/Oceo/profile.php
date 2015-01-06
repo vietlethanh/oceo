@@ -86,11 +86,14 @@ include_once('include/_menu.inc');
             <div class="span12">
                 <div class="span3">
                     <ul class="menu-profile">
-                        <li class="active">
+                        <li  class="active">
 							<a href="javascript:void(0)"><i class="icon-user"></i>Thông tin cá nhân </a><span class="after"></span>
 						</li>
-                        <li class="">
-							<a href="profile_article.php"><i class="icon-file-text"></i>Chương trình khuyến mãi</a>
+						 <li >
+							<a href="profile_price.php"><i class="icon-reorder"></i>Quản lý đăng bán </a><span class="after"></span>
+						</li>
+                        <li>
+							<a href="profile_product.php"><i class="icon-reorder"></i>Quản lý sản phẩm</a>
 						</li>
                     </ul>
                 </div>
@@ -106,7 +109,7 @@ include_once('include/_menu.inc');
                             <div class="span2">
                                 <img src="<?php echo ($currentUser[global_mapping::Avatar])?>" alt="" />
                             </div>
-                            <ul class="unstyled span10">
+                            <ul class="unstyled ">
                                 <li><span>Tên đăng nhập:</span> <?php echo global_common::formatOutputText($currentUser[global_mapping::UserName])?></li>
                                 <li><span>Họ và Tên:</span> <?php echo global_common::formatOutputText($currentUser[global_mapping::FullName])?></li>
 								<li><span>Ngày sinh:</span> 

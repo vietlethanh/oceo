@@ -4,8 +4,8 @@ if ($_pgR["pid"])
 	$productID = $_pgR["pid"];
 	$type = $_pgR["type"];
 	$allRetailers = $objRetailer->getRetailerByProduct($productID,$type,
-			global_mapping::RetailerID.','.global_mapping::ProductStatusID.','.global_mapping::Price.','.
-			global_mapping::ShortDesc.','.global_mapping::Warranty.','.global_mapping::BoxInfo.','.global_mapping::CreatedBy);
+			global_mapping::RetailerID.','.global_mapping::ProductStatusID.','.global_mapping::Price.','.global_mapping::StatusDetail.','.
+			global_mapping::ShortDesc.','.global_mapping::ShippingDesc.','.global_mapping::BoxInfo.','.global_mapping::CreatedBy);
 	//$product = $objProduct->getProductByID($productID, '*','`Status`=1');
 	//$intPage = 1;
 	//$total = 0;
@@ -35,8 +35,8 @@ include('include/_social.inc');
 
 
 			<div class="content">			
-				<div id="retailer-navigate">
-					<a href="#" class="link">Chi tiết sản phẩm</a> => <a href="#" class="link">Hàng mới từ 12.000.000đ</a> | <span>Hàng mới cũ 10.000.000đ</span> | <a href="#" class="link">Hàng refurbished từ 12.000.000đ</a> 
+				<div id="retailer-navigate" class="product-navigate">
+					<?php echo global_common::buildPathProduct($objConnection,$productID,$type) ?>					
 				</div>
 				<table class="table table-bordered table-hover article-profile">
 										<thead>
@@ -45,8 +45,8 @@ include('include/_social.inc');
 												<th style="width:120px">Tình trạng</th>
 												<th>Mô tả</th>
 												<th style="width:150px">Bộ sản phẩm</th>
-												<th style="width:150px">Bảo hành</th>
-												<th style="width:120px">Người đăng</th>
+												<th style="width:150px">Giao hàng</th>
+												<th style="width:120px"></th>
 												
 											</tr>
 										</thead>
@@ -63,11 +63,11 @@ include('include/_social.inc');
 foreach($allRetailers as $item)
 {
 	echo '								<tr>';
-	echo '									<td><a href="#" > '.global_common::FormatPrice($item[global_mapping::Price]).'</a></td>';
-	echo '									<td class="">'.$item[global_mapping::ProductStatus].'</td>';
+	echo '									<td><a href="'.global_common::buildRetailerLink($item[global_mapping::RetailerID]).'" > '.global_common::FormatPrice($item[global_mapping::Price]).'</a></td>';
+	echo '									<td class="">'.$item[global_mapping::ProductStatus].' '.$item[global_mapping::StatusDetail].'</td>';
 	echo '									<td class="">'.$item[global_mapping::ShortDesc].'</td>';
 	echo '									<td class="">'.$item[global_mapping::BoxInfo].'</td>';
-	echo '									<td class="">'.$item[global_mapping::Warranty].'</td>';
+	echo '									<td class="">'.$item[global_mapping::ShippingDesc].'</td>';
 	echo '									<td class=""> <a href="#" class="link">'.$item[global_mapping::CreatedBy][global_mapping::UserName].'</a> </td>';
 	echo '								</tr>';
 }

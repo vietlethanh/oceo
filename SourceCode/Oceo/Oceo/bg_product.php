@@ -7,12 +7,16 @@ include_once('class/model_property.php');
 include_once('class/model_productproperty.php');
 include_once('class/model_propertygroup.php');
 include_once('class/model_articletype.php');
+include_once('class/model_retailer.php');
+include_once('class/model_status.php');
+include_once('class/model_city.php');
 
 $objProduct = new Model_Product($objConnection);
 $objProperty = new Model_Property($objConnection);
 $objProductProperty = new Model_ProductProperty($objConnection);
 $objPropertyGroup = new Model_PropertyGroup($objConnection);
 $objArticleType = new Model_ArticleType($objConnection);
+$objRetailer = new Model_Retailer($objConnection);
 
 if ($_pgR["act"] == Model_Product::ACT_ADD || $_pgR["act"] == Model_Product::ACT_UPDATE)
 {
@@ -44,6 +48,9 @@ if ($_pgR["act"] == Model_Product::ACT_ADD || $_pgR["act"] == Model_Product::ACT
 			if ($resultID)
 			{
 				
+				$orderProductProperty = 0;
+				
+				$orderGroup = global_common::getMaxValueofField(global_mapping::PropertyID, Model_PropertyGroup::TBL_SL_PROPERTY_GROUP) + 1;
 				foreach($properties as $item)
 				{
 					$group = $item[global_mapping::PropertyGroupID];
@@ -59,7 +66,8 @@ if ($_pgR["act"] == Model_Product::ACT_ADD || $_pgR["act"] == Model_Product::ACT
 						}
 						else
 						{
-							$groupID = $objPropertyGroup->insert($group,$group,$catalogueID,$item[global_mapping::Order],$createdBy,null);
+							$groupID = $objPropertyGroup->insert($group,$group,$catalogueID,$orderGroup,$createdBy,null);
+							$orderGroup ++;
 						}
 					}
 					
@@ -83,7 +91,8 @@ if ($_pgR["act"] == Model_Product::ACT_ADD || $_pgR["act"] == Model_Product::ACT
 					}
 					if($propertyID)
 					{
-						$objProductProperty->insert($resultID,$propertyID,$item[global_mapping::PropertyValue],$item[global_mapping::Order]);
+						$objProductProperty->insert($resultID,$propertyID,$item[global_mapping::PropertyValue],$orderProductProperty,11,$item[global_mapping::Status]);
+						$orderProductProperty++;
 					}
 				}
 				
@@ -113,6 +122,8 @@ if ($_pgR["act"] == Model_Product::ACT_ADD || $_pgR["act"] == Model_Product::ACT
 				$isDeleted = global_common::deleteObject($resultID,global_mapping::ProductID,Model_ProductProperty::TBL_SL_PRODUCT_PROPERTY,$objConnection);
 				if($isDeleted)
 				{
+					$orderGroup = $objPropertyGroup->getMaxPropertyGroupID() + 1;
+					$orderProductProperty = 0;
 					foreach($properties as $item)
 					{
 						$group = $item[global_mapping::PropertyGroupID];
@@ -128,7 +139,8 @@ if ($_pgR["act"] == Model_Product::ACT_ADD || $_pgR["act"] == Model_Product::ACT
 							}
 							else
 							{
-								$groupID = $objPropertyGroup->insert($group,$group,$catalogueID,$item[global_mapping::Order],$createdBy,null);
+								$groupID = $objPropertyGroup->insert($group,$group,$catalogueID,$orderGroup,$createdBy,null);
+								$orderGroup++;
 							}
 						}
 						
@@ -152,7 +164,8 @@ if ($_pgR["act"] == Model_Product::ACT_ADD || $_pgR["act"] == Model_Product::ACT
 						}
 						if($propertyID)
 						{
-							$objProductProperty->insert($resultID,$propertyID,$item[global_mapping::PropertyValue],$item[global_mapping::Order]);
+							$objProductProperty->insert($resultID,$propertyID,$item[global_mapping::PropertyValue],$orderProductProperty,11, $item[global_mapping::Status]);
+							$orderProductProperty ++;
 						}
 					}
 					
@@ -183,13 +196,154 @@ if ($_pgR["act"] == Model_Product::ACT_ADD || $_pgR["act"] == Model_Product::ACT
 	}
 	return;
 }
-elseif($_pgR['act'] == Model_ProductType::ACT_GET_ALL)
+if ($_pgR["act"] == Model_Retailer::ACT_ADD_PRICE || $_pgR["act"] == Model_Retailer::ACT_UPDATE_PRICE)
 {
-	$types = $objArticleType->getAllArticleType(0);
-	echo json_encode($types);
-	return ;
+	if (global_common::isCLogin())
+	{
+		//get user info
+		$c_userInfo = $_SESSION[global_common::SES_C_USERINFO];
+		
+		$productID = $_pgR['ProductID'];
+		
+		$productStatusID = html_entity_decode($_pgR['ProductStatusID'],ENT_COMPAT ,'UTF-8' );
+		$cityID = html_entity_decode($_pgR['CityID'],ENT_COMPAT ,'UTF-8' );
+		$price = html_entity_decode($_pgR['Price'],ENT_COMPAT ,'UTF-8' );
+		$shippingDesc = html_entity_decode($_pgR['ShippingDesc'],ENT_COMPAT ,'UTF-8' );
+		$imageLink = html_entity_decode($_pgR['ImageLink'],ENT_COMPAT ,'UTF-8' );
+		$description = html_entity_decode($_pgR['Description'],ENT_COMPAT ,'UTF-8' );
+		$shortDesc = html_entity_decode($_pgR['ShortDesc'],ENT_COMPAT ,'UTF-8' );
+		$boxInfo = html_entity_decode($_pgR['BoxInfo'],ENT_COMPAT ,'UTF-8' );
+		$statusDetail = html_entity_decode($_pgR['StatusDetail'],ENT_COMPAT ,'UTF-8' );
+		
+		$status = 1;
+		if($_pgR["act"] == Model_Retailer::ACT_ADD_PRICE)
+		{
+			$createdBy = $c_userInfo[global_mapping::UserID];
+			$resultID = $objRetailer->insert($productID,$productStatusID,$statusDetail,$price,$imageLink,$cityID,$shippingDesc,$boxInfo,$shortDesc,$description,$createdBy,$status);
+			if ($resultID)
+			{
+				
+				$arrHeader = global_common::getMessageHeaderArr($banCode);//$banCode
+				echo global_common::convertToXML(
+						$arrHeader, array("rs", "inf"), 
+						array(1, 'Đăng bán thành công'), 
+						array( 0, 1 )
+						);
+				return;
+			}
+			else
+			{
+				echo global_common::convertToXML($arrHeader, array("rs","inf"), array(0,"Đăng bán thất bại. Xin vui lòng thử lại sau."), array(0,1));
+				return;
+			}
+		}
+		else
+		{
+			$modifiedBy = $c_userInfo[global_mapping::UserID];
+			$retailerID = html_entity_decode($_pgR[global_mapping::RetailerID],ENT_COMPAT ,'UTF-8' );
+			$resultID = $objRetailer->update($retailerID,$productID,$productStatusID,$statusDetail,$price,$imageLink,$cityID,$shippingDesc,$boxInfo,$shortDesc,$description,$modifiedBy,$status);
+			if ($resultID)
+			{
+				
+				$arrHeader = global_common::getMessageHeaderArr($banCode);//$banCode
+				echo global_common::convertToXML(
+						$arrHeader, array("rs", "inf"), 
+						array(1, 'Cập nhật thành công'), 
+						array( 0, 1 )
+						);
+				return;
+			}
+			else
+			{
+				echo global_common::convertToXML($arrHeader, array("rs","inf"), array(0,"Cập nhật thất bại. Xin vui lòng thử lại sau!"), array(0,1));
+				return;
+			}
+		}//end check act
+	}
+	else
+	{
+		echo global_common::convertToXML($arrHeader, array("rs",'info'), array(0,global_common::STRING_REQUIRE_LOGIN), array(0,1));
+	}
+	return;
 }
-elseif($_pgR['act'] == Model_Product::ACT_ACTIVE)
+
+elseif($_pgR['act'] == Model_Retailer::ACT_ACTIVE_RETAILER)
+{
+	if (global_common::isCLogin())
+	{
+		$retailerID = $_pgR['id'];
+		$statusID = $_pgR['statusid'];
+		
+		$currentUserID = $_SESSION[global_common::SES_C_USERINFO][global_mapping::UserID];
+		$retailter = $objRetailer->getRetailerByID($retailerID);
+		$createBy = $retailter[global_mapping::CreatedBy];
+		if($createBy != $currentUserID)
+		{
+			return;
+		}
+		
+		$result = $objRetailer->activeRetailer($retailerID,$statusID);
+		if ($result)
+		{
+			$arrHeader = global_common::getMessageHeaderArr($banCode);//$banCode
+			echo global_common::convertToXML(
+					$arrHeader, array("rs", "inf"), 
+					array(1, ($statusID == global_common::STATUS_ACTIVE?'Dừng bán':'Bán lại').' thành công'), 
+					array( 0, 1 )
+					);
+			return;
+		}
+		else
+		{
+			echo global_common::convertToXML($arrHeader, array("rs","inf"), array(0,($isActivate?'Xóa':'Deactivate').' unsuccessfully'), array(0,1));
+			return;
+		}
+	}
+	return;
+}
+elseif($_pgR['act'] == Model_Retailer::ACT_DELETE_PRICE)
+{
+	if (global_common::isCLogin())
+	{
+		$IDName = global_mapping::RetailerID;
+		$contentID = $_pgR["rid"];
+		$status = $_pgR["status"];
+		
+		$currentUserID = $_SESSION[global_common::SES_C_USERINFO][global_mapping::UserID];
+		$retailter = $objRetailer->getRetailerByID($contentID);
+		$createBy = $retailter[global_mapping::CreatedBy];
+		if($createBy != $currentUserID)
+		{
+			return;
+		}
+		
+		if($retailter)
+		{
+			$strTableName = Model_Retailer::TBL_SL_RETAILER;
+			$result = global_common::updateDeleteFlag($contentID,$IDName,$currentUserID,$strTableName,$status,$objConnection);
+			if($result)
+			{
+				$arrHeader = global_common::getMessageHeaderArr($banCode);//$banCode
+				echo global_common::convertToXML(
+						$arrHeader, array("rs", "inf"), 
+						array(1, 'Xóa thành công'), 
+						array( 0, 1 )
+						);
+				return;
+			}
+		}
+		
+	}
+	echo global_common::convertToXML($arrHeader, array("rs","inf"), array(0,'Xóa thất bại.'), array(0,1));
+	return;
+}
+//elseif($_pgR['act'] == Model_ProductType::ACT_GET_ALL)
+//{
+//	$types = $objArticleType->getAllArticleType(0);
+//	echo json_encode($types);
+//	return ;
+//}
+/*elseif($_pgR['act'] == Model_Product::ACT_ACTIVE)
 {
 	$articleID = $_pgR['id'];
 	$isActivate = $_pgR['isactivate'];
@@ -211,6 +365,7 @@ elseif($_pgR['act'] == Model_Product::ACT_ACTIVE)
 	}
 	
 }
+
 elseif($_pgR['act'] == Model_Product::ACT_REFRESH)
 {
 	$articleID = $_pgR['id'];
@@ -233,6 +388,7 @@ elseif($_pgR['act'] == Model_Product::ACT_REFRESH)
 	}
 	
 }
+
 elseif($_pgR['act'] == Model_Product::ACT_CHANGE_PAGE)
 {
 	$intPage = $_pgR['p'];
@@ -267,25 +423,6 @@ elseif ($_pgR["act"] == Model_Product::ACT_GET)
 		return ;
 	}
 }
-elseif($_pgR['act'] == Model_Product::ACT_DELETE)
-{
-	/*
-	$IDName = "menu_id";
-	$contentID = $_pgR["aid"];
-	$strTableName = user_menu::TBL_T_MENU;
-	$result = global_common::updateDeleteFlag($contentID,$IDName,$strTableName ,$_pgR["status"],$objConnection);
-	if($result)
-	{
-		$IDName = "content_id";
-		$strTableName = user_faq::TBL_T_FAQ;
-		$result = global_common::updateDeleteFlag($contentID,$IDName,$strTableName ,$_pgR["status"],$objConnection);
-	}
-	$arrHeader = global_common::getMessageHeaderArr($banCode=0,0);
-	$arrKey = array("rs","id");
-	$arrValue = array($result?1:0,$contentID);
-	$arrIsMetaData = array(0, 1);
-	echo global_common::convertToXML($arrHeader, $arrKey, $arrValue, $arrIsMetaData);
-	*/
-	return;
-}
+*/
+
 ?>

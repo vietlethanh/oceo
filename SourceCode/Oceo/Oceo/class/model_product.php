@@ -212,14 +212,35 @@ class Model_Product
 		return $arrResult[0];
 	}
 	
+	public function getProductByIDs($arrIDs) 
+	{		
+		$arrIDs = global_common::splitString($arrIDs);
+		$strQueryIN = global_common::convertToQueryIN($arrIDs);
+		$whereClause = 'WHERE '.global_mapping::ProductID.' IN ('.$strQueryIN.')';
+		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE,array('*',
+					self::TBL_SL_PRODUCT,$whereClause.' '));
+		//echo $strSQL;
+		$products =  $this->_objConnection->selectCommand($strSQL);	
+		
+		if(!$products)
+		{
+			global_common::writeLog('get getProductByIDs:'.$strSQL,1,$_mainFrame->pPage);
+			return null;
+		}
+		
+		//print_r($products);
+		return $products;
+	}
+	
+	
 	public function getPropertyInfoByID($objID) 
 	{		
 		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
 				array('*', Model_ProductProperty::TBL_SL_PRODUCT_PROPERTY ,							
-					'WHERE ProductID = \''.$objID.'\' '));
+					'WHERE ProductID = \''.$objID.'\'  Order by `'.global_mapping::Order.'`'));
+		//echo $strSQL;
 		
 		$arrResult =$this->_objConnection->selectCommand($strSQL);	
-		//echo $strSQL;
 		if(!$arrResult)
 		{
 			global_common::writeLog('get sl_product ByID:'.$strSQL,1,$_mainFrame->pPage);
@@ -229,13 +250,28 @@ class Model_Product
 		{
 			//print_r($arrResult);
 			$propertyIDs = global_common::getArrayColumn($arrResult,global_mapping::PropertyID); 
+			$propertyIDs = array_unique($propertyIDs);
 			//print_r($propertyIDs);
 			$objProperty = new Model_Property($this->_objConnection);
 			$objPropertyGroup = new Model_PropertyGroup($this->_objConnection);
 			
 			$properties = $objProperty->getPropertyByIDs($propertyIDs);
+			$temp = array();
+			foreach($propertyIDs as $item)
+			{
+				foreach($properties as $subitem)
+				{
+					if($item == $subitem[global_mapping::PropertyID])
+					{
+						//echo $item.':';
+						$temp  = array_merge($temp, array($subitem));
+					}
+				}
+			}
+			$properties = $temp;
 			//print_r($properties);
 			$propertyGroupIDs = global_common::getArrayColumn($properties,global_mapping::PropertyGroupID);
+			$propertyGroupIDs = array_unique($propertyGroupIDs);
 			//print_r($propertyGroupIDs);
 			$propertyGroups = $objPropertyGroup->getPropertyGroupByIDs($propertyGroupIDs);
 			
@@ -243,9 +279,24 @@ class Model_Product
 			foreach($arrResult as $key => $info)
 			{
 				$temp[$info[global_mapping::PropertyID]]=$info;
-				unset($arrResult[$key]);
+				unset($arrResult[$key]);				
 			}	
 			$arrResult = $temp;
+			$temp = array();
+			foreach($propertyGroupIDs as $item)
+			{
+				foreach($propertyGroups as $subitem)
+				{
+					if($item == $subitem[global_mapping::PropertyGroupID])
+					{
+						//echo $item.':';
+						$temp  = array_merge($temp, array($subitem));
+					}
+				}
+			}
+			$propertyGroups = $temp;
+			
+			//print_r($arrResult);
 			//print_r($propertyGroups);
 			$count = count($propertyGroups);
 			
@@ -253,17 +304,21 @@ class Model_Product
 			{
 				foreach($properties as $item)
 				{
-					
 					if($item[global_mapping::PropertyGroupID] == $propertyGroups[$i][global_mapping::PropertyGroupID])
 					{
 						//change defaut value  to product property value
 						$item[global_mapping::PropertyValue] = $arrResult[$item[global_mapping::PropertyID]][global_mapping::PropertyValue];
+						$item[global_mapping::Status] = $arrResult[$item[global_mapping::PropertyID]][global_mapping::Status];
+						$item[global_mapping::TypeID] = $arrResult[$item[global_mapping::PropertyID]][global_mapping::TypeID];
+						$item[global_mapping::StatusID] = $arrResult[$item[global_mapping::PropertyID]][global_mapping::StatusID];
+						$item[global_mapping::Order] = $arrResult[$item[global_mapping::PropertyID]][global_mapping::Order];
 						$propertyGroups[$i]['Properties'] = $propertyGroups[$i]['Properties']? $propertyGroups[$i]['Properties']: array();
 						$propertyGroups[$i]['Properties'] = array_merge($propertyGroups[$i]['Properties'], array( $item));
 					}
 				}
 			}
 		}
+		
 		//print_r($propertyGroups);
 		return $propertyGroups;
 	}
@@ -299,6 +354,35 @@ class Model_Product
 		{
 			global_common::writeLog('get All sl_product:'.$strSQL,1,$_mainFrame->pPage);
 			return null;
+		}
+		$objManu = new Model_Manufactory($this->_objConnection);
+		$objArticleType = new Model_ArticleType($this->_objConnection);
+		$allManus = $objManu->getAllManufactory();
+		$allCats = $objArticleType->getAllArticleType();
+		$manus = array();
+		foreach($allManus as $key => $info)
+		{
+			$manus[$info[global_mapping::ManufactoryID]]=$info;
+			unset($allManus[$key]);
+		}	
+		$cats = array();
+		foreach($allCats as $key => $info)
+		{
+			$cats[$info[global_mapping::ArticleTypeID]]=$info;
+			unset($allCats[$key]);
+		}	
+		
+		$count = count($arrResult);
+		for($index=0;$index < $count;$index++)
+		{
+			if( $manus[$arrResult[$index][global_mapping::ManufactoryID]])
+			{
+				$arrResult[$index][global_mapping::ManufactoryName] = $manus[$arrResult[$index][global_mapping::ManufactoryID]][global_mapping::ManufactoryName];
+			}
+			if( $cats[$arrResult[$index][global_mapping::CatalogueID]])
+			{
+				$arrResult[$index][global_mapping::ArticleTypeName] = $cats[$arrResult[$index][global_mapping::CatalogueID]][global_mapping::ArticleTypeName];
+			}
 		}
 		//print_r($arrResult);
 		return $arrResult;

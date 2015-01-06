@@ -16,49 +16,51 @@ class Model_ProductProperty
 {		   
 	#region PRESERVE ExtraMethods For ProductProperty
 	#endregion
-    #region Contants	
-    const ACT_ADD							= 10;
-    const ACT_UPDATE						= 11;
-    const ACT_DELETE						= 12;
-    const ACT_CHANGE_PAGE					= 13;
-    const ACT_SHOW_EDIT                     = 14;
-    const ACT_GET                           = 15;
-    const NUM_PER_PAGE                      = 15; 
-    
-    const TBL_SL_PRODUCT_PROPERTY			            = 'sl_product_property';
-
+	#region Contants	
+	const ACT_ADD							= 10;
+	const ACT_UPDATE						= 11;
+	const ACT_DELETE						= 12;
+	const ACT_CHANGE_PAGE					= 13;
+	const ACT_SHOW_EDIT                     = 14;
+	const ACT_GET                           = 15;
+	const NUM_PER_PAGE                      = 15; 
+	
+	const TBL_SL_PRODUCT_PROPERTY			            = 'sl_product_property';
+	
 	const SQL_INSERT_SL_PRODUCT_PROPERTY		= 'INSERT INTO `{0}`
 		(
-			ProductID,
-			PropertyID,
-			`PropertyValue`,
-			`Order`
-        )
-        VALUES (
-			\'{1}\', \'{2}\', \'{3}\', \'{4}\'
-        );';
-        
+		ProductID,
+		PropertyID,
+		`PropertyValue`,
+		`Order`,`TypeID`, `Status`
+		)
+		VALUES (
+		\'{1}\', \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'{6}\'
+		);';
+	
 	const SQL_UPDATE_SL_PRODUCT_PROPERTY		= 'UPDATE `{0}`
 		SET  
-			`ProductID` = \'{1}\',
-			`PropertyID` = \'{2}\',
-			`PropertyValue` = \'{3}\',
-			`Order` = \'{4}\'
+		`ProductID` = \'{1}\',
+		`PropertyID` = \'{2}\',
+		`PropertyValue` = \'{3}\',
+		`Order` = \'{4}\',
+		`TypeID` =  \'{5}\'
+		`Status` =  \'{6}\'
 		WHERE `PropertyID` = \'{2}\'  ';
-		   
-
-    const SQL_CREATE_TABLE_SL_PRODUCT_PROPERTY		= 'CREATE TABLE `{0}` (
-
-			`ProductID` ,
-			`PropertyID` ,
-			`PropertyValue` varchar(255),
-			`Order` ,
-			PRIMARY KEY(ProductID,PropertyID)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;';
 	
-    #endregion   
-    
-    #region Variables
+	
+	const SQL_CREATE_TABLE_SL_PRODUCT_PROPERTY		= 'CREATE TABLE `{0}` (
+		
+		`ProductID` ,
+		`PropertyID` ,
+		`PropertyValue` varchar(255),
+		`Order` ,
+		PRIMARY KEY(ProductID,PropertyID)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;';
+	
+	#endregion   
+	
+	#region Variables
 	var $_objConnection;
 	#end region
 	
@@ -76,19 +78,19 @@ class Model_ProductProperty
 		$this->_objConnection = $objConnection;
 		
 	}
-    #region
-    
-    #region Public Functions
-    
-    public function insert($productID, $propertyID, $propertyvalue,$order)
+	#region
+	
+	#region Public Functions
+	
+	public function insert($productID, $propertyID, $propertyvalue,$order,$typeID, $status)
 	{
 		$strTableName = self::TBL_SL_PRODUCT_PROPERTY;
 		
 		$strSQL = global_common::prepareQuery(self::SQL_INSERT_SL_PRODUCT_PROPERTY,
 				array(self::TBL_SL_PRODUCT_PROPERTY,$productID,$propertyID,
-						global_common::escape_mysql_string($propertyvalue),
-						global_common::escape_mysql_string($order)
-                ));
+					global_common::escape_mysql_string($propertyvalue),
+					global_common::escape_mysql_string($order),$typeID,$status
+					));
 		
 		if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_SL_PRODUCT_PROPERTY,$this->_objConnection,$strTableName))
 		{
@@ -99,17 +101,17 @@ class Model_ProductProperty
 		return $intID;
 		
 	}
-    
-    public function update($productid,$propertyid,$propertyvalue,$order)
+	
+	public function update($productid,$propertyid,$propertyvalue,$order,$typeID,$status)
 	{
 		$strTableName = self::TBL_SL_PRODUCT_PROPERTY;
 		$strSQL = global_common::prepareQuery(self::SQL_UPDATE_SL_PRODUCT_PROPERTY,
 				array($strTableName,
-						global_common::escape_mysql_string($productid),
-						global_common::escape_mysql_string($propertyid),
-						global_common::escape_mysql_string($propertyvalue),
-						global_common::escape_mysql_string($order)
-                ));
+					global_common::escape_mysql_string($productid),
+					global_common::escape_mysql_string($propertyid),
+					global_common::escape_mysql_string($propertyvalue),
+					global_common::escape_mysql_string($order),$typeID,$status
+					));
 		
 		if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_SL_PRODUCT_PROPERTY,$this->_objConnection,$strTableName))
 		{
@@ -119,8 +121,8 @@ class Model_ProductProperty
 		}	
 		return $intNewID;		
 	}
-    
-    public function getProductPropertyByID($objID,$selectField='*') 
+	
+	public function getProductPropertyByID($objID,$selectField='*') 
 	{		
 		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
 				array($selectField, self::TBL_SL_PRODUCT_PROPERTY ,							
@@ -135,7 +137,7 @@ class Model_ProductProperty
 		//print_r($arrResult);
 		return $arrResult[0];
 	}
-    
+	
 	
 	public function getProductPropertyByProduct($objID,$selectField='*') 
 	{		
@@ -153,10 +155,86 @@ class Model_ProductProperty
 		return $arrResult;
 	}
 	
+	public function getTopPropertyValue($catID, $sizeProperty, $sizeValue )
+	{
+		$whereClause = 'WHERE '.global_mapping::ArticleTypeID.' =  \''.$catID.'\' ';
+		$strSQL = global_common::prepareQuery(global_common::SQL_SELECT_FREE,array('*',
+					Model_PropertyGroup::TBL_SL_PROPERTY_GROUP,$whereClause));
+		
+		$propertyGroups =  $this->_objConnection->selectCommand($strSQL);	
+		//print_r($propertyGroups);
+		$arrPropertyGroupIDs = global_common::getArrayColumn($propertyGroups,global_mapping::PropertyGroupID);
+		
+		$strQueryIN = global_mapping::PropertyGroupID .' IN('. global_common::convertToQueryIN($arrPropertyGroupIDs) .')';
+		//echo $strQueryIN;
+		$objProperty = new Model_Property($this->_objConnection);
+		$allProperties = $objProperty->getAllProperty(0,'*',$strQueryIN,'`Order`');
+		$arrPropertyIDs = global_common::getArrayColumn($allProperties,global_mapping::PropertyID);
+		//print_r($allProperties);
+		$strQueryIN = global_mapping::PropertyID .' IN('. global_common::convertToQueryIN($arrPropertyIDs) .')';		
+		$temp = array();
+		foreach($allProperties as $key => $info)
+		{
+			$temp[$info[global_mapping::PropertyID]]=$info;
+			unset($allProperties[$key]);
+		}	
+		$allProperties = $temp;
+		//print_r($allProperties);
+		
+		//get top properties used
+		$strQueryIN = global_mapping::PropertyID .' IN('. global_common::convertToQueryIN($arrPropertyIDs) .')';		
+		$strSQL = global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+				array(PropertyID, self::TBL_SL_PRODUCT_PROPERTY , 'WHERE '. $strQueryIN.' 
+						GROUP BY PropertyID ORDER BY COUNT(*) DESC LIMIT 0,'.$sizeProperty.''));
+		//echo '<br>SQL:'.$strSQL;
+		$arrTopPropertyIDs = $this->_objConnection->selectCommand($strSQL);	
+		
+		//print_r($arrTopPropertyIDs);
+		$arrTopPropertyIDs = global_common::getArrayColumn($arrTopPropertyIDs,global_mapping::PropertyID);
+		$strQueryIN = 'WHERE '. global_mapping::PropertyID .' IN('. global_common::convertToQueryIN($arrTopPropertyIDs) .')';		
+		$strQueryIN .= ' Group By '.global_mapping::PropertyID.','.global_mapping::PropertyValue;
+		$strQueryIN .= ' Order By '.global_mapping::PropertyID.',COUNT('.global_mapping::PropertyValue.') DESC';
+		$strSQL = global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+				array('distinct '. global_mapping::PropertyID.','.global_mapping::PropertyValue, 
+					self::TBL_SL_PRODUCT_PROPERTY , $strQueryIN));
+		
+		//echo '<br>SQL:'.$strSQL;
+		$arrTopProperties = $this->_objConnection->selectCommand($strSQL);		
+		//print_r($arrTopProperties);
+		$arrResult = array();
+		foreach($arrTopPropertyIDs as $item)
+		{
+			//echo $item;
+			$arrResult[$item] = $allProperties[$item];
+			$arrValue = array();
+			$limit = $sizeValue;
+			//print_r($arrTopProperties);
+			//echo ' PropID:'.$item;
+			foreach($arrTopProperties as $value)
+			{
+				if($value[global_mapping::PropertyID] == $item && $limit >0)
+				{
+					//echo $value[global_mapping::PropertyValue];
+					//echo $value[global_mapping::PropertyValue];
+					$arrValue = array_merge($arrValue, array( $value[global_mapping::PropertyValue]));
+					$limit --;
+				}
+				
+			}
+			//print_r($arrValue);
+			$arrResult[$item][global_mapping::PropertyValue] = $arrValue;
+		}
+		//print_r($arrResult);
+		return $arrResult;
+	}
 	
-    public function getAllProductProperty($intPage = 0,$selectField='*',$whereClause='',$orderBy='') 
+	public function getAllProductProperty($intPage = 0,$selectField='*',$whereClause='',$orderBy='') 
 	{		
-        if($whereClause)
+		if(!$selectField)
+		{
+			$selectField = '*';
+		}
+		if($whereClause)
 		{
 			$whereClause = ' WHERE '.$whereClause;
 		}
@@ -165,18 +243,18 @@ class Model_ProductProperty
 		{
 			$orderBy = ' ORDER BY '.$orderBy;
 		}
-        if($intPage>0)
-        {
-		    $strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
-				array($selectField, Model_ProductProperty::TBL_SL_PRODUCT_PROPERTY ,							
-					$whereClause.$orderBy .' limit '.(($intPage-1)* self::NUM_PER_PAGE).','.self::NUM_PER_PAGE));
-        }
-        else
-        {
-            $strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
-				array($selectField, Model_ProductProperty::TBL_SL_PRODUCT_PROPERTY ,							
-					$whereClause.$orderBy ));
-        }
+		if($intPage>0)
+		{
+			$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+					array($selectField, Model_ProductProperty::TBL_SL_PRODUCT_PROPERTY ,							
+						$whereClause.$orderBy .' limit '.(($intPage-1)* self::NUM_PER_PAGE).','.self::NUM_PER_PAGE));
+		}
+		else
+		{
+			$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+					array($selectField, Model_ProductProperty::TBL_SL_PRODUCT_PROPERTY ,							
+						$whereClause.$orderBy ));
+		}
 		//echo '<br>SQL:'.$strSQL;
 		$arrResult =$this->_objConnection->selectCommand($strSQL);		
 		if(!$arrResult)
@@ -187,39 +265,39 @@ class Model_ProductProperty
 		//print_r($arrResult);
 		return $arrResult;
 	}
-    
-    public function getListProductProperty($intPage,$orderBy='ProductID', $whereClause)
+	
+	public function getListProductProperty($intPage,$orderBy='ProductID', $whereClause)
 	{		
-        if($whereClause)
-        {
-            $whereClause='WHERE'+ $whereClause;						
-        }
-        if($orderBy)
-        {
-            $orderBy='ORDER BY'+ $orderBy;						
-        }
+		if($whereClause)
+		{
+			$whereClause='WHERE'+ $whereClause;						
+		}
+		if($orderBy)
+		{
+			$orderBy='ORDER BY'+ $orderBy;						
+		}
 		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE,array('*',
 					self::TBL_SL_PRODUCT_PROPERTY,$orderBy.' '.$whereClause.' limit '.(($intPage-1)* self::NUM_PER_PAGE).','.self::NUM_PER_PAGE));
 		//echo 'sql:'.$strSQL;	
 		$arrResult = $this->_objConnection->selectCommand($strSQL);
 		//print_r($arrResult);
 		$strHTML = '<table class="tbl-list">
-                    <thead>
-						<td>ProductID</td>
-						<td>PropertyID</td>
-						<td>PropertyValue</td>
-						<td>Order</td>
-                    </thead>
-                    <tbody>';
+				<thead>
+				<td>ProductID</td>
+				<td>PropertyID</td>
+				<td>PropertyValue</td>
+				<td>Order</td>
+				</thead>
+				<tbody>';
 		$icount = count($arrmenu);
 		for($i=0;$i<$icount;$i++)
 		{
 			$strHTML.='<tr class="'.($i%2==0?'even':'odd').'">
-						<td>'.$arrResult[$i]['ProductID'].'</td>
-						<td>'.$arrResult[$i]['PropertyID'].'</td>
-						<td>'.$arrResult[$i]['PropertyValue'].'</td>
-						<td class="lastCell">'.$arrResult[$i]['Order'].'</td>
-					  </tr>';
+					<td>'.$arrResult[$i]['ProductID'].'</td>
+					<td>'.$arrResult[$i]['PropertyID'].'</td>
+					<td>'.$arrResult[$i]['PropertyValue'].'</td>
+					<td class="lastCell">'.$arrResult[$i]['Order'].'</td>
+					</tr>';
 		}
 		$strHTML.='</tbody></table>';
 		
@@ -227,7 +305,7 @@ class Model_ProductProperty
 				"_objMenu.changePage")."</div>";
 		return $strHTML;
 	}
-    
-    #endregion   
+	
+	#endregion   
 }
 ?>

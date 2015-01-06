@@ -14,17 +14,26 @@ include_once('class/model_property.php');
 include_once('class/model_productproperty.php');
 include_once('class/model_retailer.php');
 include_once('class/model_status.php');
+include_once('class/model_propertygroup.php');
 $objProduct = new Model_Product($objConnection);
+$objArticleType = new Model_ArticleType($objConnection);
 $objProductPrice = new Model_ProductPrice($objConnection);
 $objProperty = new Model_Property($objConnection);
 $objRetailer = new Model_Retailer($objConnection);
 $objComment = new Model_Comment($objConnection);
 if ($_pgR["pid"])
 {
-	$productID = $_pgR["pid"];
-	$_SESSION[global_common::SES_C_CUR_PAGE] = 'product_detail.php?pid='.$productID;
+	$_currentProductID = $_pgR["pid"];
+	$_SESSION[global_common::SES_C_CUR_PAGE] = 'product_detail.php?pid='.$_currentProductID;
 }
-
+$_arrCategories =  $objArticleType->getAllArticleType(0,null,'`ParentID`=0','Level');
+//$_currentParentCatID = $catID;
+if ($_pgR["pid"])
+{
+	$_currentProduct = $objProduct->getProductByID($_currentProductID);
+	$catID = $objArticleType->getArticleTypeByID($_currentProduct[global_mapping::CatalogueID]);
+	$_currentParentCatID = $catID[global_mapping::ParentID];
+}
 ?>
 <?php
 include_once('include/_header.inc');
@@ -38,16 +47,34 @@ include_once('include/_menu.inc');
 </script>
 <?php 
 //left side
-include_once('include/_slogan.inc');
+//include_once('include/_slogan.inc');
 ?>
-<?php 
-//left side
-include_once('include/_left_side.inc');
+<div class="tab-content">      
+<?php
+$default = '';
+foreach($_arrCategories as $parentCat)
+{
+	$default = '';
+	$_parentCatID = $parentCat[global_mapping::ArticleTypeID];
+	if($_currentParentCatID == $parentCat[global_mapping::ArticleTypeID])
+	{
+		$default = 'active';
+	}
+	?>
+	<div id="tab<?php echo $parentCat[global_mapping::ArticleTypeID] ?>" class="tab-pane <?php echo $default ?>" >
+	<?php 
+	//left side
+	include('include/_left_side.inc');
 ?>
-<?php 
-//right side
-include_once('include/_right_side.inc');
+	<?php 
+	//right side
+	include('include/_right_side.inc');
 ?>
+	</div>
+	<?php 
+			}?>
+	
+	</div>
 <?php 
 //search box
 include_once('include/_search_box.inc');

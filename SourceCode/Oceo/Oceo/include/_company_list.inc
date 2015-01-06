@@ -1,66 +1,13 @@
 <?php
 $objArticleType = new model_ArticleType($objConnection);
-$objArticle = new model_Article($objConnection);
-
-$catID = $_pgR['cid'];
-//Just get from "article_list.php"
-//$city = $_pgR['ct'];
-//$district = $_pgR['ds'];
-//$keyword =  $_pgR['kw'];
-
-$allCats = $objArticleType->getAllArticleType(0,null,'ParentID='.$catID,null);
-if(count($allCats)<=0)
+$objAdvert = new Model_Advertising($objConnection);
+//get $_currentParentCatID from main view
+if($_currentParentCatID)
 {
-	$allCatIDs = $catID;
-}
-else
-{
-	$allCatIDs = global_common::getArrayColumn($allCats,global_mapping::ArticleTypeID);
-}
-//print_r($allCats);
-
-//print_r($allCatIDs);
-$search = '';
-if($city)
-{
-	$search = '`'.global_mapping::Cities.'` like \'%'.global_common::escape_mysql_string($city).'%\' ';
-}
-if($district)
-{
-	if($search)
-	{
-		$search .= ' and `'.global_mapping::Dictricts.'` like \'%'.global_common::escape_mysql_string($district).'%\' ';
-	}
-	else
-	{
-		$search .= '`'.global_mapping::Dictricts.'` like \'%'.global_common::escape_mysql_string($district).'%\' ';
-	}
+	$condition = global_mapping::AdTypeID.'=\'2\' and '.global_mapping::ArticleTypeID.'=\''.$_currentParentCatID.'\'';
+	$allAds = $objAdvertising->getAllAdvertising(0,'',$condition,'');
 }
 
-if($keyword)
-{
-	if($search)
-	{
-		$search .= ' and (`'.global_mapping::CompanyName.'` like \'%'.global_common::escape_mysql_string($keyword).'%\' or `'.global_mapping::Title.'` like \'%'.global_common::escape_mysql_string($keyword).'%\' or `'.global_mapping::Content.'` like \'%'.global_common::escape_mysql_string($keyword).'%\')' ;
-	}
-	else
-	{
-		$search .= '(`'.global_mapping::CompanyName.'` like \'%'.global_common::escape_mysql_string($keyword).'%\' or  `'.global_mapping::Title.'` like \'%'.global_common::escape_mysql_string($keyword).'%\' or `'.global_mapping::Content.'` like \'%'.global_common::escape_mysql_string($keyword).'%\')' ;
-	}
-}
-$condidtion = global_mapping::StartDate.' <= \''.global_common::nowSQL().'\''.
-	' And '.global_mapping::EndDate.' >= \''.global_common::nowSQL().'\'';
-$condidtion .= ' And `Status` = 1';
-
-if($search)
-{
-	$condidtion .= ' And '.$search;
-}
-
-//echo $condidtion;
-
-$articles = $objArticle->getTopArticleByType($allCatIDs,global_common::DEFAULT_TOP_ITEMS,null,$condidtion);
-//print_r($articles);
 ?>
 <style>
  
@@ -71,7 +18,7 @@ $articles = $objArticle->getTopArticleByType($allCatIDs,global_common::DEFAULT_T
 <?php
 $max = 15;
 $index = 0;
-foreach($articles as $item)
+foreach($allAds as $item)
 {
 	$index ++;
 	$thumbnail = $item[global_mapping::FileName];
