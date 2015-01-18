@@ -2,10 +2,9 @@
 /* TODO: Add code here */
 require('config/globalconfig.php');
 
-$_SESSION[global_common::SES_C_CUR_PAGE] = "post_article.php";
+$_SESSION[global_common::SES_C_CUR_PAGE] = "post_price.php";
 
 include_once('include/_permission.inc');
-include_once('include/_header.inc');
 include_once('class/model_articletype.php');
 include_once('class/model_product.php');
 include_once('class/model_comment.php');
@@ -50,6 +49,7 @@ if ($_pgR["rid"])
 	$currentProductType = $retailter[global_mapping::ProductStatusID];
 	$currentPrice = $retailter[global_mapping::Price];
 }
+include_once('include/_header.inc');
 
 ?>
 
@@ -115,7 +115,7 @@ foreach($productStatuses as $item)
 <?php
 foreach($allCities as $item)
 {
-	if($item[global_mapping::CityID] == $retailter[global_mapping::CityID])
+	if($item[global_mapping::CityID] == $retailter[global_mapping::CityID] || $item[global_mapping::CityID]== $_SESSION[global_common::SES_C_USERINFO][global_mapping::CityID])
 		echo '			<option selected="selected" value="'.$item[global_mapping::CityID].'" >'.$item[global_mapping::CityName].'</option>';
 	else
 		echo '			<option value="'.$item[global_mapping::CityID].'" >'.$item[global_mapping::CityName].'</option>';
@@ -152,10 +152,18 @@ foreach($allCities as $item)
 					<textarea  name="txtShipDesc" id="txtShipDesc" class="m-wrap span6" maxlength="255"  rows="2"><?php echo $retailter[global_mapping::ShippingDesc];?></textarea>
 				</div>
 			</div>
+			
 			<div class="control-group">
 				<label class="control-label">Tổng quát sản phẩm</label>
 				<div class="controls">
 					<textarea  name="txtShortDesc" id="txtShortDesc" class="m-wrap span6" maxlength="255"  rows="2" placeholder=""><?php echo $retailter[global_mapping::ShortDesc];?></textarea>
+				</div>
+			</div>
+			<div class="control-group">
+				<div class="controls">
+					<label class="checkbox">
+						<input type="checkbox" id="chkRecieveEmail" name="chkRecieveEmail" value="" <?php echo ($retailter[global_mapping::Status]   ?'checked=checked':'');?>/> Nhận email khi có bình luận
+					</label>
 				</div>
 			</div>
 			<div class="control-group zone">
@@ -170,14 +178,14 @@ foreach($allCities as $item)
 					<div class="help-inline message"></div>					
 				</div>
 			</div>
-			<div class="control-group">
+			<!--div class="control-group">
 				<div class="controls">
 					<label class="checkbox">
-						<input type="checkbox" id="chkTerm" value="" /> Tôi đã đọc và đồng ý với <a href="<?php echo global_common::PAGE_TERM_KM ?>" class="link" target="_blank">điều khoản đăng tin</a>  của hệ thống oceo.vn
+						<input type="checkbox" id="chkTerm" value="" /> Tôi đã đọc và đồng ý với <a href="<?php echo global_common::PAGE_TERM_GENERAL ?>" class="link" target="_blank">điều khoản sử dụng</a>  của hệ thống oceo.vn
 					</label>
 					<div class="help-inline message"></div>		
 				</div>
-			</div>
+			</div-->
 			<div class="control-group">				
 				<div class="controls">
 					<a href="<?php echo $_SESSION[global_common::SES_LAST_PAGE]?>" class="lbtn">

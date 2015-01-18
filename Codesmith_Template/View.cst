@@ -1,4 +1,4 @@
-<%------------------------------------------------------------------------------------------
+﻿<%------------------------------------------------------------------------------------------
 * Author: Eric J. Smith 
 * Description: This template will generate standard CRUD stored procedures for a given 
 *   database table.
@@ -565,7 +565,7 @@ public void GenerateGetParams(ColumnSchemaCollection columns, int indentLevel)
             GenerateIndent(indentLevel);
             Response.WriteLine("$"+variable+" = $_pgR['"+fieldName+"'];");
             GenerateIndent(indentLevel);
-            Response.WriteLine("$"+variable+" = global_editor::rteSafe(html_entity_decode($"+variable+",ENT_COMPAT ,'UTF-8' ));");
+            Response.WriteLine("$"+variable+" = html_entity_decode($"+variable+",ENT_COMPAT ,'UTF-8' );");
         }
 	}
 }

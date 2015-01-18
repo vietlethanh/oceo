@@ -8,7 +8,14 @@ if ($_pgR["pid"])
 	$exPrices = $objProductPrice->getProductPriceByProduct($productID);
 	$inPrices = $objRetailer->getRetailerByProduct($productID);
 	$imageLinks = global_common::splitString($product[global_mapping::ImageLink],',');
-	
+	$city  = $_pgR["ct"];
+	if(!$city)
+	{
+		if(global_common::isCLogin())
+		{
+			$city = $_SESSION[global_common::SES_C_USERINFO][global_mapping::CityID];;
+		}
+	}
 	//$intPage = 1;
 	//$total = 0;
 	//$comments = $objComment->getCommentByArticle($intPage,$total,$articleID,'*','',' CreatedDate DESC');
@@ -24,6 +31,10 @@ if ($_pgR["pid"])
             slide.init('slide_product_container');
         });
     </script>
+    <form  method="GET" id="formSearchWithCity">
+		<input type="hidden" name="pid" value="<?php echo $productID?>" />
+		<input type="hidden" name="ct" id="hdct" value="<?php echo $city?>" />
+	</form>
 <div id="product">
 	<div id="advertises">
 <?php 
@@ -31,6 +42,7 @@ if ($_pgR["pid"])
 //include_once('_advertises.inc');
 		?>	
 	</div>
+	
 	<input type="hidden" id="hdproductid" value="<?php echo $product[global_mapping::ProductID]?>" />
 	<div id="product-detail">
 		<div id="product-summary">
@@ -214,7 +226,7 @@ foreach($inPrices as $item)
 	echo '<div class="control-group">';
 	echo '	<label class="control-label">'.$item[global_mapping::ProductStatus].':</label>';
 	echo '	<div class="controls">	';
-	echo '		<a href="price_detail.php?pid='.$productID.'&type='.$item[global_mapping::ProductStatusID].'" class="link"> Từ '.global_common::FormatPrice($item[global_mapping::Price]).'</a>';
+	echo '		<a href="price_detail.php?pid='.$productID.'&type='.$item[global_mapping::ProductStatusID].'&ct='.$city.'" class="link"> Từ '.global_common::FormatPrice($item[global_mapping::Price]).'</a>';
 	echo '	</div>';
 	echo '</div>';
 }
@@ -268,26 +280,26 @@ foreach($exPrices as $item)
 		<div id="product-property">	
 			<form method="" class="form-horizontal" id="">
 					<div class="table-post">
-					<?php 
-					foreach($propertyInfo as $item)
-					{
-						echo '<div class="property-zone">';
-							echo '<div class="control-header">';
-							echo '	<div class="group-name">';
-							echo '     <h1 class="m-wrap control-label">'.$item[global_mapping::PropertyGroupName].'</h1>';
-							echo '  </div>';
-							echo '</div>';
-							foreach($item["Properties"] as $subitem)
-							{
-								echo '<div class="control-group">';
-								echo '	<label class="control-label">'.$subitem[global_mapping::PropertyName].':</label>';
-								echo '	<div class="controls">	';
-								echo '			<label class="">'.$subitem[global_mapping::PropertyValue].'</label>';
-								echo '	</div>';
-								echo '</div>';
-							}
-						echo '</div>';
-					}
+<?php 
+foreach($propertyInfo as $item)
+{
+	echo '<div class="property-zone">';
+	echo '<div class="control-header">';
+	echo '	<div class="group-name">';
+	echo '     <h1 class="m-wrap control-label">'.$item[global_mapping::PropertyGroupName].'</h1>';
+	echo '  </div>';
+	echo '</div>';
+	foreach($item["Properties"] as $subitem)
+	{
+		echo '<div class="control-group">';
+		echo '	<label class="control-label">'.$subitem[global_mapping::PropertyName].':</label>';
+		echo '	<div class="controls">	';
+		echo '			<label class="">'.$subitem[global_mapping::PropertyValue].'</label>';
+		echo '	</div>';
+		echo '</div>';
+	}
+	echo '</div>';
+}
 					 ?>
 						<!--div class="control-header">
 							<div class="group-name">

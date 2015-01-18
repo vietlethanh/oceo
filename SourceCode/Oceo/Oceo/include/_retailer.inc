@@ -25,6 +25,7 @@ if ($_pgR["rid"])
 		?>	
 	</div>
 	<input type="hidden" id="hdproductid" value="<?php echo $product[global_mapping::ProductID]?>" />
+	<input type="hidden" id="hdretailerid" value="<?php echo $retailerID?>" />
 	<div id="retailer-detail">
 		<div id="retailer-navigate" class="product-navigate">
 			<?php echo global_common::buildPathProduct($objConnection,$retailer[global_mapping::ProductID],$retailer[global_mapping::ProductStatusID]) ?>		

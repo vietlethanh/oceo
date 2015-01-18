@@ -9,14 +9,13 @@ include_once('include/_header.inc');
 include_once('class/model_articletype.php');
 include_once('class/model_article.php');
 include_once('class/model_comment.php');
-include_once('class/model_user.php');
+nclude_once('class/model_user.php');
 include_once('class/model_propertygroup.php');
 include_once('class/model_property.php');
 include_once('class/model_product.php');
 include_once('class/model_manufactory.php');
 include_once('class/model_productproperty.php');
 include_once('class/model_datatype.php');
-
 
 $objArticle = new Model_Article($objConnection);
 $objArticleType = new Model_ArticleType($objConnection);
@@ -29,7 +28,6 @@ $objManufactory = new Model_Manufactory($objConnection);
 //$propertyInfo = $objProduct->getPropertyInfoByID(30);
 
 //print_r($propertyInfo);
-
 
 
 $intMode = 0;//add mode
@@ -243,7 +241,7 @@ foreach($allProperties as $item)
 			break;
 		}
 	}
-	if(!$isExisted)
+	//if(!$isExisted)
 		echo '			<option value="'.$item[global_mapping::PropertyID].'" '.$display.'  PropertyGroupID="'.$item[global_mapping::PropertyGroupID].'" 
 				Values="'.$item[global_mapping::PropertyValue].'" DataType="'.$item[global_mapping::DataTypeID][global_mapping::InputType].'" 
 				Suffix="'.$item[global_mapping::DataTypeID][global_mapping::Suffix].'">'.$item[global_mapping::PropertyName].'</option>';
@@ -354,14 +352,14 @@ for($i=0; $i<$total; $i++)
 					<textarea id='txtTags' name='txtTags' class="m-wrap span6" rows="2"></textarea>
 				</div>
 			</div>
-			<div class="control-group">
+			<!--div class="control-group">
 				<div class="controls">
 					<label class="checkbox">
-						<input type="checkbox" id="chkTerm" value="" /> Tôi đã đọc và đồng ý với <a href="<?php echo global_common::PAGE_TERM_KM ?>" class="link" target="_blank">điều khoản đăng tin</a>  của hệ thống oceo.vn
+						<input type="checkbox" id="chkTerm" value="" /> Tôi đã đọc và đồng ý với <a href="<?php echo global_common::PAGE_TERM_GENERAL ?>" class="link" target="_blank">điều khoản đăng tin</a>  của hệ thống oceo.vn
 					</label>
 					<div class="help-inline message"></div>		
 				</div>
-			</div>
+			</div-->
 			<div class="control-group">				
 				<div class="controls">
 				<a href="<?php echo $_SESSION[global_common::SES_LAST_PAGE]?>" class="lbtn">
@@ -374,14 +372,6 @@ for($i=0; $i<$total; $i++)
 		</div>
 	</form>
 </div>
-
-<!--End Form Input -->
-<?php 
-//footer
-include_once('include/_footer.inc');
-include_once('include/_location.inc');
-
-?>
 <script language="javascript" type="text/javascript">
     $(document).ready(function () {
 			
@@ -414,8 +404,17 @@ if(!$intMode)
 }
 else
 {
-	echo '$("#cmCategory").change()';
+	
+	echo '$("#cmCategory").change();';
+	echo '$("#cmManufactory option[value='.$product[global_mapping::ManufactoryID].']").attr(\'selected\', \'selected\');$("#cmManufactory").trigger("liszt:updated");$("#cmManufactory").change();';
 }
 			?>
     });
 </script>
+<!--End Form Input -->
+<?php 
+//footer
+include_once('include/_footer.inc');
+include_once('include/_location.inc');
+?>
+

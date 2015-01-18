@@ -25,6 +25,7 @@ var product = {
     ACT_GET : 15,
     ACT_ACTIVE : 16,
     ACT_REFRESH : 17,
+    ACT_CLONE : 18,
     Page : "bg_product.php",
     
    
@@ -132,10 +133,10 @@ var product = {
 			isValid =  false;
 		}
 
-		if(!core.util.isChecked("chkTerm")){		 
+		/*if(!core.util.isChecked("chkTerm")){		 
             core.util.validateInputTextBox('chkTerm', 'Bạn cần phải đồng ý điều khoản sử dụng', isValid);
             isValid = false;
-        }
+        }*/
 		
         if (isValid == false) {
 			core.util.disableControl("btnOK", false);
@@ -196,6 +197,37 @@ var product = {
             {
 				core.ui.showInfoBar(2, core.constant.MsgProcessError);	
 				core.util.disableControl("btnOK", false);
+            }
+        );
+    },
+	
+	cloneProduct: function(productID) {  
+	    var productInfo = {
+	        ProductID:productID
+	    };
+	    
+		if(core.util.isNull(productInfo))
+		{
+			return false;
+		}
+		
+		productInfo.act = this.ACT_CLONE;
+			
+        core.request.post(this.Page,productInfo,
+            function(respone, info){
+                console.log(info);
+				var strRespond = core.util.parserXML(respone);
+				if (parseInt(strRespond[1]['rs']) == 1) {
+					core.ui.showInfoBar(1, strRespond[1]["inf"]);	
+				    core.util.reload();
+                }
+                else{
+                   core.ui.showInfoBar(2, strRespond[1]["inf"]);	
+                }
+            },
+            function()
+            {
+				core.ui.showInfoBar(2, core.constant.MsgProcessError);	
             }
         );
     },
@@ -765,7 +797,8 @@ var product = {
 		{
 			core.util.getObjectByID("formSearch").submit();
 		}
-	},
+	},	
+	
 	showMap: function(obj)
 	{		
 		/*

@@ -16,13 +16,13 @@
 var comment = 
 {		   
     //region Contants	
-    ACT_ADD : 10,
-    ACT_UPDATE : 11,
-    ACT_DELETE : 12,
-    ACT_CHANGE_PAGE : 13,
-    ACT_SHOW_EDIT : 14,
-    ACT_GET : 15,
-	ACT_BAD_COMMENT: 16,
+    ACT_ADD : 130,
+    ACT_UPDATE : 131,
+    ACT_DELETE : 132,
+    ACT_CHANGE_PAGE : 133,
+    ACT_SHOW_EDIT : 134,
+    ACT_GET : 135,
+	ACT_BAD_COMMENT: 136,
     Page : "bg_comment.php",
     AdminPage : "../bg_comment.php",
     
@@ -51,7 +51,7 @@ var comment =
 		var commentInfo = 
 		{
 			Content: content,
-			ArticleID: core.util.getObjectValueByID("hdarticleid")
+			RetailerID: core.util.getObjectValueByID("hdretailerid")
 		};
 		return commentInfo;
     },
@@ -89,7 +89,34 @@ var comment =
             }
         );
     },
-	
+	changePage: function(page) {  
+		
+		var commentInfo = 
+		{
+		    RetailerID: core.util.getObjectValueByID("hdretailerid"),
+			p: page,
+			act: this.ACT_CHANGE_PAGE
+		};
+		
+        core.request.post(this.Page,commentInfo,
+            function(respone, info){
+				var strRespond = core.util.parserXML(respone);
+				if (parseInt(strRespond[1]['rs']) == 1) {
+				    core.ui.hideInfoBar();	
+					var listComment = core.util.getObjectByID('comment-list');
+					listComment.html(strRespond[1]["inf"]);
+                }
+                else{
+                    core.ui.showInfoBar(2, strRespond[1]["inf"]);	
+                }
+            },
+            function()
+            {
+				core.ui.showInfoBar(2, core.constant.MsgProcessError);	
+				core.util.disableControl(controlSubmit, false);
+            },false
+        );
+    },
 	badComment: function(commentID, reportBad, fromAdmin) {  
 		
 		var commentInfo = {

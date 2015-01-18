@@ -11,16 +11,20 @@ include_once('class/model_user.php');
 include_once('class/model_product.php');
 include_once('class/model_productprice.php');
 include_once('class/model_property.php');
-include_once('class/model_productproperty.php');
 include_once('class/model_retailer.php');
 include_once('class/model_status.php');
+include_once('class/model_productproperty.php');
 include_once('class/model_propertygroup.php');
+include_once('class/model_datatype.php');
+include_once('class/model_manufactory.php');
 $objProduct = new Model_Product($objConnection);
+$objProductProperty = new Model_ProductProperty($objConnection);
 $objArticleType = new Model_ArticleType($objConnection);
 $objProductPrice = new Model_ProductPrice($objConnection);
 $objProperty = new Model_Property($objConnection);
 $objRetailer = new Model_Retailer($objConnection);
 $objComment = new Model_Comment($objConnection);
+$objManufactory = new Model_Manufactory($objConnection);
 if ($_pgR["pid"])
 {
 	$_currentProductID = $_pgR["pid"];
@@ -85,10 +89,7 @@ include_once('include/_search_box.inc');
 include_once('include/_product.inc');
 ?>
 
-<?php 
-//footer
-include_once('include/_footer.inc');
-?>
+
 
 <?php
 //include_once('include/_header.inc');
@@ -102,3 +103,7 @@ include_once('include/_footer.inc');
 ?>
 
 
+<?php 
+//footer
+include_once('include/_footer.inc');
+?>

@@ -1,4 +1,4 @@
-<%------------------------------------------------------------------------------------------
+﻿<%------------------------------------------------------------------------------------------
 * Author: Eric J. Smith 
 * Description: This template will generate standard CRUD stored procedures for a given 
 *   database table.
@@ -8,7 +8,7 @@
 
 <%-- Assembly References --%>
 <%@ Assembly Name="SchemaExplorer" %>
-<%@ Assembly Name="CodeSmith.BaseTemplates" %>
+<%@ Assembly Name="CodeSmith.BaseTemplates" %> 
 <%@ Assembly Name="CodeSmith.CustomProperties" %>
 <%@ Assembly Name="System.Data" %>
 <%-- Namespace Imports --%>
@@ -34,7 +34,7 @@
  * Modifications will be overwritten when code smith is run
  *
  * PLEASE DO NOT MAKE MODIFICATIONS TO THIS FILE
- * Date Created 5/6/2012<%//= //DateTime.Now %>
+ * Date Created 5/6/2012<%//= //DateTime.Now %> 
  *
  */
 
@@ -53,7 +53,7 @@ class Model_<%= GetClassName(SourceTable) %>
     const ACT_CHANGE_PAGE					= 13;
     const ACT_SHOW_EDIT                     = 14;
     const ACT_GET                           = 15;
-    const NUM_PER_PAGE                      = 15;
+    const NUM_PER_PAGE                      = 15;  
     
     const TBL_<%= GetTableName(SourceTable,true) %>			            = '<%= GetTableName(SourceTable,false) %>';
 
@@ -90,7 +90,7 @@ class Model_<%= GetClassName(SourceTable) %>
 	*/
 	public function  Model_<%= GetClassName(SourceTable) %>($objConnection)
 	{
-		$this->_objConnection = $objConnection;
+		$this->_objConnection = $objConnection; 
 		
 	}
     #region
@@ -103,7 +103,9 @@ class Model_<%= GetClassName(SourceTable) %>
 		
 		$strTableName = self::TBL_<%= GetTableName(SourceTable,true) %>;
 		$strSQL = global_common::prepareQuery(self::SQL_INSERT_<%= GetTableName(SourceTable,true) %>,
-				array(self::TBL_<%= GetTableName(SourceTable,true) %>,$intID,<% GenerateValueForInsert(SourceTable.Columns); %>));
+				array(self::TBL_<%= GetTableName(SourceTable,true) %>,$intID,
+                <% GenerateValueForInsert(SourceTable.Columns); %>
+                ));
 		
 		if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_<%= GetTableName(SourceTable,true) %>,$this->_objConnection,$strTableName))
 		{
@@ -119,7 +121,9 @@ class Model_<%= GetClassName(SourceTable) %>
 	{
 		$strTableName = self::TBL_<%= GetTableName(SourceTable,true) %>;
 		$strSQL = global_common::prepareQuery(self::SQL_UPDATE_<%= GetTableName(SourceTable,true) %>,
-				array($strTableName,<% GenerateValueForUpdate(SourceTable.Columns); %> ));
+				array($strTableName,
+                <% GenerateValueForUpdate(SourceTable.Columns); %> 
+                ));
 		
 		if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_<%= GetTableName(SourceTable,true) %>,$this->_objConnection,$strTableName))
 		{
@@ -130,8 +134,9 @@ class Model_<%= GetClassName(SourceTable) %>
 		return $intNewID;		
 	}
     
-    public function get<%= GetClassName(SourceTable) %>ByID($objID,$selectField='*') 
+    public function get<%= GetClassName(SourceTable) %>ByID($objID, $selectField='*') 
 	{		
+        $selectField = $selectField? $selectField : '*'; 
 		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
 				array($selectField, self::TBL_<%= GetTableName(SourceTable,true) %> ,							
 					'WHERE <%= GetPrimaryKey(SourceTable.Columns) %> = \''.$objID.'\' '));
@@ -147,7 +152,8 @@ class Model_<%= GetClassName(SourceTable) %>
 	}
     
     public function getAll<%= GetClassName(SourceTable) %>($intPage = 0,$selectField='*',$whereClause='',$orderBy='') 
-	{		
+	{		    
+        $selectField = $selectField? $selectField : '*'; 
         if($whereClause)
 		{
 			$whereClause = ' WHERE '.$whereClause;
@@ -507,9 +513,9 @@ public void GenerateColumns(ColumnSchemaCollection columns, int indentLevel)
 public void GenerateColumn(ColumnSchema column, int indentLevel, bool isFirst, bool isLast)
 {
 	GenerateIndent(indentLevel);
-	Response.Write("");
+	Response.Write("`");
 	Response.Write(column.Name);
-	Response.Write("");
+	Response.Write("`");
 	if (!isLast) Response.Write(",");
 	if (indentLevel >= 0)
 	{
@@ -763,40 +769,46 @@ public void GenerateParamForInsert(ColumnSchemaCollection columns)
             if(i != filteredColumns.Count - 1)
             {
                 Response.Write("$"+filteredColumns[i].Name.ToLower() +",");
+              
             }
             else
             {
                 Response.Write("$"+filteredColumns[i].Name.ToLower());
             }
-        }
+        }       
 	}
 }
 
 
 public void GenerateValueForInsert(ColumnSchemaCollection columns)
 {
+   
     ColumnSchemaCollection filteredColumns = columns;
 	for (int i = 0; i < filteredColumns.Count; i++)
 	{
         if(filteredColumns[i].IsPrimaryKeyMember == false )
         {
+             GenerateIndent(6);
             if(i != filteredColumns.Count - 1)
             {
-                Response.Write("global_common::escape_mysql_string($"+filteredColumns[i].Name.ToLower() +"),");
+                Response.WriteLine("global_common::escape_mysql_string($"+filteredColumns[i].Name.ToLower() +"),");
             }
             else
             {
-               Response.Write("global_common::escape_mysql_string($"+filteredColumns[i].Name.ToLower() +")");
+               Response.WriteLine("global_common::escape_mysql_string($"+filteredColumns[i].Name.ToLower() +")");
             }
+            
         }
 	}
 }
 
 public void GenerateParamForUpdate(ColumnSchemaCollection columns)
 {
+   
     ColumnSchemaCollection filteredColumns = columns;
 	for (int i = 0; i < filteredColumns.Count; i++)
 	{   
+     
         if(i != filteredColumns.Count - 1)
         {
             Response.Write("$"+filteredColumns[i].Name.ToLower() +",");
@@ -811,17 +823,20 @@ public void GenerateParamForUpdate(ColumnSchemaCollection columns)
 
 public void GenerateValueForUpdate(ColumnSchemaCollection columns)
 {
+    
     ColumnSchemaCollection filteredColumns = columns;
 	for (int i = 0; i < filteredColumns.Count; i++)
-	{        
+	{       
+         GenerateIndent(6);
         if(i != filteredColumns.Count - 1)
         {
-            Response.Write("global_common::escape_mysql_string($"+filteredColumns[i].Name.ToLower() +"),");
+            Response.WriteLine("global_common::escape_mysql_string($"+filteredColumns[i].Name.ToLower() +"),");
         }
         else
         {
-           Response.Write("global_common::escape_mysql_string($"+filteredColumns[i].Name.ToLower() +")");
-        }       
+           Response.WriteLine("global_common::escape_mysql_string($"+filteredColumns[i].Name.ToLower() +")");
+        }     
+       
 	}
 }
 

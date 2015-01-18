@@ -1,12 +1,13 @@
 <?php
-if ($_pgR["aid"])
+if ($_pgR["rid"])
 {
-	$articleID = $_pgR["aid"];
+	$retailerID = $_pgR["rid"];
 	//,$intPage = 0,$selectField='*',$whereClause='',$orderBy='') 
-	$comments = $objComment->getCommentByArticle($articleID,0,'*','','ModifiedDate Desc');
+	//$comments = $objComment->getCommentByArticle($retailerID,0,'*','','ModifiedDate Desc');
 	//echo '$comments:';
 	//print_r($comments);
 	//print_r($_SESSION[global_common::SES_C_USERINFO]);
+	
 }
 ?>
 <script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_comment.js');?>"></script>
@@ -23,7 +24,7 @@ if(global_common::isCLogin())
 ?>
 			<div class="clear"></div>
 			<div class="avatar">
-				<img src="/images/avatar.jpg" />
+				<img src="<?php echo $_SESSION[global_common::SES_C_USERINFO][global_mapping::Avatar] ?>" />
 			</div>
 			<div class="comment_box controls">
 				<textarea placeholder="Nội dung bình luận" id="txtcontent" rows="4"></textarea>
@@ -41,33 +42,12 @@ else
 ?>
 		</form>
 	</div>
-	
 	<div id="comment-list">	
+	
 <?php
-foreach($comments as $item)
-{
-	echo '<div class="item">';
-	echo '		<div class="avatar">';
-	echo '			<img src="'.$item[global_mapping::CreatedBy][global_mapping::Avatar].'" />';
-	echo '		</div>';
-	echo '		<div class="comment-detail">';
-	echo '			<div class="username">';
-	echo '				 <a href="#">'.$item[global_mapping::CreatedBy][global_mapping::FullName].'</a>	';
-	echo '				 <p class="created-date">'.global_common::formatDateTimeVN($item[global_mapping::CreatedDate]).'</p>	';
-	echo '			</div>';
-	echo '			<div class="comment-detail-content">';
-	echo '					'.$item[global_mapping::Content];
-	echo '			</div>	';	
-	if(global_common::isAdmin())
-	{	
-		echo '			<div class="comment-controls">';
-		echo '				<a href="javascript:comment.badComment(\''.$item[global_mapping::CommentID].'\',1)">Delete</a>';
-		echo '			</div>	';	
-	}			
-	echo '		</div>';
-	echo '</div>';
-}
+echo $objComment->getCommentHTMLByArticle($retailerID,1);
 ?>	
+
 	</div>
 </div>
 <script>

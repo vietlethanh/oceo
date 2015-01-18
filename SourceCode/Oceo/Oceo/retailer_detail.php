@@ -12,13 +12,22 @@ include_once('class/model_productproperty.php');
 include_once('class/model_retailer.php');
 include_once('class/model_status.php');
 include_once('class/model_city.php');
-
+include_once('class/model_property.php');
+include_once('class/model_productprice.php');
+include_once('class/model_productproperty.php');
+include_once('class/model_propertygroup.php');
+include_once('class/model_datatype.php');
+include_once('class/model_manufactory.php');
 $objProduct = new Model_Product($objConnection);
+$objProductProperty = new Model_ProductProperty($objConnection);
+$objArticleType = new Model_ArticleType($objConnection);
+$objProductPrice = new Model_ProductPrice($objConnection);
 $objProperty = new Model_Property($objConnection);
 $objComment = new Model_Comment($objConnection);
+$objManufactory = new Model_Manufactory($objConnection);
 $objRetailer = new Model_Retailer($objConnection);
+
 $objCity = new Model_City($objConnection);
-$objArticleType = new Model_ArticleType($objConnection);
 
 $_arrCategories =  $objArticleType->getAllArticleType(0,null,'`ParentID`=0','Level');
 
@@ -96,20 +105,19 @@ include_once('include/_search_box.inc');
 include_once('include/_retailer.inc');
 ?>
 
-<?php 
-//footer
-include_once('include/_footer.inc');
-?>
+
 
 <?php
 //include_once('include/_header.inc');
 //include_once('include/_menu.inc');
 //include_once('include/_article.inc');
-//echo '<div id= "comment-list">';
-//include_once('include/_comment_list.inc');
-//echo '</div>';
-//include_once('include/_comment_editor.inc');
+
+include_once('include/_comment_editor.inc');
 
 ?>
 
+<?php 
+//footer
+include_once('include/_footer.inc');
+?>
 

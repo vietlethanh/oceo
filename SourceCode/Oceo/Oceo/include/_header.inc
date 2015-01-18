@@ -108,6 +108,15 @@ include_once('class/model_city.php');
 $objCity = new Model_City($objConnection);
 
 $allCities = $objCity->getAllCity();
+if(!$city)
+{
+	$disableCity = '';
+	if(global_common::isCLogin())
+	{
+		$city = $_SESSION[global_common::SES_C_USERINFO][global_mapping::CityID];
+		$disableCity = 'disabled=disabled';
+	}
+}
 ?>
 
 <body >
@@ -117,13 +126,12 @@ $allCities = $objCity->getAllCity();
 		
 		 <div id="div-login" align="right" style=""  class="navbar navbar-inverse navbar-fixed-top">
 			<ul class="nav pull-right">	
-			
 <?php 
+//echo $_SESSION[global_common::SES_C_USERINFO][global_mapping::CityID];
 
 if (global_common::isCLogin())
 {
-	//print_r($_SESSION[global_common::SES_C_USERINFO]);
-				?>
+	?>
 				<!-- BEGIN USER LOGIN DROPDOWN -->
 				<li class="dropdown user">
 					
@@ -147,7 +155,6 @@ if (global_common::isCLogin())
 }
 else{
 				?>
-				
 				<!-- BEGIN USER LOGIN ACTIONS -->
 				<li>
 					<a href="login.php" class="btn btn-mini inline">
@@ -157,24 +164,27 @@ else{
 						Đăng ký
 					</a>				
 				</li>
+				<!-- END USER LOGIN DROPDOWN -->
+				
 	<?php
 }
+
 				?>
-				<!-- END USER LOGIN DROPDOWN -->
-				<li>
+		<li>
 			<label>
-			<select id="optCity" name="ct" onchange="article.bindDistrict(this);">
+			<select id="optUserCity" name="ct" onchange="core.util.searchWithCity('optUserCity');" <?php echo $disableCity ?> >
 				<option value="">Tỉnh/Thành Phố</option>
 <?php
+
+
 foreach($allCities as $item)
 {
-	if($item[global_mapping::CityName] == $city)
+	if($item[global_mapping::CityID] == $city)
 	{
-		$selectCityID = $item[global_mapping::CityID];
-		echo '			<option value="'.$item[global_mapping::CityName].'" selected="selected" CityID="'.$item[global_mapping::CityID].'">'.$item[global_mapping::CityName].'</option>';
+		echo '			<option value="'.$item[global_mapping::CityID].'" selected="selected" >'.$item[global_mapping::CityName].'</option>';
 	}
 	else
-		echo '			<option value="'.$item[global_mapping::CityName].'" CityID="'.$item[global_mapping::CityID].'">'.$item[global_mapping::CityName].'</option>';
+		echo '			<option value="'.$item[global_mapping::CityID].'" >'.$item[global_mapping::CityName].'</option>';
 }
 					?>
 				</select>
@@ -185,12 +195,12 @@ foreach($allCities as $item)
 		<div id="top-menu">
 			<ul>
 				<li>
-					<a href="#">Giới thiệu</a>
+					<a href="<?php echo global_common::PAGE_TERM_KM ?>">Giới thiệu</a>
 					
 				</li>
-				<li><a href="#">Giải đáp</a></li>
-				<li>	<a href="#">Qui định</a></li>
-				<li>	<a href="#">Liên hệ</a></li>
+				<!--li><a href="#">Giải đáp</a></li-->
+				<li>	<a href="<?php echo global_common::PAGE_TERM_GENERAL ?>">Điều khoản sử dụng</a></li>
+				<li>	<a href="contact.php">Liên hệ</a></li>
 			</ul>
 		</div>
 		<div id="header-banner">

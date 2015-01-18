@@ -3,7 +3,8 @@ if ($_pgR["pid"])
 {
 	$productID = $_pgR["pid"];
 	$type = $_pgR["type"];
-	$allRetailers = $objRetailer->getRetailerByProduct($productID,$type,
+	$city = $_pgR['ct'];
+	$allRetailers = $objRetailer->getRetailerByProduct($productID,$type,$city,
 			global_mapping::RetailerID.','.global_mapping::ProductStatusID.','.global_mapping::Price.','.global_mapping::StatusDetail.','.
 			global_mapping::ShortDesc.','.global_mapping::ShippingDesc.','.global_mapping::BoxInfo.','.global_mapping::CreatedBy);
 	//$product = $objProduct->getProductByID($productID, '*','`Status`=1');
@@ -19,7 +20,11 @@ if ($_pgR["pid"])
 
 
 <div id="price">
-	
+	<form  method="GET" id="formSearchWithCity">
+		<input type="hidden" name="pid" value="<?php echo $productID?>" />
+		<input type="hidden" name="type" value="<?php echo $type?>" />
+		<input type="hidden" name="ct" id="hdct" value="<?php echo $city?>" />
+	</form>
 	<input type="hidden" id="hdproductid" value="<?php echo $product[global_mapping::ProductID]?>" />
 	<div id="price-detail">
 		<div id="product-summary">

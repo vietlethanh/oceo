@@ -214,8 +214,9 @@ if ($_pgR["act"] == Model_Retailer::ACT_ADD_PRICE || $_pgR["act"] == Model_Retai
 		$shortDesc = html_entity_decode($_pgR['ShortDesc'],ENT_COMPAT ,'UTF-8' );
 		$boxInfo = html_entity_decode($_pgR['BoxInfo'],ENT_COMPAT ,'UTF-8' );
 		$statusDetail = html_entity_decode($_pgR['StatusDetail'],ENT_COMPAT ,'UTF-8' );
+		$receiveEmail = html_entity_decode($_pgR['ReceiveEmail'],ENT_COMPAT ,'UTF-8' );
 		
-		$status = 1;
+		$status = strtolower($receiveEmail=='true'?1:0);
 		if($_pgR["act"] == Model_Retailer::ACT_ADD_PRICE)
 		{
 			$createdBy = $c_userInfo[global_mapping::UserID];
@@ -296,6 +297,34 @@ elseif($_pgR['act'] == Model_Retailer::ACT_ACTIVE_RETAILER)
 		else
 		{
 			echo global_common::convertToXML($arrHeader, array("rs","inf"), array(0,($isActivate?'Xóa':'Deactivate').' unsuccessfully'), array(0,1));
+			return;
+		}
+	}
+	return;
+}
+elseif($_pgR['act'] == Model_Product::ACT_CLONE)
+{
+	if (global_common::isCLogin())
+	{
+		$currentUserID = $_SESSION[global_common::SES_C_USERINFO][global_mapping::UserID];
+	
+		$productID = $_pgR[global_mapping::ProductID];
+		
+		$result = $objProduct->cloneProduct($productID,$currentUserID);
+		if ($result)
+		{
+			$objProductProperty->clonProductProperty($productID,$result);
+			$arrHeader = global_common::getMessageHeaderArr($banCode);//$banCode
+			echo global_common::convertToXML(
+					$arrHeader, array("rs", "inf"), 
+					array(1, 'Clone thành công'), 
+					array( 0, 1 )
+					);
+			return;
+		}
+		else
+		{
+			echo global_common::convertToXML($arrHeader, array("rs","inf"), array(0,'Clone thất bại'), array(0,1));
 			return;
 		}
 	}

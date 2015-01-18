@@ -74,7 +74,8 @@ class Model_User
 		`UserRankID` = \'{12}\',
 		`Avatar` = \'{13}\',
 		`AccountID` = \'{14}\',
-		`IsActived` = \'{15}\'
+		`IsActived` = \'{15}\',
+		`CityID` = \'{16}\'
 		WHERE `UserID` = \'{1}\'  ';
 	
 	
@@ -187,7 +188,7 @@ class Model_User
 	}
 	
 	public function update($userid,$username,$password,$fullname,$birthdate,$address,$phone,$email,
-		$sex,$identity,$roleid,$userrankid,$avatar,$accountid,$isactived)
+		$sex,$identity,$roleid,$userrankid,$avatar,$accountid,$isactived,$city)
 	{
 		
 		$strTableName = self::TBL_SL_USER;
@@ -206,7 +207,7 @@ class Model_User
 					global_common::escape_mysql_string($userrankid),
 					global_common::escape_mysql_string($avatar),
 					global_common::escape_mysql_string($accountid),
-					global_common::escape_mysql_string($isactived) ));
+					global_common::escape_mysql_string($isactived),$city ));
 		//echo $strSQL;
 		if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_SL_USER,$this->_objConnection,$strTableName))
 		{
@@ -276,6 +277,10 @@ class Model_User
 			global_common::writeLog('get sl_user ByID:'.$strSQL,1,$_mainFrame->pPage);
 			return null;
 		}
+		$objCity = new Model_City($this->_objConnection);
+		
+		$city = $objCity->getCityByID($arrResult[0][global_mapping::CityID]);
+		$arrResult[0][global_mapping::CityName] = $city[global_mapping::CityName];
 		//print_r($arrResult);
 		return $arrResult[0];
 	}
@@ -292,6 +297,10 @@ class Model_User
 			global_common::writeLog('get sl_user ByName:'.$strSQL,1,$_mainFrame->pPage);
 			return null;
 		}
+		$objCity = new Model_City($this->_objConnection);
+		
+		$city = $objCity->getCityByID($arrResult[0][global_mapping::CityID]);
+		$arrResult[0][global_mapping::CityName] = $city[global_mapping::CityName];
 		//print_r($arrResult);
 		return $arrResult[0];
 	}

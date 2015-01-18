@@ -307,6 +307,7 @@ var user = {
 			birthdate: birthDate,
 			address: core.util.getObjectValueByID("txtAddress"),
 			phone: core.util.getObjectValueByID("txtPhone"),
+			city: core.util.getObjectValueByID("updateCity")
 	   }      
     },
 	
@@ -326,7 +327,7 @@ var user = {
 				 var strRespond = core.util.parserXML(respone);
 				if (parseInt(strRespond[1]['rs']) == 1) {
 					core.ui.showInfoBar(1, "Cập nhật thành công");	
-					core.util.reload();
+					//core.util.reload();
                 }
                 else{					
 					if(parseInt(strRespond[1]['rs']) == 3)
