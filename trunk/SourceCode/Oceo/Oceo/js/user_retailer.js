@@ -74,10 +74,10 @@ var retailer =
             isValid = false;
         }
 
-        if (!core.util.isChecked("chkTerm")) {
+        /*if (!core.util.isChecked("chkTerm")) {
             core.util.validateInputTextBox('chkTerm', 'Bạn cần phải đồng ý điều khoản sử dụng', isValid);
             isValid = false;
-        }
+        }*/
 
         if (isValid == false) {
             core.util.disableControl("btnOK", false);
@@ -95,6 +95,7 @@ var retailer =
 		    ShippingDesc: shippingDesc,
 		    ImageLink: core.util.getObjectValueByID('txtImage'),
 		    ShortDesc: $("#txtShortDesc").val(),
+		    ReceiveEmail: core.util.isChecked("chkRecieveEmail"),
 		    Description: content,
 		    Mode: core.util.getObjectValueByID('adddocmode')
 		};

@@ -33,7 +33,7 @@ blockquote, q {
   quotes: ""; }
 
 body {
-  color: black;
+  color: #000;
   font-family: Verdana, Arial, Helvetica, sans-serif;
   font-size: 12px;
   margin: 0;
@@ -62,13 +62,13 @@ body {
 /*********** end font ************/
 /*********** common for font page *********/
 h1 a {
-  color: black; }
+  color: #000; }
 
 h1 a:visited {
-  color: black; }
+  color: #000; }
 
 h1 a:hover {
-  color: black !important; }
+  color: #000 !important; }
 
 /*********** end common for font page *********/
 /*********** common for admin page *********/
@@ -126,12 +126,12 @@ label {
   font-weight: bold;
   color: #FFFFFF;
   background-color: #49c0f0;
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#49c0f0), to(#2cafe3));
-  background-image: -webkit-linear-gradient(top, #49c0f0, #2cafe3);
-  background-image: -moz-linear-gradient(top, #49c0f0, #2cafe3);
-  background-image: -ms-linear-gradient(top, #49c0f0, #2cafe3);
-  background-image: -o-linear-gradient(top, #49c0f0, #2cafe3);
-  background-image: linear-gradient(to bottom, #49c0f0, #2cafe3);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#49c0f0), to(#2CAFE3));
+  background-image: -webkit-linear-gradient(top, #49c0f0, #2CAFE3);
+  background-image: -moz-linear-gradient(top, #49c0f0, #2CAFE3);
+  background-image: -ms-linear-gradient(top, #49c0f0, #2CAFE3);
+  background-image: -o-linear-gradient(top, #49c0f0, #2CAFE3);
+  background-image: linear-gradient(to bottom, #49c0f0, #2CAFE3);
   filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr=#49c0f0, endColorstr=#2CAFE3);
   text-shadow: none;
   box-shadow: none; }
@@ -153,7 +153,7 @@ label {
   text-shadow: none;
   box-shadow: none;
   background: none;
-  color: black;
+  color: #000;
   border: none;
   padding: 5px 20px 5px 20px;
   margin: 3px 5px;
@@ -181,7 +181,7 @@ label {
 
 .btn:hover,
 .btn:focus {
-  color: black;
+  color: #000;
   background-position: 0 0px;
   border: 1px solid #1090c3;
   background-color: #1ab0ec;
@@ -245,7 +245,7 @@ label.checkbox {
   font-size: 30px;
   letter-spacing: -1px;
   display: block;
-  color: black;
+  color: #000;
   margin: 20px 0px 45px 0px;
   font-weight: 300; }
 
@@ -279,7 +279,7 @@ label.checkbox {
     _position: relative;
     _top: 3px; }
   .info-bar .processing {
-    background: white url(../images/loading.gif) 20px 7px no-repeat; }
+    background: #fff url(../images/loading.gif) 20px 7px no-repeat; }
   .info-bar .processing .icon {
     background: none !important;
     width: 20px; }
@@ -319,7 +319,7 @@ label.checkbox {
   user-select: none; }
 
 a.active {
-  color: #e63002; }
+  color: #E63002; }
 
 .product-navigate {
   font-weight: bold;
@@ -339,7 +339,7 @@ a.active {
   color: black; }
 
 a:hover {
-  color: #ffbc00; }
+  color: #FFBC00; }
 
 a, a:focus, a:hover, a:active, a:visited {
   text-decoration: none; }
@@ -359,16 +359,16 @@ a, a:focus, a:hover, a:active, a:visited {
   padding-left: 33px !important; }
 
 table.table {
-  color: black; }
+  color: #000; }
 
 .tabbable-custom .nav-tabs > li, *.nav-tabs > li {
   border-top: none; }
   .tabbable-custom .nav-tabs > li > a, .tabbable-custom .nav-tabs > li > a:hover, .tabbable-custom .nav-tabs > li > a:focus, *.nav-tabs > li > a, *.nav-tabs > li > a:hover, *.nav-tabs > li > a:focus {
-    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
-    color: #0099ff; }
+    background: none repeat scroll 0 0 transparent;
+    color: #0099FF; }
 .tabbable-custom .nav-tabs > li.active > a, .tabbable-custom .nav-tabs > li.active > a:hover, .tabbable-custom .nav-tabs > li.active > a:focus, *.nav-tabs > li.active > a, *.nav-tabs > li.active > a:hover, *.nav-tabs > li.active > a:focus {
-  color: #0099ff;
-  background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+  color: #0099FF;
+  background: none repeat scroll 0 0 transparent;
   border-right: medium none;
   border-left: medium none;
   border-top: medium none;
@@ -433,10 +433,10 @@ table.table {
   margin-top: 0px; }
 
 .modal-header h3 {
-  color: black; }
+  color: #000; }
 
 .modal {
-  color: black; }
+  color: #000; }
 
 /*********** end custom plugin ************/
 /*********** header ************/
@@ -479,20 +479,21 @@ table.table {
         text-align: center;
         line-height: 14px; }
         #header #top-menu > ul li a {
-          color: black;
+          color: #000;
           margin: 0;
           padding: 0;
           border: none;
           line-height: 12px;
           font-size: 10px; }
         #header #top-menu > ul li a:hover {
-          color: #ffbc00; }
+          color: #FFBC00; }
       #header #top-menu > ul li:first-child a {
         cursor: pointer; }
       #header #top-menu > ul li:last-child {
         border-right: none; }
   #header #header-banner {
-    clear: both; }
+    clear: both;
+    text-align: center; }
     #header #header-banner img {
       height: 50px;
       margin: 20px 0; }
@@ -507,7 +508,7 @@ table.table {
       margin: 0;
       padding: 0; }
       #header #header-menu > ul li {
-        border-right: 1px dotted black;
+        border-right: 1px dotted #000;
         color: white;
         float: left;
         font-size: 1em;
@@ -520,23 +521,23 @@ table.table {
         background-color: none; }
         #header #header-menu > ul li a {
           background-color: none;
-          color: black;
+          color: #000;
           margin: 0;
           padding: 0;
           border: none;
           line-height: 15px;
           cursor: default; }
         #header #header-menu > ul li a:hover {
-          color: #ffbc00; }
+          color: #FFBC00; }
         #header #header-menu > ul li img.m-logo {
           height: 40px;
           margin-top: -5px; }
       #header #header-menu > ul li.active a {
-        color: #ffbc00; }
+        color: #FFBC00; }
       #header #header-menu > ul li:first-child {
         padding-top: 5px;
         width: 52px;
-        border-right: 0px dotted black; }
+        border-right: 0px dotted #000; }
         #header #header-menu > ul li:first-child a {
           cursor: pointer; }
       #header #header-menu > ul li:last-child {
@@ -550,7 +551,7 @@ table.table {
     padding: 0; }
   #header #div-login select {
     width: 152px;
-    height: 22px;
+    height: 23px;
     padding-top: 1px; }
   #header #div-login li a {
     padding: 4px 4px 3px 4px; }
@@ -576,13 +577,13 @@ table.table {
   float: left;
   min-width: 280px; }
   #left-sider > ul {
-    color: #0099ff;
+    color: #0099FF;
     line-height: 33px;
     font-size: 14px;
     margin-left: 55px;
     font-weight: bold; }
     #left-sider > ul li {
-      color: black;
+      color: #000;
       font-size: 12px;
       height: 31px;
       list-style: circle outside none;
@@ -590,13 +591,13 @@ table.table {
       padding: 2px 1px;
       text-align: left; }
       #left-sider > ul li a {
-        color: black; }
+        color: #000; }
       #left-sider > ul li a:hover {
-        color: #ffbc00; }
+        color: #FFBC00; }
     #left-sider > ul li.active a {
-      color: #e63002; }
+      color: #E63002; }
     #left-sider > ul li.active a:hover {
-      color: #ffbc00; }
+      color: #FFBC00; }
 
 /*********** end left-sider ************/
 /*********** right-sider ************/
@@ -701,7 +702,7 @@ table.table {
   #post-page .table-post .zone {
     margin: 10px 0 0 0; }
     #post-page .table-post .zone .zone-title {
-      color: #0099ff;
+      color: #0099FF;
       font-size: 1.1em; }
   #post-page .table-post .ad-value {
     margin-top: 3px;
@@ -725,7 +726,7 @@ table.table {
   #post-product .table-post .zone {
     margin: 10px 0 0 0; }
     #post-product .table-post .zone .zone-title {
-      color: #0099ff;
+      color: #0099FF;
       font-size: 1.1em; }
   #post-product .table-post .ad-value {
     margin-top: 3px;
@@ -733,7 +734,7 @@ table.table {
   #post-product .table-post .property-product .btn-add {
     vertical-align: top; }
   #post-product .table-post .property-product .property-zone {
-    color: #0099ff;
+    color: #0099FF;
     font-size: 1em;
     padding-left: 28px; }
   #post-product .table-post .controls .row-item {
@@ -783,7 +784,7 @@ table.table {
       float: right;
       width: 44%; }
       #retailer #retailer-detail #retailer-summary .retailer-spec .form-horizontal .control-group .title {
-        color: #0099ff;
+        color: #0099FF;
         font-size: 16px;
         margin: 0 0 10px 0;
         padding: 0;
@@ -822,14 +823,14 @@ table.table {
       padding: 2px;
       vertical-align: top;
       margin-bottom: 20px;
-      border: 2px solid #716c68;
+      border: 2px solid #716C68;
       border: 2px solid rgba(113, 108, 104, 0.3);
       -webkit-background-clip: padding-box;
       /* for Safari */
       background-clip: padding-box;
       /* for IE9+, Firefox 4+, Opera, Chrome */ }
       #retailer #retailer-detail #retailer-content .name {
-        color: #0099ff;
+        color: #0099FF;
         font-size: 1.3em;
         font-weight: bold; }
       #retailer #retailer-detail #retailer-content .title {
@@ -911,7 +912,7 @@ table.table {
   #post-price .table-post .zone {
     margin: 10px 0 0 0; }
     #post-price .table-post .zone .zone-title {
-      color: #0099ff;
+      color: #0099FF;
       font-size: 1.1em; }
   #post-price .table-post .ad-value {
     margin-top: 3px;
@@ -972,9 +973,9 @@ table.table {
         text-align: center;
         width: 1.25em; }
     #profile-page .menu-profile li.active:after {
-      border-bottom: 6px solid rgba(0, 0, 0, 0);
+      border-bottom: 6px solid transparent;
       border-left: 6px solid #169EF4;
-      border-top: 6px solid rgba(0, 0, 0, 0);
+      border-top: 6px solid transparent;
       content: "";
       display: inline-block;
       position: absolute;
@@ -1032,7 +1033,7 @@ table.table {
   #search-box input[type='text']#txtkeyword {
     background: none repeat scroll 0 0 gray;
     border: medium none;
-    color: black;
+    color: #000;
     font-weight: bold;
     opacity: 0.7;
     padding: 10px 50px;
@@ -1040,16 +1041,16 @@ table.table {
     margin-bottom: 0; }
   #search-box ::-webkit-input-placeholder {
     /* WebKit browsers */
-    color: black; }
+    color: #000; }
   #search-box :-moz-placeholder {
     /* Mozilla Firefox 4 to 18 */
-    color: black; }
+    color: #000; }
   #search-box ::-moz-placeholder {
     /* Mozilla Firefox 19+ */
-    color: black; }
+    color: #000; }
   #search-box :-ms-input-placeholder {
     /* Internet Explorer 10+ */
-    color: black; }
+    color: #000; }
   #search-box input[type='button'].btnSearch {
     display: inline-block;
     width: 25px;
@@ -1115,14 +1116,14 @@ table.table {
     margin-top: 20px; }
     #footer ul li {
       display: inline;
-      border-right: 2px solid black;
+      border-right: 2px solid #000;
       padding: 0 17px; }
       #footer ul li a, #footer ul li a:visited {
-        color: black;
+        color: #000;
         text-decoration: none;
         cursor: pointer; }
       #footer ul li a:hover {
-        color: #ffbc00; }
+        color: #FFBC00; }
     #footer ul li:last-child {
       border-right: none; }
   #footer .copyright {
@@ -1147,7 +1148,7 @@ table.table {
       #article-list #articles .item .info {
         position: relative; }
       #article-list #articles .item .name {
-        color: #0099ff;
+        color: #0099FF;
         font-size: 1.2em;
         font-weight: bold; }
       #article-list #articles .item .artcile-title {
@@ -1158,7 +1159,7 @@ table.table {
         margin-top: -24px;
         background: red; }
         #article-list #articles .item .price a, #article-list #articles .item .price a:focus, #article-list #articles .item .price a:hover, #article-list #articles .item .price a:active, #article-list #articles .item .price a:visited {
-          color: black !important; }
+          color: #000 !important; }
       #article-list #articles .item .article-thumbnail {
         min-height: 171px;
         border: 5px solid; }
@@ -1226,21 +1227,21 @@ table.table {
       padding: 2px;
       vertical-align: top;
       margin-bottom: 20px;
-      border: 5px solid #716c68;
+      border: 5px solid #716C68;
       border: 5px solid rgba(113, 108, 104, 0.3);
       -webkit-background-clip: padding-box;
       /* for Safari */
       background-clip: padding-box;
       /* for IE9+, Firefox 4+, Opera, Chrome */ }
       #article #article-detail #article-content .name {
-        color: #0099ff;
+        color: #0099FF;
         font-size: 1.3em;
         font-weight: bold; }
       #article #article-detail #article-content .title {
         font-size: 1.2em;
         font-weight: bold; }
       #article #article-detail #article-content .content {
-        background: none repeat scroll 0 0 black;
+        background: none repeat scroll 0 0 #000;
         font-size: 1.1em;
         text-align: justify;
         padding: 2px; }
@@ -1319,7 +1320,7 @@ table.table {
     #article #company-info #company_address {
       text-align: center;
       font-weight: bold;
-      border: 5px solid #716c68;
+      border: 5px solid #716C68;
       border: 5px solid rgba(113, 108, 104, 0.3);
       -webkit-background-clip: padding-box;
       /* for Safari */
@@ -1367,7 +1368,7 @@ table.table {
       float: right;
       width: 44%; }
       #product #product-detail #product-summary .product-spec .form-horizontal .control-group .title {
-        color: #0099ff;
+        color: #0099FF;
         font-size: 16px;
         margin: 0 0 10px 0;
         padding: 0;
@@ -1408,14 +1409,14 @@ table.table {
       padding: 2px;
       vertical-align: top;
       margin-bottom: 20px;
-      border: 2px solid #716c68;
+      border: 2px solid #716C68;
       border: 2px solid rgba(113, 108, 104, 0.3);
       -webkit-background-clip: padding-box;
       /* for Safari */
       background-clip: padding-box;
       /* for IE9+, Firefox 4+, Opera, Chrome */ }
       #product #product-detail #product-content .name {
-        color: #0099ff;
+        color: #0099FF;
         font-size: 1.3em;
         font-weight: bold; }
       #product #product-detail #product-content .title {
@@ -1509,7 +1510,7 @@ table.table {
       #product-list #products .item .info {
         position: relative; }
       #product-list #products .item .name {
-        color: #0099ff;
+        color: #0099FF;
         font-size: 1.2em;
         font-weight: bold; }
       #product-list #products .item .artcile-title {
@@ -1520,7 +1521,7 @@ table.table {
         margin-top: -24px;
         background: red; }
         #product-list #products .item .price a, #product-list #products .item .price a:focus, #product-list #products .item .price a:hover, #product-list #products .item .price a:active, #product-list #products .item .price a:visited {
-          color: black !important; }
+          color: #000 !important; }
       #product-list #products .item .product-thumbnail {
         min-height: 171px;
         border: 5px solid; }
@@ -1569,7 +1570,7 @@ table.table {
       #company-list #companies .item .info {
         position: relative; }
       #company-list #companies .item .name {
-        color: #0099ff;
+        color: #0099FF;
         font-size: 1.2em;
         font-weight: bold; }
       #company-list #companies .item .artcile-title {
@@ -1580,7 +1581,7 @@ table.table {
         margin-top: -24px;
         background: red; }
         #company-list #companies .item .price a, #company-list #companies .item .price a:focus, #company-list #companies .item .price a:hover, #company-list #companies .item .price a:active, #company-list #companies .item .price a:visited {
-          color: black !important; }
+          color: #000 !important; }
       #company-list #companies .item .article-thumbnail {
         /*min-height:171px;*/
         border: 5px solid; }
@@ -1602,6 +1603,71 @@ table.table {
         box-shadow: 0px 0px 7px rgba(255, 255, 255, 0.9); }
 
 /*********** end company-list ************/
+/*********** comment ************/
+#comment-content #comment-editor {
+  background: none repeat scroll 0 0 rgba(113, 108, 104, 0.3);
+  padding: 10px; }
+  #comment-content #comment-editor .title {
+    display: inline-block;
+    font-size: 15px;
+    font-weight: bolder;
+    height: 26px;
+    padding: 4px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    margin-top: 0px; }
+    #comment-content #comment-editor .title .icon {
+      vertical-align: middle; }
+  #comment-content #comment-editor .avatar {
+    vertical-align: top;
+    display: inline-block;
+    margin-right: 10px;
+    margin-left: 8px; }
+    #comment-content #comment-editor .avatar img {
+      height: 65px;
+      vertical-align: top; }
+  #comment-content #comment-editor .comment_box {
+    width: 895px;
+    display: inline-block;
+    text-align: left;
+    vertical-align: top; }
+    #comment-content #comment-editor .comment_box textarea {
+      vertical-align: top;
+      border: none;
+      height: 70px;
+      width: 99%; }
+    #comment-content #comment-editor .comment_box input.btn {
+      margin-top: 4px;
+      margin-right: 0px; }
+  #comment-content #comment-editor .comment_action {
+    width: 100%;
+    display: inline-block;
+    text-align: right; }
+#comment-content #comment-list .item {
+  vertical-align: top;
+  margin-top: 4px;
+  padding: 8px;
+  padding-right: 22px;
+  background: none repeat scroll 0 0 rgba(113, 108, 104, 0.3);
+  margin-bottom: 0px;
+  overflow: hidden; }
+  #comment-content #comment-list .item .avatar {
+    display: inline-block; }
+    #comment-content #comment-list .item .avatar img {
+      height: 65px;
+      max-width: 51px; }
+  #comment-content #comment-list .item .comment-detail {
+    vertical-align: top;
+    display: inline-block;
+    width: 895px; }
+    #comment-content #comment-list .item .comment-detail .username {
+      line-height: 10px; }
+      #comment-content #comment-list .item .comment-detail .username p.created-date {
+        float: right; }
+  #comment-content #comment-list .item .comment-controls {
+    float: right; }
+
+/*********** end map ************/
 /*********** map ************/
 #map {
   display: block;
@@ -1658,7 +1724,7 @@ table.table {
 /*********** end map ************/
 /*********** map ************/
 #cms-page {
-  background-color: rgba(25, 25, 25, 0.8);
+  /*background-color:rgba(25,25,25,.8);  */
   min-height: 500px;
   text-aign: center;
   font-size: 1.2em; }
@@ -1667,7 +1733,7 @@ table.table {
     text-align: center;
     padding-top: 0px;
     padding-bottom: 8px;
-    color: #0099ff;
+    color: #0099FF;
     text-align: center; }
   #cms-page div.cms-content {
     padding: 20px; }
@@ -1678,7 +1744,7 @@ table.table {
   text-align: center;
   padding-top: 0px;
   padding-bottom: 8px;
-  color: #0099ff; }
+  color: #0099FF; }
 .wrapper #content p.slogan {
   padding-top: 80px; }
 .wrapper #content img.slogan {
@@ -1774,7 +1840,7 @@ span.tooltipDown {
   margin-left: 15px; }
 
 .hintText {
-  color: #999999 !important; }
+  color: #999 !important; }
 
 .mainContent {
   margin: auto;
@@ -1816,7 +1882,7 @@ span.tooltipDown {
   color: #f90; }
 
 a.button {
-  background: white url(http://images.vietnamworks.com/gen/form_button.png) no-repeat -9px -1px;
+  background: #fff url(http://images.vietnamworks.com/gen/form_button.png) no-repeat -9px -1px;
   border: 1px #bd8124 solid;
   /*border-radius:5px;-moz-border-radius:5px;-webkit-border-radius:5px;*/ }
 
@@ -1838,7 +1904,7 @@ a.button, a.button:visited {
   display: inline-block; }
 
 a.button:hover span {
-  color: #333333 !important;
+  color: #333 !important;
   background-position: -9px 0; }
 
 /*********** User info ***********/
@@ -1859,7 +1925,9 @@ a.button:hover span {
     cursor: pointer; }
 
 .paging-dropdown {
-  clear: both; }
+  clear: both;
+  text-align: right;
+  margin: 5px; }
   .paging-dropdown a {
     text-decoration: none;
     font-weight: bold;
@@ -1892,17 +1960,17 @@ a.button:hover span {
 /* End Css for Tooltip */
 /*category-page*/
 .category-page .category-list .category-header {
-  color: black;
+  color: #000;
   font-size: 20px; }
 .category-page .category-list .category-detail {
   text-align: left; }
   .category-page .category-list .category-detail .article-detail {
     text-align: left; }
     .category-page .category-list .category-detail .article-detail .article-header {
-      color: black;
+      color: #000;
       font-size: 16px; }
     .category-page .category-list .category-detail .article-detail .article-content {
-      color: black;
+      color: #000;
       font-size: 12px; }
 
 /* end category-page*/
@@ -1934,3 +2002,5 @@ a.button:hover span {
   #search-box input[type='button'] {
     top: 8px; } }
 /*********** end fixchrome ************/
+
+/*# sourceMappingURL=style.css.map */

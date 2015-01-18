@@ -17,16 +17,16 @@ class Model_Comment
 	#region PRESERVE ExtraMethods For Comment
 	#endregion
 	#region Contants	
-	const ACT_ADD							= 10;
-	const ACT_UPDATE						= 11;
-	const ACT_DELETE						= 12;
-	const ACT_CHANGE_PAGE					= 13;
-	const ACT_SHOW_EDIT                     = 14;
-	const ACT_GET                           = 15;
-	const ACT_BAD_COMMENT                   = 16;
+	const ACT_ADD							= 130;
+	const ACT_UPDATE						= 131;
+	const ACT_DELETE						= 132;
+	const ACT_CHANGE_PAGE					= 133;
+	const ACT_SHOW_EDIT                     = 134;
+	const ACT_GET                           = 135;
+	const ACT_BAD_COMMENT                   = 136;
 	
 	
-	const NUM_PER_PAGE                      = 15;
+	const NUM_PER_PAGE                      = 5;
 	
 	const TBL_SL_COMMENT			            = 'sl_comment';
 	
@@ -109,10 +109,11 @@ class Model_Comment
 	
 	public function insert($articleid,$content,$createdby,$status)
 	{
-		
 		$strTableName = self::TBL_SL_COMMENT;
+		$intID = global_common::getMaxValueofField(global_mapping::CommentID, $strTableName) + 1;
+		
 		$strSQL = global_common::prepareQuery(self::SQL_INSERT_SL_COMMENT,
-				array(self::TBL_SL_COMMENT,0,global_common::escape_mysql_string($commenttype),
+				array(self::TBL_SL_COMMENT,$intID,global_common::escape_mysql_string($commenttype),
 					global_common::escape_mysql_string($articleid),global_common::escape_mysql_string($content),
 					global_common::escape_mysql_string($createdby),global_common::nowSQL(),
 					global_common::escape_mysql_string($modifiedby),global_common::nowSQL(),
@@ -125,8 +126,7 @@ class Model_Comment
 			global_common::writeLog('Error add sl_comment:'.$strSQL,1);
 			return false;
 		}	
-		$newID = global_common::getMaxValueofField(global_mapping::CommentID,self::TBL_SL_COMMENT);
-		return $newID;
+		return $intID;
 		
 	}
 	
@@ -161,9 +161,16 @@ class Model_Comment
 		return $arrResult[0];
 	}
 	
-	public function getCommentHTMLByArticle($articleID) 
+	public function getCommentHTMLByArticle($articleID,$page) 
 	{
-		$comments = Model_Comment::getCommentByArticle($articleID,0,'*','','ModifiedDate Desc');
+		if(!$page)
+		{
+			$page=1;
+		}
+		$comments = $this->getCommentByArticle($articleID,$page,'*','','ModifiedDate Desc');
+		
+		$condition = ' where `'.global_mapping::ArticleID.'` =  \''. $articleID .'\'  AND CommentID NOT IN (SELECT CommentID FROM sl_comment_bad WHERE `STATUS` =\'1\')';
+		$total = global_common::getTotalRecord(Model_Comment::TBL_SL_COMMENT,$this->_objConnection,$condition);
 		$commentHTML = '';
 		foreach($comments as $item)
 		{
@@ -178,10 +185,17 @@ class Model_Comment
 			$commentHTML .= '			</div>';
 			$commentHTML .= '			<div class="comment-detail-content">';
 			$commentHTML .= '					'.$item[global_mapping::Content];
-			$commentHTML .= '			</div>	';				
+			$commentHTML .= '			</div>	';	
+			if(global_common::isAdmin())
+			{	
+				$commentHTML.= '		<div class="comment-controls">';
+				$commentHTML.= '			<a href="javascript:comment.badComment(\''.$item[global_mapping::CommentID].'\',1)">Delete</a>';
+				$commentHTML.= '		</div>	';	
+			}						
 			$commentHTML .= '		</div>';
 			$commentHTML .= '</div>';
 		}
+		$commentHTML.= global_common::getPagingHTMLByNum($page, Model_Comment::NUM_PER_PAGE, $total, 'comment.changePage');
 		return $commentHTML;
 	}
 	
@@ -217,7 +231,7 @@ class Model_Comment
 						$whereClause.$orderBy ));
 		}
 		
-		//return '<br>SQL:'.$strSQL;
+		//echo '<br>SQL:'.$strSQL;
 		$arrResult =$this->_objConnection->selectCommand($strSQL);		
 		if(!$arrResult)
 		{

@@ -102,6 +102,9 @@ core.request = {
     post: function(url, data, fx, fxFail) {
         this.execute(url, data, fx, 'POST', fxFail,true)
     },
+    post: function(url, data, fx, fxFail, showLoading) {
+        this.execute(url, data, fx, 'POST', fxFail,showLoading)
+    },
     get: function(url, data, fx, fxFail) {
         this.execute(url, data, fx, 'GET', fxFail,true);
     }
@@ -572,6 +575,15 @@ core.util = {
 		childControl.trigger("liszt:updated");
 		childControl.change();
     },
+    searchWithCity: function(obj)
+	{
+	    if(typeof($("#formSearchWithCity"))!= 'undefined')
+		{
+		    cityID =  $("#"+obj).val();
+		    $("#hdct").val(cityID);
+		    $("#formSearchWithCity").submit();
+		}
+	},
     messageDialog: function()
     {
     },

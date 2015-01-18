@@ -3,6 +3,7 @@
 /* TODO: Add code here */
 require('config/globalconfig.php');
 include_once('class/model_user.php');
+include_once('class/model_city.php');
 
 $objUser = new Model_User($objConnection);
 

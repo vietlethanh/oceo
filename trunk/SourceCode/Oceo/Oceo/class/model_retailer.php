@@ -276,19 +276,30 @@ class Model_Retailer
 		return $retailer;
 	}
 	
-	public function getRetailerByProduct($productID,$type,$selectField='*') 
+	public function getRetailerByProduct($productID,$type,$city,$selectField='*') 
 	{		
+		if($city)
+		{
+			
+			$city = ' and `'.global_mapping::CityID.'` = '.$city.' ';
+		}
+		else
+		{
+			$city = ' and 1=1 ';
+		}
+		
+		
 		if($type)
 		{
 			$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
 					array($selectField, self::TBL_SL_RETAILER ,							
-						'WHERE '.global_mapping::ProductID.' = \''.$productID.'\' and '.global_mapping::ProductStatusID.' = \''.$type.'\''));
+						'WHERE '.global_mapping::ProductID.' = \''.$productID.'\' and '.global_mapping::ProductStatusID.' = \''.$type.'\' '.$city));
 		}
 		else
 		{
 			$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
 					array(global_mapping::ProductStatusID.', MIN('.global_mapping::Price.') as '.global_mapping::Price, self::TBL_SL_RETAILER ,							
-						'WHERE '.global_mapping::ProductID.' = \''.$productID.'\' group by '.global_mapping::ProductStatusID.' Order by '.global_mapping::ProductStatusID));
+						'WHERE '.global_mapping::ProductID.' = \''.$productID.'\' '.$city.' group by '.global_mapping::ProductStatusID.' Order by '.global_mapping::ProductStatusID));
 		}
 		//echo '<br>SQL:'.$strSQL;
 		$arrResult =$this->_objConnection->selectCommand($strSQL);		

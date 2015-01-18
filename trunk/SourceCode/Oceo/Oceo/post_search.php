@@ -240,6 +240,7 @@ if($productResults)
 		echo '<td style="padding:0;width:180px">';
 		echo '<a href="'.global_common::buildProductLink($item[global_mapping::ProductID]).'" target="_blank" class="btn btn-mini">Xem</a> ';	
 		echo '<a href="post_price.php?pid='.$item[global_mapping::ProductID].'" class="btn btn-mini">Đăng bán</a> ';	
+		echo '<a href="javascript:product.cloneProduct(\''.$item[global_mapping::ProductID].'\')" class="btn btn-mini">Clone</a> ';	
 		echo '</td>';
 		echo '</tr>';
 	}

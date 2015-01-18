@@ -23,6 +23,11 @@ class Model_Product
 	const ACT_CHANGE_PAGE					= 13;
 	const ACT_SHOW_EDIT                     = 14;
 	const ACT_GET                           = 15;
+	const ACT_ACTIVE						= 16;
+    const ACT_REFRESH						= 17;
+	const ACT_CLONE                         = 18;
+	
+	
 	const NUM_PER_PAGE                      = 15;
 	
 	const TBL_SL_PRODUCT			            = 'sl_product';
@@ -100,7 +105,45 @@ class Model_Product
 		`Status` varchar(20),
 		PRIMARY KEY(ProductID)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;';
-	
+		
+	const SQL_CLONE_SL_PRODUCT = 'INSERT INTO `{0}` (`ProductID`,
+		`ProductName`,
+		`CatalogueID`,
+		`ImageLink`,
+		`ManufactoryID`,
+		`PaymentModeID`,
+		`NumberaireID`,
+		`StorageDate`,
+		`Price`,
+		`Amount`,
+		`Description`,
+		`CreatedBy`,
+		`CreatedDate`,
+		`ModifiedBy`,
+		`ModifiedDate`,
+		`DeletedBy`,
+		`DeletedDate`,
+		`IsDeleted`,
+		`Status`)
+		SELECT 		\'{2}\',
+		CONCAT(\'CLONE-\',`ProductName`),
+		`CatalogueID`,
+		`ImageLink`,
+		`ManufactoryID`,
+		`PaymentModeID`,
+		`NumberaireID`,
+		`StorageDate`,
+		`Price`,
+		`Amount`,
+		`Description`,
+		\'{3}\',
+		\'{4}\',
+		\'{3}\',
+		\'{4}\',
+		`DeletedBy`,
+		`DeletedDate`,
+		`IsDeleted`,
+		`Status` FROM `{0}` WHERE productid=\'{1}\'';
 	#endregion   
 	
 	#region Variables
@@ -194,6 +237,28 @@ class Model_Product
 			return false;
 		}	
 		return $productid;		
+	}
+	
+	public function cloneProduct($productid,$createdBy)
+	{
+		$strTableName = self::TBL_SL_PRODUCT;
+		$intID = global_common::getMaxValueofField(global_mapping::ProductID, $strTableName) + 1;
+		$strSQL = global_common::prepareQuery(self::SQL_CLONE_SL_PRODUCT,
+				array($strTableName,
+					$productid,
+					$intID,
+					global_common::escape_mysql_string($createdBy),
+					global_common::nowSQL()
+					));
+		//echo $strSQL;
+		//return;
+		if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_SL_PRODUCT,$this->_objConnection,$strTableName))
+		{
+			//echo $strSQL;
+			global_common::writeLog('Error add sl_product:'.$strSQL,1);
+			return false;
+		}	
+		return $intID;		
 	}
 	
 	public function getProductByID($objID,$selectField='*') 

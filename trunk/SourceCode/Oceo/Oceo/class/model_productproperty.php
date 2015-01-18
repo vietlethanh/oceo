@@ -58,6 +58,25 @@ class Model_ProductProperty
 		PRIMARY KEY(ProductID,PropertyID)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;';
 	
+	const SQL_CLONE_SL_PRODUCT_PROPERTY		= 'INSERT INTO `{0}`
+		(
+		`ProductID`,
+		`PropertyID`,
+		`PropertyValue`,
+		`Order`,
+		`TypeID`, 
+		`Status`
+		)
+		Select
+		\'{2}\',
+		`PropertyID`,
+		`PropertyValue`,
+		`Order`,
+		`TypeID`, 
+		`Status`
+		From
+		`{0}`
+		Where `ProductID`= {1};';
 	#endregion   
 	
 	#region Variables
@@ -120,6 +139,22 @@ class Model_ProductProperty
 			return false;
 		}	
 		return $intNewID;		
+	}
+	
+	public function clonProductProperty($cloneProductid,$newProductId)
+	{
+		$strTableName = self::TBL_SL_PRODUCT_PROPERTY;
+		$strSQL = global_common::prepareQuery(self::SQL_CLONE_SL_PRODUCT_PROPERTY,
+				array($strTableName,
+					$cloneProductid,$newProductId));
+		
+		if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_SL_PRODUCT_PROPERTY,$this->_objConnection,$strTableName))
+		{
+			//echo $strSQL;
+			global_common::writeLog('Error clonProductProperty sl_product_property:'.$strSQL,1);
+			return false;
+		}	
+		return true;		
 	}
 	
 	public function getProductPropertyByID($objID,$selectField='*') 

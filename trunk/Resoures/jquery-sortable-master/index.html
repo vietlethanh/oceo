@@ -21,7 +21,7 @@
 	
 	$("ol.simple_with_drop").sortable({
 		  handle: 'i.icon-move',
-		  containment: "parent" ,
+		  containment: "window" ,
 		  onDragStart: function (item, container, _super) {
 			// Duplicate items of the no drop area
 			if(!container.options.drop)
@@ -35,7 +35,7 @@
 				return true;
 			  }
 		  },
-		})
+	})
 	
   });
   
@@ -56,27 +56,28 @@
   <li class="ui-state-default"><span class="ui-icon ui-icon-arrowthick-2-n-s"></span>Item 7</li>
 </ul>
 <div style="padding:30px">
-<ol class="simple_with_drop vertical">
-                <li class='root'>
-                  <i class="icon-move"></i>
-                  Item 1
-                </li>
-               <li class='root'>
-                  <i class="icon-move"></i>
-                  Item 2
-                <li class='root'>
-                
-                <li class="highlight">
-                  <i class="icon-move"></i>
-                  Item 2
-                </li><li>
-                  <i class="icon-move"></i>
-                  Item 4
-                </li>
-                <li>
-                  <i class="icon-move"></i>
-                  Item 5
-                </li>
+			<ol class="simple_with_drop vertical">
+				<li class='root'>
+					<i class="icon-move"></i>
+					Item 1
+				</li>
+				<li class='root'>
+					<i class="icon-move"></i>
+					Item 2
+				</li>
+
+				<li class="highlight">
+					<i class="icon-move"></i>
+					Item 2
+				</li>
+				<li>
+					<i class="icon-move"></i>
+					Item 4
+				</li>
+				<li>
+					<i class="icon-move"></i>
+					Item 5
+				</li>
                 <li>
                   <i class="icon-move"></i>
                   Item 6

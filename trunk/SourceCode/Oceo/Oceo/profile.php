@@ -45,7 +45,8 @@ if($_pgR["update-avatar"])
 					$userUpdate[global_mapping::FullName],$userUpdate[global_mapping::BirthDate],$userUpdate[global_mapping::Address],
 					$userUpdate[global_mapping::Phone],$userUpdate[global_mapping::Email],$userUpdate[global_mapping::Sex],
 					$userUpdate[global_mapping::Identity],$userUpdate[global_mapping::RoleID],$userUpdate[global_mapping::UserRankID],
-					$userUpdate[global_mapping::Avatar],$userUpdate[global_mapping::AccountID],$userUpdate[global_mapping::IsActive]);
+					$userUpdate[global_mapping::Avatar],$userUpdate[global_mapping::AccountID],$userUpdate[global_mapping::IsActive],
+					$userUpdate[global_mapping::CityID]);
 			//echo $result;
 			$_SESSION[global_common::SES_C_USERINFO] = $currentUser = $userUpdate;
 			move_uploaded_file($_FILES["file"]["tmp_name"],$fileName);
@@ -70,7 +71,7 @@ if($_pgR["update-avatar"])
 <?php
 include_once('include/_header.inc');
 include_once('include/_menu.inc');
-//print_r($currentUser);
+//print_r($_SESSION[global_common::SES_C_USERINFO]);
 ?>
 
 <div id="profile-page" class="page-content">
@@ -117,7 +118,7 @@ include_once('include/_menu.inc');
                                 <li><span>Giới tính:</span> <?php echo ($currentUser[global_mapping::UserName]?'Nam':'Nữ')?></li>
                                 <li><span>Email:</span> <a href="mailto:">  <?php echo global_common::formatOutputText($currentUser[global_mapping::Email])?></a></li>
 	   						 <li><span>Số điện thoại:</span> <?php echo ($currentUser[global_mapping::Phone])?></li>                               
-                                <li><span>Địa chỉ:</span>  <?php echo global_common::formatOutputText($currentUser[global_mapping::Address])?></li>
+                                <li><span>Địa chỉ:</span>  <?php echo global_common::formatOutputText($currentUser[global_mapping::Address]). ', '.$currentUser[global_mapping::CityName]?></li>
                             </ul>
                         </div>
 						<div id="change-avatar" class="tab-pane row-fluid">
@@ -220,10 +221,32 @@ include_once('include/_menu.inc');
 								<label class="control-label">Địa chỉ </label>
 								<div class="controls">
 									<input type="text" name="txtAddress" id="txtAddress" class="text m-wrap span8" maxlength="250" 
-									placeholder="vd: 1A Trần Hưng Đạo, P. Bến Thành, Quận 1, HCM" value="<?php echo $currentUser[global_mapping::Address]?>" />
+									placeholder="vd: 1A Trần Hưng Đạo, P. Bến Thành, Quận 1" value="<?php echo $currentUser[global_mapping::Address]?>" />
 								</div>				
 							</div>
-						
+							<div class="control-group">
+								<label class="control-label">Thành phố </label>
+								<div class="controls">
+									<select id="updateCity"  onchange="core.util.searchWithCity('optCity');">
+				<option value="">Tỉnh/Thành Phố</option>
+<?php
+
+$city = $_SESSION[global_common::SES_C_USERINFO][global_mapping::CityID];
+	
+
+foreach($allCities as $item)
+{
+	if($item[global_mapping::CityID] == $city)
+	{
+		echo '			<option value="'.$item[global_mapping::CityID].'" selected="selected" >'.$item[global_mapping::CityName].'</option>';
+	}
+	else
+		echo '			<option value="'.$item[global_mapping::CityID].'" >'.$item[global_mapping::CityName].'</option>';
+}
+					?>
+				</select>
+								</div>				
+							</div>
                             <div class="submit-btn">
                                 <input type="button" onclick="javascript:user.updateProfile();" class="btn green" id="btnUpdateInfo" value="Lưu thay đổi" />
 								<input type="reset" class="btn" value="Hủy bỏ"/>

@@ -9,14 +9,24 @@ include_once('class/model_user.php');
 include_once('class/model_product.php');
 include_once('class/model_retailer.php');
 include_once('class/model_status.php');
-$objArticleType = new Model_ArticleType($objConnection);
+include_once('class/model_property.php');
+include_once('class/model_productprice.php');
+include_once('class/model_productproperty.php');
+include_once('class/model_propertygroup.php');
+include_once('class/model_datatype.php');
+include_once('class/model_manufactory.php');
 $objProduct = new Model_Product($objConnection);
-$objRetailer = new Model_Retailer($objConnection);
-$objStatus = new Model_Status($objConnection);
+$objProductProperty = new Model_ProductProperty($objConnection);
+$objArticleType = new Model_ArticleType($objConnection);
+$objProductPrice = new Model_ProductPrice($objConnection);
+$objProperty = new Model_Property($objConnection);
 $objComment = new Model_Comment($objConnection);
-if ($_pgR["pid"])
+$objManufactory = new Model_Manufactory($objConnection);
+$objRetailer = new Model_Retailer($objConnection);
+
 {
 	$_currentProductID = $_pgR["pid"];
+	$city = $_pgR['ct'];
 	$_SESSION[global_common::SES_C_CUR_PAGE] = 'product_detail.php?pid='.$_currentProductID;
 }
 $_arrCategories =  $objArticleType->getAllArticleType(0,null,'`ParentID`=0','Level');

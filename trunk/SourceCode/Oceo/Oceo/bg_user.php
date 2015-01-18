@@ -79,6 +79,7 @@ else if ($_pgR["act"] == Model_User::ACT_UPDATE_PROFILE)
 		$phone = $_pgR['phone'];
 		$phone = html_entity_decode($phone,ENT_COMPAT ,'UTF-8' );
 		$address = $_pgR['address'];
+		$city = $_pgR['city'];
 		$address = html_entity_decode($address,ENT_COMPAT ,'UTF-8' );
 		$currentUser = $_SESSION[global_common::SES_C_USERINFO];
 		if($objUser->checkExistEmail($email,$currentUser[global_mapping::UserID])){
@@ -97,11 +98,12 @@ else if ($_pgR["act"] == Model_User::ACT_UPDATE_PROFILE)
 		$userUpdate[global_mapping::Phone] = $phone;
 		$userUpdate[global_mapping::Email] = $email;
 		$userUpdate[global_mapping::Sex] = $sex;
+		$userUpdate[global_mapping::CityID] = $city;
 		$result = $objUser->update($userUpdate[global_mapping::UserID],$userUpdate[global_mapping::UserName],$userUpdate[global_mapping::Password],
 				$userUpdate[global_mapping::FullName],$userUpdate[global_mapping::BirthDate],$userUpdate[global_mapping::Address],
 				$userUpdate[global_mapping::Phone],$userUpdate[global_mapping::Email],$userUpdate[global_mapping::Sex],
 				$userUpdate[global_mapping::Identity],$userUpdate[global_mapping::RoleID],$userUpdate[global_mapping::UserRankID],
-				$userUpdate[global_mapping::Avatar],$userUpdate[global_mapping::AccountID],$userUpdate[global_mapping::IsActive]);
+				$userUpdate[global_mapping::Avatar],$userUpdate[global_mapping::AccountID],$userUpdate[global_mapping::IsActive],$userUpdate[global_mapping::CityID]);
 		if ($result)
 		{
 			$_SESSION[global_common::SES_C_USERINFO] = $objUser->getUserByID($currentUser[global_mapping::UserID]);
@@ -231,7 +233,7 @@ else if ($_pgR["act"] == Model_User::ACT_UPDATE_PROFILE)
 							$userEmail = $result[0][global_mapping::Email];
 							$fullName = $result[0][global_mapping::FullName];
 							$linkReset = global_common::getHostName().'/change_password.php?id='.$guid;
-							$arrMailContent = global_common::formatMailContent(global_common::TEAMPLATE_RESET_PASSWORD,
+							$arrMailContent = global_common::formatMailContent(global_common::TEMPLATE_RESET_PASSWORD,
 									null,
 									array(global_common::formatOutputText($result[0][global_mapping::FullName]),
 										$linkReset, global_common::RESET_EXPIRE_DAYS));

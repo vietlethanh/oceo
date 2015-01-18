@@ -12,12 +12,16 @@ include_once('class/model_property.php');
 include_once('class/model_productproperty.php');
 include_once('class/model_propertygroup.php');
 include_once('class/model_datatype.php');
+include_once('class/model_city.php');
+//get catId from _article.inc
+//$catID = $_pgR['cid'];
+$objCity = new Model_City($objConnection);
 
+$allCities = $objCity->getAllCity();
 if (!$_pgR["cid"])
 {
 	global_common::redirectByScript("index.php"); 
 }
-$city = $_pgR['ct'];
 $keyword =  $_pgR['kw'];
 ?>
 <?php
@@ -27,7 +31,7 @@ $objProductProperty = new Model_ProductProperty($objConnection);
 $objManufactory = new Model_Manufactory($objConnection);
 $catID = $_pgR['cid'];
 //Just get from "article_list.php"
-$city = $_pgR['ct'];
+
 //$district = $_pgR['ds'];
 $keyword =  $_pgR['kw'];
 $manu =  $_pgR['manu'];
@@ -73,7 +77,7 @@ if($city)
 {
 	if($search)
 	{
-		$search = '`'.global_mapping::CityID.'` = '.$city.' ';
+		$search = 'ProductID IN( select ProductID where CityID =`'.global_mapping::CityID.'` = '.$city.') ';
 	}
 	else
 	{
@@ -118,8 +122,7 @@ if($productInIDs)
 if($search)
 	$products = $objProduct->getAllProduct(0,'*',$search,null);
 
-$topProperties = $objProductProperty->getTopPropertyValue($catID,5,10);
-$allManuFactories = $objManufactory->getAllManufactory(0,'*',global_mapping::CategoryID.'='.$catID, global_mapping::ManufactoryName);
+
 //print_r($topProperties);
 
 ?>
@@ -135,7 +138,7 @@ include_once('include/_menu.inc');
 ?>
 
 
-<script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_article.js');?>"></script>
+<script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_product.js');?>"></script>
 <script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_user.js');?>"></script>
 
 
