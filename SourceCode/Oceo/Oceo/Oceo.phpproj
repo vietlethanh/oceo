@@ -4188,6 +4188,10 @@
     {
     "ProjRelPath" = "T"
     }
+    "member.php"
+    {
+    "ProjRelPath" = "T"
+    }
     "images\\data\\button-cat4.png"
     {
     "ProjRelPath" = "T"
@@ -7028,6 +7032,10 @@
     {
     "ProjRelPath" = "T"
     }
+    "lib\\URLcrypt-master\\Urlcrypt.php"
+    {
+    "ProjRelPath" = "T"
+    }
     "plugins\\fullcalendar\\fullcalendar\\fullcalendar.css"
     {
     "ProjRelPath" = "T"
@@ -7589,6 +7597,10 @@
     "ProjRelPath" = "T"
     }
     "css\\themes\\base\\jquery.ui.progressbar.css"
+    {
+    "ProjRelPath" = "T"
+    }
+    "lib\\URLcrypt-master"
     {
     "ProjRelPath" = "T"
     }
@@ -8460,6 +8472,10 @@
     {
     "ProjRelPath" = "T"
     }
+    "member_price.php"
+    {
+    "ProjRelPath" = "T"
+    }
     "images\\footer_bg.jpg"
     {
     "ProjRelPath" = "T"
@@ -8761,6 +8777,10 @@
     "ProjRelPath" = "T"
     }
     "plugins\\ckeditor\\plugins\\link\\images"
+    {
+    "ProjRelPath" = "T"
+    }
+    "admin\\admin_price.php"
     {
     "ProjRelPath" = "T"
     }

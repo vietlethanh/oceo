@@ -189,7 +189,7 @@ class Model_Advertising
 		return $arrResult[0];
 	}
 	
-	public function getAllAdvertising($intPage = 0,$selectField='*',$whereClause='',$orderBy='') 
+	public function getAllAdvertising($intPage = 0,$selectField='*',$whereClause='',$orderBy='',&$total) 
 	{		
 		if(!$selectField)
 		{
@@ -210,6 +210,10 @@ class Model_Advertising
 			$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
 					array($selectField, Model_Advertising::TBL_SL_ADVERTISING ,							
 						$whereClause.$orderBy .' limit '.(($intPage-1)* self::NUM_PER_PAGE).','.self::NUM_PER_PAGE));
+			
+			$strSQLCount .=  global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+					array('count(*)', Model_Advertising::TBL_SL_ADVERTISING ,							
+						$whereClause.$orderBy ));
 		}
 		else
 		{
@@ -224,6 +228,28 @@ class Model_Advertising
 			global_common::writeLog('get All sl_advertising:'.$strSQL,1,$_mainFrame->pPage);
 			return null;
 		}
+		if($strSQLCount)
+		{
+			//echo '<br>$strSQLCount:'.$strSQLCount;
+			$arrTotal =$this->_objConnection->selectCommand($strSQLCount);		
+			$total = $arrTotal[0][0];
+		}
+		$objAdType = new Model_AdType($this->_objConnection);
+		$allAdType = $objAdType->getAllAdType(0,null,null,null);
+		
+		$adTypes = array();
+		foreach($allAdType as $key => $info)
+		{
+			$adTypes[$info[global_mapping::AdTypeID]]=$info;
+			unset($allAdType[$key]);
+		}	
+		
+		$count = count($arrResult);
+		for($index=0;$index < $count;$index++)
+		{
+			$arrResult[$index][global_mapping::AdTypeName] = $adTypes[$arrResult[$index][global_mapping::AdTypeID]][global_mapping::AdTypeName];
+		}
+		
 		//print_r($arrResult);
 		return $arrResult;
 	}

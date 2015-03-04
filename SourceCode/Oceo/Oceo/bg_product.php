@@ -278,7 +278,7 @@ elseif($_pgR['act'] == Model_Retailer::ACT_ACTIVE_RETAILER)
 		$currentUserID = $_SESSION[global_common::SES_C_USERINFO][global_mapping::UserID];
 		$retailter = $objRetailer->getRetailerByID($retailerID);
 		$createBy = $retailter[global_mapping::CreatedBy];
-		if($createBy != $currentUserID)
+		if($createBy != $currentUserID && global_common::isAdmin() == false)
 		{
 			return;
 		}

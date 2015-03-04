@@ -25,7 +25,7 @@ class Model_Retailer
 	const ACT_GET_PRICE                         = 115;
 	const ACT_ACTIVE_RETAILER                   = 116;
 	
-	const NUM_PER_PAGE							= 15;
+	const NUM_PER_PAGE							=10 ;
 	
 	const TBL_SL_RETAILER			            = 'sl_retailer';
 	
@@ -329,12 +329,29 @@ class Model_Retailer
 		return $arrResult;
 	}
 	
-	public function getRetailerByUser($userID,$selectField='*') 
+	
+	
+	public function getRetailerByUser($intPage,$userID,$selectField='*',&$total) 
 	{		
-		
-		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
-				array($selectField, self::TBL_SL_RETAILER ,							
-					'WHERE '.global_mapping::CreatedBy.' = \''.$userID.'\' and ('.global_mapping::IsDeleted.' IS NULL or '.global_mapping::IsDeleted.' = \'0\') '));
+		$whereClause = 'WHERE '.global_mapping::CreatedBy.' = \''.$userID.'\' and ('.global_mapping::IsDeleted.' IS NULL or '.global_mapping::IsDeleted.' = \'0\')';
+		if($intPage>0)
+		{
+			$strSQL = global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+					array($selectField, self::TBL_SL_RETAILER ,	$whereClause.'limit '.(($intPage-1)* self::NUM_PER_PAGE).','.self::NUM_PER_PAGE));
+			
+			
+			
+			$strSQLCount = global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+					array('count(*)', self::TBL_SL_RETAILER ,	$whereClause));
+			
+		}
+		else
+		{
+			$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+					array($selectField, self::TBL_SL_RETAILER ,							
+						'WHERE '.global_mapping::CreatedBy.' = \''.$userID.'\' and ('.global_mapping::IsDeleted.' IS NULL or '.global_mapping::IsDeleted.' = \'0\') '));
+			
+		}
 		
 		//echo '<br>SQL:'.$strSQL;
 		$arrResult =$this->_objConnection->selectCommand($strSQL);		
@@ -342,6 +359,12 @@ class Model_Retailer
 		{
 			global_common::writeLog('get sl_retailer ByID:'.$strSQL,1,$_mainFrame->pPage);
 			return null;
+		}
+		if($strSQLCount)
+		{
+			//echo '<br>$strSQLCount:'.$strSQLCount;
+			$arrTotal =$this->_objConnection->selectCommand($strSQLCount);		
+			$total = $arrTotal[0][0];
 		}
 		
 		$productIDs = global_common::getArrayColumn($arrResult,global_mapping::ProductID); 
@@ -393,6 +416,120 @@ class Model_Retailer
 			return false;
 		}	
 		return $retailerID;	
+	}
+	
+	public function getRetailerByProducts($intPage, $productIds,$type,$city,$status, &$total) 
+	{		
+		
+		if(!$selectField)
+		{
+			$selectField='*';
+		}
+		$arrIDs = global_common::splitString($productIds);
+		$strQueryIN = global_common::convertToQueryIN($arrIDs);
+		if($strQueryIN)
+		{
+			$strQueryIN= global_mapping::ProductID.' IN( '.$strQueryIN.') and';
+		}
+		else
+		{
+			$strQueryIN= '1 != and';
+		}
+		if($city)
+		{
+			
+			$city = ' and `'.global_mapping::CityID.'` = '.$city.' ';
+		}
+		else
+		{
+			$city = ' and 1=1 ';
+		}
+		
+		if($type)
+		{
+			
+			$type = ' and `'.global_mapping::ProductStatusID.'` = '.$type.' ';
+		}
+		else
+		{
+			$type = ' and 1=1 ';
+		}
+		
+		if($status)
+		{
+			$status = '  (`'.global_mapping::StatusID.'` = '.global_common::STATUS_ACTIVE .' or `'.global_mapping::StatusID.'` is null)';
+		}
+		else
+		{
+			$status = '  `'.global_mapping::StatusID.'` = '.global_common::STATUS_INACTIVE ;
+		}
+		
+		if($intPage > 0)
+		{
+			$strSQLCount = global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+					array("count(*)", self::TBL_SL_RETAILER ,							
+						'WHERE '.$strQueryIN.$status. $type. $city));
+			
+			$strSQL = global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+					array($selectField, self::TBL_SL_RETAILER ,							
+						'WHERE '.$strQueryIN.$status. $type. $city.$orderBy .' limit '.(($intPage-1)* self::NUM_PER_PAGE).','.self::NUM_PER_PAGE));
+		}
+		else
+		{
+			$strSQL = global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+					array($selectField, self::TBL_SL_RETAILER ,							
+						'WHERE '.$strQueryIN.$status. $type. $city));
+		}
+		
+		//echo '<br>SQL:'.$strSQL;
+		$arrResult =$this->_objConnection->selectCommand($strSQL);		
+		if(!$arrResult)
+		{
+			global_common::writeLog('get sl_retailer ByID:'.$strSQL,1,$_mainFrame->pPage);
+			return null;
+		}
+		if($strSQLCount)
+		{
+			$arrTotal =$this->_objConnection->selectCommand($strSQLCount);		
+			$total = $arrTotal[0][0];
+		}
+		$productIDs = global_common::getArrayColumn($arrResult,global_mapping::ProductID); 
+		//print_r($productIDs);
+		$productIDs = array_unique($productIDs);
+		
+		$objProduct = new Model_Product($this->_objConnection);
+		
+		$products = $objProduct->getProductByIDs($productIDs);
+		$temp = array();
+		foreach($products as $key => $info)
+		{
+			$temp[$info[global_mapping::ProductID]]=$info;
+			unset($products[$key]);
+		}	
+		$products = $temp;
+		//print_r($products);
+		$objStatus = new Model_Status($this->_objConnection);
+		$allStatus = $objStatus->getAllStatus();
+		$statuses = array();
+		foreach($allStatus as $key => $info)
+		{
+			$statuses[$info[global_mapping::StatusID]]=$info;
+			unset($allStatus[$key]);
+		}	
+		
+		$count = count($arrResult);
+		
+		for($i=0; $i < $count; $i++)
+		{
+			$arrResult[$i][global_mapping::ProductStatus] = $statuses[$arrResult[$i][global_mapping::ProductStatusID]][global_mapping::StatusName];
+			$arrResult[$i][global_mapping::ProductName] = $products[$arrResult[$i][global_mapping::ProductID]][global_mapping::ProductName];
+		}
+		
+		
+		
+		$arrResult = global_common::mergeUserInfo($arrResult);
+		//print_r($arrResult);
+		return $arrResult;
 	}
 	
 	

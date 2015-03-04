@@ -19,10 +19,14 @@ require('include/_permission_admin.inc');
 include_once('class/model_user.php');
 include_once('class/model_advertising.php');
 include_once('class/model_adtype.php');
+include_once('class/model_articletype.php');
 
+$objArticleType = new Model_ArticleType($objConnection);
 
 $objAdvertising = new Model_Advertising($objConnection);
 $objAdType = new Model_AdType($objConnection);
+
+$allCats = $objArticleType->getAllArticleType(0,null,'',null);
 
 if ($_pgR["act"] == Model_Advertising::ACT_ADD || $_pgR["act"] == Model_Advertising::ACT_UPDATE)
 {
@@ -33,6 +37,7 @@ if ($_pgR["act"] == Model_Advertising::ACT_ADD || $_pgR["act"] == Model_Advertis
 	$advertisingName = html_entity_decode($advertisingName,ENT_COMPAT ,'UTF-8' );
 	
 	$adTypeID = html_entity_decode($_pgR[global_mapping::AdTypeID],ENT_COMPAT ,'UTF-8' );
+	$articleTypeID = html_entity_decode($_pgR[global_mapping::ArticleTypeID],ENT_COMPAT ,'UTF-8' );
 	$content = html_entity_decode($_pgR[global_mapping::Content],ENT_COMPAT ,'UTF-8' );
 	$preferLink = html_entity_decode($_pgR[global_mapping::PreferLink],ENT_COMPAT ,'UTF-8' );
 	$order = html_entity_decode($_pgR[global_mapping::Order],ENT_COMPAT ,'UTF-8' );
@@ -45,7 +50,7 @@ if ($_pgR["act"] == Model_Advertising::ACT_ADD || $_pgR["act"] == Model_Advertis
 	{
 		$createdBy = $c_userInfo[global_mapping::UserID];
 		
-		$resultID = $objAdvertising->insert($advertisingName,$partnerID,$startDate,$endDate,$adTypeID,$content,$imageLink,$preferLink,$order,$createdBy,$status);
+		$resultID = $objAdvertising->insert($advertisingName,$partnerID,$startDate,$endDate,$adTypeID,$articleTypeID,$content,$imageLink,$preferLink,$order,$createdBy,$status);
 		if ($resultID)
 		{
 			$arrHeader = global_common::getMessageHeaderArr($banCode);//$banCode
@@ -67,7 +72,7 @@ if ($_pgR["act"] == Model_Advertising::ACT_ADD || $_pgR["act"] == Model_Advertis
 		$modifiedBy = $c_userInfo[global_mapping::UserID];
 		$advertisingID = html_entity_decode($_pgR[global_mapping::AdvertisingID],ENT_COMPAT ,'UTF-8' );
 		$currentAd = $objAdvertising->getAdvertisingByID($advertisingID);
-		$resultID = $objAdvertising->update($advertisingID,$advertisingName,$partnerID,$startDate,$endDate,$adTypeID,$content,$imageLink,$preferLink,$order,
+		$resultID = $objAdvertising->update($advertisingID,$advertisingName,$partnerID,$startDate,$endDate,$adTypeID,$articleTypeID, $content,$imageLink,$preferLink,$order,
 				$modifiedBy,global_common::nowSQL(),
 				$currentAd[global_mapping::DeletedBy],$currentAd[global_mapping::DeletedDate],
 				$currentAd[global_mapping::IsDeleted],$currentAd[global_mapping::Status]
@@ -99,8 +104,9 @@ elseif($_pgR['act'] == Model_Advertising::ACT_SHOW_EDIT)
 	{
 		$advertising[global_mapping::StartDate] = global_common::formatDateVN($advertising[global_mapping::StartDate]);
 		$advertising[global_mapping::EndDate] = global_common::formatDateVN($advertising[global_mapping::EndDate]);
+		//echo json_encode($advertising);
 		echo global_common::convertToXML($strMessageHeader, 
-				array('rs','content'),array(1,json_encode($advertising)), array(0,1));
+				array("rs","content"),array(1,json_encode($advertising)), array(0,1));
 	}
 	else
 	{
@@ -109,7 +115,45 @@ elseif($_pgR['act'] == Model_Advertising::ACT_SHOW_EDIT)
 	
 	return ;
 }
-$allAds = $objAdvertising->getAllAdvertising(0,null,null,null);
+
+$catID = $_pgR["cid"];
+$page = $_pgR["p"];
+if($catID == 0)
+{
+	$allCatIDs ='';
+}
+else
+{
+	$allSubCats = $objArticleType->getAllArticleType(0,null,'ParentID='.$catID,null);
+	//print_r($allSubCats);
+	if(count($allSubCats)<=0)
+	{
+		$allCatIDs = $catID;
+	}
+	else
+	{
+		$allCatIDs = global_common::getArrayColumn($allSubCats,global_mapping::ArticleTypeID);
+	}
+}
+
+if($allCatIDs)
+{
+	$search ='`'.global_mapping::ArticleTypeID.'` IN ( '. global_common::convertToQueryIN($allCatIDs).' )';
+}
+if($keyword)
+{
+	if($search)
+	{
+		$search .= ' and (`'.global_mapping::ProductName.'` like \'%'.global_common::escape_mysql_string($keyword).'%\' or `'.global_mapping::Description.'` like \'%'.global_common::escape_mysql_string($keyword).'%\')' ;
+	}
+	else
+	{
+		$search .= '(`'.global_mapping::ProductName.'` like \'%'.global_common::escape_mysql_string($keyword).'%\' or `'.global_mapping::Description.'` like \'%'.global_common::escape_mysql_string($keyword).'%\')' ;
+	}
+}
+
+
+$allAds = $objAdvertising->getAllAdvertising(1,null,$search,null,$total);
 $allAdType = $objAdType->getAllAdType(0,null,null,null);
 ?>
 <?php
@@ -147,9 +191,40 @@ include_once('include/_admin_header.inc');
 			</div>
 		</div>
 		<!---->
-		<div class="portlet-body">
-		
-									
+		<div class="portlet-body" style="text-align:center">
+		<form method="get" id="admin_advert" style="display: inline-flex" onclick="return core.util.resetSearchForm('admin_advert')">
+<select class="" name="cid" id="id" style="height:25px" onchange="">
+<option value="0">Choose Category</option>
+<?php
+foreach($allCats as $parent)
+{
+	//print_r($currentTypes);
+	if($parent[global_mapping::ParentID] == 0)
+	{
+		echo '			<option disabled="disabled" value="'.$parent[global_mapping::ArticleTypeID].'" >'.$parent[global_mapping::ArticleTypeName].'</option>';
+		foreach($allCats as $item)
+		{
+			$isSelect = false;
+			if($item[global_mapping::ParentID] == $parent[global_mapping::ArticleTypeID])
+			{
+				if($item[global_mapping::ArticleTypeID] == $catID)
+				{
+					$isSelect=true;
+				}
+				if($isSelect)
+					echo '			<option selected="selected" value="'.$item[global_mapping::ArticleTypeID].'" >- '.$item[global_mapping::ArticleTypeName].'</option>';
+				else
+					echo '			<option value="'.$item[global_mapping::ArticleTypeID].'" >- '.$item[global_mapping::ArticleTypeName].'</option>';
+			}
+		}
+	}
+}
+?>		
+</select>	
+<input type="submit" value="Search" style="height:24px;margin:0 10px" />	
+<input type="hidden"  name="p" id="p" value="<?php echo ($page) ?>" />	
+</form>	
+		<?php echo 'Total:'.($total?$total:0); ?>							
 <?php
 //print_r($advertising);
 if($allAds)
@@ -191,7 +266,7 @@ if($allAds)
 		echo $item[global_mapping::PartnerID];		
 		echo '</td>';
 		echo '<td style="">';
-		echo $item[global_mapping::AdTypeID];		
+		echo $item[global_mapping::AdTypeName];		
 		echo '</td>';
 		echo '<td style="">';
 		echo $item[global_mapping::Order];		
@@ -219,6 +294,7 @@ if($allAds)
 		echo '</tr>';
 	}
 	echo '</table>';
+	echo global_common::getPagingHTMLByNum($page,Model_Advertising::NUM_PER_PAGE,$total, 'core.util.changePage','admin_advert');
 }
 ?>
 				</div>
@@ -268,6 +344,34 @@ foreach($allAdType as $item)
 }
 ?>
                 </select>
+            </div>
+        </div>	
+		<div class="control-group">
+            <label class="control-label">
+                Category  
+            </label>
+            <div class="controls">
+			<select class="" name="cmdCat" id="cmdCat" style="height:25px">
+                <option value="0">Choose Category</option>
+					<?php
+					foreach($allCats as $parent)
+					{
+						//print_r($currentTypes);
+						if($parent[global_mapping::ParentID] == 0)
+						{
+							echo '			<option disabled="disabled" value="'.$parent[global_mapping::ArticleTypeID].'" >'.$parent[global_mapping::ArticleTypeName].'</option>';
+							foreach($allCats as $item)
+							{
+								$isSelect = false;
+								if($item[global_mapping::ParentID] == $parent[global_mapping::ArticleTypeID])
+								{
+									echo '			<option value="'.$item[global_mapping::ArticleTypeID].'" >- '.$item[global_mapping::ArticleTypeName].'</option>';
+								}
+							}
+						}
+					}
+					?>		
+					</select>	
             </div>
         </div>	
 		<div class="control-group">

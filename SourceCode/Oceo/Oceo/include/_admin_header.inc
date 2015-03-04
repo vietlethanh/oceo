@@ -55,11 +55,11 @@
 <link type="text/css" rel="stylesheet"  href="<?php echo $_objSystem->locateJPlugin('bootstrap-modal/css/bootstrap-modal.css');?>">
 <script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('bootstrap-modal/js/bootstrap-modal.js');?>"></script>
 <script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('bootstrap-modal/js/bootstrap-modalmanager.js');?>"></script>
-
+<!--
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyD99k32UTA3js7a2aaSbAmJxwwO2K5QIpk&sensor=true"></script>
 <script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('gmaps/gmaps.js');?>"></script>
 
-
+-->
 <script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('ckeditor/ckeditor.js');?>"></script>
 <script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('ckeditor/adapters/jquery.js');?>"></script>
 
@@ -91,7 +91,8 @@
     <!--div id="subcontent" -->
     <div id="admin-header" align="">
 		<a class="menu" href="../index.php">oCEO</a>
-		<a class="menu" href="admin_article.php">Manage Article</a>
+		<a class="menu" href="admin_price.php">Manage Price</a>
+		<a class="menu" href="admin_product.php">Manage Product</a>
 		<a class="menu" href="admin_commentbad.php">Manage Comment</a>
 		<a class="menu" href="admin_advertising.php">Manage Advertising</a>
     </div>

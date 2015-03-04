@@ -12,12 +12,14 @@ include_once('class/model_property.php');
 include_once('class/model_productproperty.php');
 include_once('class/model_propertygroup.php');
 include_once('class/model_datatype.php');
+include_once('class/model_adtype.php');
 include_once('class/model_city.php');
 //get catId from _article.inc
 //$catID = $_pgR['cid'];
 $objCity = new Model_City($objConnection);
 
 $allCities = $objCity->getAllCity();
+$page = $_pgR["p"]? $_pgR["p"]:1;
 if (!$_pgR["cid"])
 {
 	global_common::redirectByScript("index.php"); 
@@ -120,8 +122,8 @@ if($productInIDs)
 }
 //echo 'search:'. $search;
 if($search)
-	$products = $objProduct->getAllProduct(0,'*',$search,null);
-
+	$products = $objProduct->getAllProduct($page,'*',$search,null,$total);
+//echo $total;
 
 //print_r($topProperties);
 

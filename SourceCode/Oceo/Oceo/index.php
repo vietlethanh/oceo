@@ -8,6 +8,7 @@ include_once('class/model_product.php');
 include_once('class/model_user.php');
 include_once('class/model_article.php');
 include_once('class/model_manufactory.php');
+include_once('class/model_adtype.php');
 
 ?>
 <?php

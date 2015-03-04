@@ -24,11 +24,11 @@ class Model_Product
 	const ACT_SHOW_EDIT                     = 14;
 	const ACT_GET                           = 15;
 	const ACT_ACTIVE						= 16;
-    const ACT_REFRESH						= 17;
+	const ACT_REFRESH						= 17;
 	const ACT_CLONE                         = 18;
 	
 	
-	const NUM_PER_PAGE                      = 15;
+	const NUM_PER_PAGE                      = 12;
 	
 	const TBL_SL_PRODUCT			            = 'sl_product';
 	
@@ -105,7 +105,7 @@ class Model_Product
 		`Status` varchar(20),
 		PRIMARY KEY(ProductID)
 		) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;';
-		
+	
 	const SQL_CLONE_SL_PRODUCT = 'INSERT INTO `{0}` (`ProductID`,
 		`ProductName`,
 		`CatalogueID`,
@@ -281,7 +281,15 @@ class Model_Product
 	{		
 		$arrIDs = global_common::splitString($arrIDs);
 		$strQueryIN = global_common::convertToQueryIN($arrIDs);
-		$whereClause = 'WHERE '.global_mapping::ProductID.' IN ('.$strQueryIN.')';
+		if($strQueryIN)
+		{
+			$strQueryIN= global_mapping::ProductID.' IN ('.$strQueryIN.')';
+		}
+		else
+		{
+			$strQueryIN = '1=1';
+		}
+		$whereClause = 'WHERE '.$strQueryIN;
 		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE,array('*',
 					self::TBL_SL_PRODUCT,$whereClause.' '));
 		//echo $strSQL;
@@ -390,7 +398,7 @@ class Model_Product
 	
 	
 	
-	public function getAllProduct($intPage = 0,$selectField='*',$whereClause='',$orderBy='') 
+	public function getAllProduct($intPage = 0,$selectField='*',$whereClause='',$orderBy='',&$total) 
 	{		
 		if($whereClause)
 		{
@@ -403,13 +411,17 @@ class Model_Product
 		}
 		if($intPage>0)
 		{
-			$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+			$strSQL = global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
 					array($selectField, Model_Product::TBL_SL_PRODUCT ,							
 						$whereClause.$orderBy .' limit '.(($intPage-1)* self::NUM_PER_PAGE).','.self::NUM_PER_PAGE));
+			
+			$strSQLCount = global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+					array('count(*)', Model_Product::TBL_SL_PRODUCT ,							
+						$whereClause.$orderBy));
 		}
 		else
 		{
-			$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+			$strSQL = global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
 					array($selectField, Model_Product::TBL_SL_PRODUCT ,							
 						$whereClause.$orderBy ));
 		}
@@ -419,6 +431,12 @@ class Model_Product
 		{
 			global_common::writeLog('get All sl_product:'.$strSQL,1,$_mainFrame->pPage);
 			return null;
+		}
+		//echo '<br>$strSQLCount:'.$strSQLCount;
+		if($strSQLCount)
+		{
+			$arrTotal =$this->_objConnection->selectCommand($strSQLCount);		
+			$total = $arrTotal[0][0];
 		}
 		$objManu = new Model_Manufactory($this->_objConnection);
 		$objArticleType = new Model_ArticleType($this->_objConnection);

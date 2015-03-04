@@ -409,7 +409,7 @@ core.util = {
 	
 	parserXML: function(text) {
         text = text.replace(/(\r\n|\n|\r)/gm, "");
-        text = text.replace(/(\")/gm, "\'");
+        //text = text.replace(/(\")/gm, "\'");
         var xmlDoc;
         //debugger;
         if (window.DOMParser) {
@@ -548,6 +548,18 @@ core.util = {
         window.location.href = url;
     },
     
+    
+    changePage: function(formID, page ) {
+        $("#"+formID+" #p").val(page);
+		$("#"+formID).submit();
+    },
+    
+    resetSearchForm: function(formID ) {
+        $("#"+formID+" #p").val(1);
+    },
+    
+    
+    
     bindChosen: function(obj,childID,attName)  
     {
         me = this;
@@ -560,7 +572,7 @@ core.util = {
 		elementOpts.each(function(index){
 			if($(this).attr(attName) != "0")
 			{
-				if($(this).attr(attName) == parentValue && $(this).attr('isUsed') != 'true' )
+				if(($(this).attr(attName) == parentValue && $(this).attr('isUsed') != 'true') || typeof($(this).attr(attName)) == 'undefined' || $(this).attr(attName)==''  )
 				{
 					$(this).css("display","");
 				}
