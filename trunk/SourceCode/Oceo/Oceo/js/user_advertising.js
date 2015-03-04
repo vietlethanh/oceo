@@ -49,6 +49,7 @@ var advertising = {
 				if (parseInt(strRespond[1]['rs']) == 1) {
 					core.util.getObjectByClass('ckCreateOther').hide();
 					core.util.getObjectByClass('popup-title').html('Edit Advertising');
+					//console.log(strRespond[1]['content']);
 					var advert = $.parseJSON(strRespond[1]['content']);
 					advertising.bindingAdForm(advert);
 					$('#'+modalID).modal({ backdrop: 'static', keyboard: false });
@@ -73,6 +74,9 @@ var advertising = {
 		
 		controlID = 'cmAdType';		
 		core.util.getObjectByID(controlID).val(advert.AdTypeID);
+		
+		controlID = 'cmdCat';		
+		core.util.getObjectByID(controlID).val(advert.ArticleTypeID);
 		
 		controlID = 'txtContent';		
 		core.util.getObjectByID(controlID).html(advert.Content);
@@ -106,6 +110,9 @@ var advertising = {
 		controlID = 'cmAdType';		
 		var adType = core.util.getObjectValueByID(controlID);
 		
+		controlID = 'cmdCat';		
+		var catID = core.util.getObjectValueByID(controlID);
+			
 		controlID = 'txtContent';		
 		var content = core.util.getObjectValueByID(controlID);
 		
@@ -131,6 +138,7 @@ var advertising = {
 		{
 			 AdvertisingName: adName,
 			 AdTypeID: adType,
+			 ArticleTypeID: catID,
 			 Content: content,
 			 Order: order,
 			 StartDate: startDate,
@@ -180,7 +188,6 @@ var advertising = {
     addAdverting: function() { 
 		var submitID = "btnSave"
         var advertisingInfo = this.getAdvertisingInfo(submitID);
-		
 		if(core.util.isNull(advertisingInfo))
 		{
 			return false;

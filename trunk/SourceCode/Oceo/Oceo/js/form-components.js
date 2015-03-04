@@ -200,6 +200,7 @@ var FormComponents = function () {
 	
 	var handelSelectize = function()
 	{
+	    /*
 		$('.selectize').selectize({
 					create: true,
 					sortField: {
@@ -208,6 +209,7 @@ var FormComponents = function () {
 					},
 					dropdownParent: 'body'
 				});
+		*/
 	}
 	
 	var handleSelect2 = function () {

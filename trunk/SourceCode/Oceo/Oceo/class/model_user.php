@@ -52,10 +52,11 @@ class Model_User
 		UserRankID,
 		Avatar,
 		AccountID,
-		IsActived
+		IsActived,
+		CreatedDate
 		)
 		VALUES (
-		\'{1}\', \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'{6}\', \'{7}\', \'{8}\', \'{9}\', \'{10}\', \'{11}\', \'{12}\', \'{13}\', \'{14}\', \'{15}\'
+		\'{1}\', \'{2}\', \'{3}\', \'{4}\', \'{5}\', \'{6}\', \'{7}\', \'{8}\', \'{9}\', \'{10}\', \'{11}\', \'{12}\', \'{13}\', \'{14}\', \'{15}\', \'{16}\'
 		);';
 	
 	const SQL_UPDATE_SL_USER		= 'UPDATE `{0}`
@@ -175,7 +176,9 @@ class Model_User
 					global_common::escape_mysql_string($userrankid),
 					global_common::escape_mysql_string($avatar),
 					global_common::escape_mysql_string($accountid),
-					global_common::escape_mysql_string($isactived)));
+					global_common::escape_mysql_string($isactived),
+					global_common::nowSQL()
+					));
 		
 		if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_SL_USER,$this->_objConnection,$strTableName))
 		{
@@ -282,26 +285,39 @@ class Model_User
 		$city = $objCity->getCityByID($arrResult[0][global_mapping::CityID]);
 		$arrResult[0][global_mapping::CityName] = $city[global_mapping::CityName];
 		//print_r($arrResult);
+		
+		if(!$arrResult[0][global_mapping::Avatar])
+		{
+			if($arrResult[0][global_mapping::Sex])
+			{
+				$arrResult[0][global_mapping::Avatar]= global_common::DEFAUTL_MALE_AVATAR;
+			}
+			else
+			{
+				$arrResult[0][global_mapping::Avatar]= global_common::DEFAUTL_FEMALE_AVATAR;
+			}
+		}
 		return $arrResult[0];
 	}
 	
 	public function getUserByName($userName,$selectField='*') 
 	{		
-		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+		$strSQL = global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
 				array($selectField, self::TBL_SL_USER ,							
 					'WHERE UserName = \''.$userName.'\' '));
 		//echo '<br>SQL:'.$strSQL;
-		$arrResult =$this->_objConnection->selectCommand($strSQL);		
+		$arrResult =$this->_objConnection->selectCommand($strSQL);
 		if(!$arrResult)
 		{
 			global_common::writeLog('get sl_user ByName:'.$strSQL,1,$_mainFrame->pPage);
 			return null;
 		}
-		$objCity = new Model_City($this->_objConnection);
-		
-		$city = $objCity->getCityByID($arrResult[0][global_mapping::CityID]);
-		$arrResult[0][global_mapping::CityName] = $city[global_mapping::CityName];
 		//print_r($arrResult);
+		
+		//$objCity = new Model_City($this->_objConnection);
+		
+		//$city = $objCity->getCityByID($arrResult[0][global_mapping::CityID]);
+		//$arrResult[0][global_mapping::CityName] = $city[global_mapping::CityName];
 		return $arrResult[0];
 	}
 	

@@ -26,6 +26,7 @@ var retailer =
     ACT_GET_PRICE: 115,
     ACT_ACTIVE_RETAILER: 116,
     Page: "bg_product.php",
+    AdminPage: "../bg_product.php",
 
 
 
@@ -176,16 +177,19 @@ var retailer =
 
 
     },
-    activateRetailer: function(retailerID, statusID) {
+    activateRetailer: function(retailerID, statusID, page) {
 
         var data =
 		{
 		    id: retailerID,
 		    statusid: statusID
 		};
-
+        if(typeof(page) == 'undefined')
+        {
+            page = this.Page;
+        }
         data.act = this.ACT_ACTIVE_RETAILER;
-        core.request.post(this.Page, data,
+        core.request.post(page, data,
                 function(respone, info) {
                     var strRespond = core.util.parserXML(respone);
                     if (parseInt(strRespond[1]['rs']) == 1) {

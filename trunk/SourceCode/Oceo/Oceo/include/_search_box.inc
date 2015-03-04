@@ -1,7 +1,7 @@
 <?php 
 $properties =  $_pgR['property'];
 $manu =  $_pgR['manu'];
-
+$page = $_pgR["p"]? $_pgR["p"]:1;
 
 $topProperties = $objProductProperty->getTopPropertyValue($catID,5,10);
 $allManuFactories = $objManufactory->getAllManufactory(0,'*',global_mapping::CategoryID.'='.$catID, global_mapping::ManufactoryName);
@@ -10,10 +10,11 @@ $allManuFactories = $objManufactory->getAllManufactory(0,'*',global_mapping::Cat
 <div id="search-box">
 	<form method="get" action="products.php" id="formSearch">
 	    <input type="hidden" name="cid" value="<?php echo $catID ?>"/>	
+	    <input type="hidden" name="p" id="p" value="<?php echo $page ?>"/>	
 		
 		<input type="text" id="txtkeyword" name="kw" value="<?php echo $keyword ?>" placeholder="Tìm kiếm..."> 
 		<input type="button" class="btnSearch"  onclick="product.validateKeyword();"/>	
-		<a href="post_search.php?pid=<?php echo $_currentProductID ?>" class="btn btn-large btn-post">Đăng Bán</a>
+		<a href="post_search.php?pid=<?php echo $_currentProductID ?>" class="btn btn-large btn-post">Đăng Giá Bán</a>
 		<div class="clear"></div>
 		
 		<div class="box-filter">

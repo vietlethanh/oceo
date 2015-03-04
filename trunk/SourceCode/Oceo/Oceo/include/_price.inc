@@ -73,7 +73,7 @@ foreach($allRetailers as $item)
 	echo '									<td class="">'.$item[global_mapping::ShortDesc].'</td>';
 	echo '									<td class="">'.$item[global_mapping::BoxInfo].'</td>';
 	echo '									<td class="">'.$item[global_mapping::ShippingDesc].'</td>';
-	echo '									<td class=""> <a href="#" class="link">'.$item[global_mapping::CreatedBy][global_mapping::UserName].'</a> </td>';
+	echo '									<td class=""> <a href="'.global_common::buildUserLink($item[global_mapping::CreatedBy][global_mapping::UserID]).'" class="link">'.$item[global_mapping::CreatedBy][global_mapping::UserName].'</a> </td>';
 	echo '								</tr>';
 }
 ?>

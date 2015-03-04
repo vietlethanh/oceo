@@ -15,17 +15,15 @@ $objUser = new Model_User($objConnection);
 $objRetailer = new Model_Retailer($objConnection);
 if (global_common::isCLogin())
 {
+	$page = $_pgR["p"]? $_pgR["p"]:1;
 	//get user info
 	$userInfo = $_SESSION[global_common::SES_C_USERINFO];
 	$userID = $userInfo[global_mapping::UserID];
 	//$condidtion = global_mapping::CreatedBy.'='.$userID;//global_mapping::StartDate.' <= \''.global_common::nowSQL().'\''.' And '.global_mapping::EndDate.' >= \''.global_common::nowSQL().'\'';
-	$allRetailers = $objRetailer->getRetailerByUser($userID,
+	$allRetailers = $objRetailer->getRetailerByUser($page,$userID,
 			global_mapping::ProductID.','.global_mapping::RetailerID.','.global_mapping::ProductStatusID.','.global_mapping::Price.','.global_mapping::StatusDetail.','.
-			global_mapping::ShortDesc.','.global_mapping::ShippingDesc.','.global_mapping::BoxInfo.','.global_mapping::CreatedBy.','.global_mapping::ModifiedDate.','.global_mapping::StatusID);
-	//$products = $objProduct->getAllProduct(0,'*',$condidtion,'');
-	//$condidtion = global_mapping::EndDate.' <= \''.global_common::nowSQL().'\'';
-	//$expireArticles = $objArticle->getArticleByUser($userID,1,global_common::DEFAULT_PAGE_SIZE,null,$condidtion,'');
-	//print_r($articles);
+			global_mapping::ShortDesc.','.global_mapping::ShippingDesc.','.global_mapping::BoxInfo.','.global_mapping::CreatedBy.','.global_mapping::ModifiedDate.','.global_mapping::StatusID,$total);
+	
 }
 $_SESSION[global_common::SES_C_CUR_PAGE] = "profile_price.php";
 $_SESSION[global_common::SES_LAST_PAGE] = $_SESSION[global_common::SES_C_CUR_PAGE];
@@ -45,6 +43,9 @@ include_once('include/_header.inc');
 			</h3>
 		</div>
 	</div>
+	<form id="form-member-price">
+		<input type="hidden"  name="p" id="p" value="<?php echo ($page) ?>" />	
+	</form>	
 	  <div class="row-fluid">	
             <div class="span12">
                 <div class="span3">
@@ -110,11 +111,11 @@ foreach($allRetailers as $item)
 	echo '										<a href="javascript:retailer.deleteRetailer(\''.$item[global_mapping::ProductName].'\',\''.$item[global_mapping::RetailerID].'\')" class="btn btn-mini">Xóa</a>';
 	if(	$item[global_mapping::StatusID] == global_common::STATUS_INACTIVE)
 	{
-		echo '							        <a href="javascript:retailer.activateRetailer(\''.$item[global_mapping::RetailerID].'\','.global_common::STATUS_ACTIVE.')" class="btn btn-mini">Dừng bán</a>';
+		echo '							        <a href="javascript:retailer.activateRetailer(\''.$item[global_mapping::RetailerID].'\','.global_common::STATUS_INACTIVE.')" class="btn btn-mini">Bán lại</a>';
 	}
 	else
 	{
-		echo '							        <a href="javascript:retailer.activateRetailer(\''.$item[global_mapping::RetailerID].'\','.global_common::STATUS_INACTIVE.')" class="btn btn-mini">Bán lại</a>';
+		echo '							        <a href="javascript:retailer.activateRetailer(\''.$item[global_mapping::RetailerID].'\','.global_common::STATUS_ACTIVE.')" class="btn btn-mini">Dừng bán</a>';
 	}	
 	
 	echo '									</td>';
@@ -123,7 +124,10 @@ foreach($allRetailers as $item)
 ?>
 										</tbody>
 									</table>
-								</div>						
+								</div>			
+<?php
+echo global_common::getPagingHTMLByNum($page,Model_Retailer::NUM_PER_PAGE,$total, 'core.util.changePage','form-member-price');
+										 ?>					
 								<!-- BEGIN PAGINATION-->
 								<!--div class="row-fluid no-background no-display">
 									<div class="span12">

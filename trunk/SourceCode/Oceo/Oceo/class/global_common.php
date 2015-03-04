@@ -1,4 +1,5 @@
 <?php
+define("ENCRYPTION_KEY", "!@#$%^&*");
 
 /* TODO: Add code here */
 /*lớp đối tượng chứa những phương thức chung và các hằng số chung*/
@@ -2425,7 +2426,6 @@ class global_common
 		{
 			$intTotalResult = self::NUM_RESULT_PER_PAGE*5;
 		}*/
-		
 		//$intMaxPages = ceil($intTotalResult/$intResultsInOnePage);
 		$strPages = "";
 		$i = $intCurrPage;	
@@ -2504,7 +2504,7 @@ class global_common
 	 * @author TinhDoan edited [20100427]
 	 * 
 	 */
-	public function getPagingHTMLByNum($intCurrPage, $intResultsInOnePage, $intTotalResult, $jsFuncName)
+	public function getPagingHTMLByNum($intCurrPage, $intResultsInOnePage, $intTotalResult, $jsFuncName,$formID)
 	{
 		//echo 'current: '.$intCurrPage;
 		if ($intTotalResult<=$intResultsInOnePage)
@@ -2518,15 +2518,15 @@ class global_common
 		// previous
 		if($intCurrPage > 1)
 		{
-			$strPages.= "<a href='javascript:$jsFuncName(1);' >First</a>" . "&nbsp;&nbsp;&nbsp;&nbsp;";
-			$strPages.= "<a href='javascript:$jsFuncName(". ($intCurrPage - 1) .");' >Prev</a>" . "&nbsp;&nbsp;";
+			$strPages.= '<a href=\'javascript:'.$jsFuncName.'("'.$formID.'",1);\' >First</a>' . '&nbsp;&nbsp;&nbsp;&nbsp;';
+			$strPages.= '<a href=\'javascript:'.$jsFuncName.'("'.$formID.'",'. ($intCurrPage - 1) .')\' >Prev</a>' . '&nbsp;&nbsp;';
 		}
 		else
 		{
 			$strPages.= "\nFirst &nbsp;&nbsp; Prev &nbsp;&nbsp;";
 		}
 		//page
-		$strPages.= "<select id=\"txtCurrPage\" name=\"txtCurrPage\" onchange=\"$jsFuncName(this.value);\" style=\"width:50px; margin-left:20px;\"> ";
+		$strPages.= "<select id=\"txtCurrPage\" name=\"txtCurrPage\" onchange=\"$jsFuncName('$formID',this.value);\" style=\"width:50px; margin-left:20px;\"> ";
 		$i = 1;
 		while($i <= $intMaxPages && ($i - 1) * $intResultsInOnePage < $intTotalResult)
 		{				
@@ -2545,8 +2545,8 @@ class global_common
 		//last
 		if($intCurrPage < $intMaxPages)
 		{
-			$strPages.= "<a href='javascript:$jsFuncName(".($intCurrPage + 1).");' >Next</a>" . "&nbsp;&nbsp;&nbsp;&nbsp;";
-			$strPages.= "<a href='javascript:$jsFuncName(".$intMaxPages.");' >Last</a>" . "&nbsp;&nbsp;";
+			$strPages.= '<a href=\'javascript:'.$jsFuncName.'("'.$formID.'",'.($intCurrPage + 1).');\' >Next</a>' . '&nbsp;&nbsp;&nbsp;&nbsp;';
+			$strPages.= '<a href=\'javascript:'.$jsFuncName.'("'.$formID.'",'.$intMaxPages.');\' >Last</a>' . '&nbsp;&nbsp;';
 		}
 		else
 		{
@@ -2789,10 +2789,10 @@ class global_common
 	public function convertToXML($arrHeader, $arrKey, $arrValue, $arrIsMetaData)
 	{
 		$domDoc = new DOMDocument;
-		$rootElt = $domDoc->createElement('r');
+		$rootElt = $domDoc->createElement("r");
 		$rootNode = $domDoc->appendChild($rootElt);
 		
-		$subElt = $domDoc->createElement('h');
+		$subElt = $domDoc->createElement("h");
 		$intCount = count($arrHeader);
 		$subNode = $rootNode->appendChild($subElt);
 		for ($i = 1; $i<=$intCount; $i++)
@@ -2803,7 +2803,7 @@ class global_common
 			$subNode->appendChild($node);
 		}
 		
-		$subElt = $domDoc->createElement('c');
+		$subElt = $domDoc->createElement("c");
 		$intCount = count($arrKey);
 		$subNode = $rootNode->appendChild($subElt);
 		for ($i = 0; $i<$intCount; $i++)
@@ -4151,12 +4151,50 @@ class global_common
 		}
 		return $path;
 	}
-	public function buildRetailerLink($retailerID)
+	public function buildRetailerLink($retailerID, $admin = false)
 	{
-		return 'retailer_detail.php?rid='.$retailerID;
+		if($admin)
+		{
+			return '../retailer_detail.php?rid='.$retailerID;
+		}
+		else
+		{
+			return 'retailer_detail.php?rid='.$retailerID;
+		}
+	}
+	public function buildUserLink($retailerID)
+	{
+		return 'member.php?uid='. Urlcrypt::encode($retailerID);
+	}
+	
+	/**
+	 * Returns an encrypted & utf8-encoded
+	 */
+	function encrypt($pure_string, $encryption_key) {
+		if(!$encryption_key)
+		{
+			$encryption_key = ENCRYPTION_KEY;
+		}
+		$iv_size = mcrypt_get_iv_size(MCRYPT_BLOWFISH, MCRYPT_MODE_ECB);
+		$iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+		$encrypted_string = mcrypt_encrypt(MCRYPT_BLOWFISH, $encryption_key, utf8_encode($pure_string), MCRYPT_MODE_ECB, $iv);
+		return $encrypted_string;
+	}
+	
+	/**
+	 * Returns decrypted original string
+	 */
+	function decrypt($encrypted_string, $encryption_key) {
+		if(!$encryption_key)
+		{
+			$encryption_key = ENCRYPTION_KEY;
+		}
+		$iv_size = mcrypt_get_iv_size(MCRYPT_BLOWFISH, MCRYPT_MODE_ECB);
+		$iv = mcrypt_create_iv($iv_size, MCRYPT_RAND);
+		$decrypted_string = mcrypt_decrypt(MCRYPT_BLOWFISH, $encryption_key, $encrypted_string, MCRYPT_MODE_ECB, $iv);
+		return $decrypted_string;
 	}
 	
 	#end region
-	
 }
 ?>

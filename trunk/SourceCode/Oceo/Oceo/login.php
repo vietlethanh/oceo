@@ -124,10 +124,9 @@ echo '<input type="hidden" name="act" id="act" value="'.Model_User::ACT_LOGIN.'"
 					<h1 class="m-wrap title">Đăng ký tài khoản</h1>
 					<ul class="promo-info">
 						<li><i class=" icon-thumbs-up"></i>Đăng ký miễn phí đơn giản & nhanh chóng</li>
-						<li><i class=" icon-thumbs-up"></i>Đăng tin khuyến mãi miễn phí</li>
-						<li><i class=" icon-thumbs-up"></i>Đưa bài viết lên đầu trang 3 lần trong 1 ngày</li>
+						<li><i class=" icon-thumbs-up"></i>Gửi bình luận, đánh giá</li>
+						<li><i class=" icon-thumbs-up"></i>Tạo mới bài viết tham khảo giá</li>
 						<li><i class=" icon-thumbs-up"></i>Gửi phản hồi</li>
-						<li><i class=" icon-thumbs-up"></i>Quản lý khuyến mãi</li>
 					</ul>
 					<div class="action-register">
 						<a href="register.php" name="btnRegister" id="btnRegister" class="link" ><i class="icon-hand-right white"></i> Đăng ký Ngay</a>

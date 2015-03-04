@@ -18,7 +18,7 @@ if (global_common::isCLogin())
 	$userInfo = $_SESSION[global_common::SES_C_USERINFO];
 	$userID = $userInfo[global_mapping::UserID];
 	$condidtion = global_mapping::CreatedBy.'='.$userID;//global_mapping::StartDate.' <= \''.global_common::nowSQL().'\''.' And '.global_mapping::EndDate.' >= \''.global_common::nowSQL().'\'';
-	$products = $objProduct->getAllProduct(0,'*',$condidtion,'');
+	$products = $objProduct->getAllProduct($page,'*',$condidtion,'',$total);
 	//$condidtion = global_mapping::EndDate.' <= \''.global_common::nowSQL().'\'';
 	//$expireArticles = $objArticle->getArticleByUser($userID,1,global_common::DEFAULT_PAGE_SIZE,null,$condidtion,'');
 	//print_r($articles);
@@ -41,6 +41,9 @@ include_once('include/_header.inc');
 			</h3>
 		</div>
 	</div>
+	<form id="form-member-product">
+		<input type="hidden"  name="p" id="p" value="<?php echo ($page) ?>" />	
+	</form>	
 	  <div class="row-fluid">	
             <div class="span12">
                 <div class="span3">
@@ -109,27 +112,12 @@ foreach($products as $item)
 ?>
 										</tbody>
 									</table>
-								</div>						
-								<!-- BEGIN PAGINATION-->
-								<!--div class="row-fluid no-background no-display">
-									<div class="span12">
-										<div class="pagination pull-right margin-right">
-											<ul>
-												<li><a href="#" title="Trang đầu tiên"><i class="icon-step-backward"></i></a></li>
-												<li><a href="#" title="Trang trước">&laquo;</a></li>
-												<li><a href="#">1</a></li>
-												<li><a href="#">2</a></li>
-												<li><a href="#">3</a></li>
-												<li><a href="#">4</a></li>
-												<li><a href="#">5</a></li>
-												<li><a href="#" title="Trang sau">&raquo;</a></li>
-												<li><a href="#" title="Trang cuối cùng"><i class="icon-step-forward"></i></a></li>
-											</ul>
-										</div>
-									</div>
-								</div-->
-								<!-- END PAGINATION-->
-								<!---->
+									</div>			
+<?php
+echo global_common::getPagingHTMLByNum($page,Model_Product::NUM_PER_PAGE,$total, 'core.util.changePage','form-member-product');
+										 ?>		
+								</div>	
+													
 							</div>
                    
                         </div>

@@ -91,8 +91,29 @@ if($manu)
 	}
 }
 
-$products = $objProduct->getAllProduct(1,'*',$search,null,$total);
+$products = $objProduct->getAllProduct(0,'*',$search,null);
+$productIDs = global_common::getArrayColumn($products, global_mapping::ProductID);
+
+
+
 $allManuFactories = $objManufactory->getAllManufactory(0);
+
+//print_r($productIDs);
+//if($expired)
+//{
+//	$condidtion = ' And '.global_mapping::EndDate.' < \''.global_common::nowDateSQL().'\'';
+//}
+//else
+//{
+//	$condidtion = ' And '.global_mapping::StartDate.' <= \''.global_common::nowDateSQL().'\''.' And '.global_mapping::EndDate.' >= \''.global_common::nowDateSQL().'\'';
+//}
+$inactive = $_pgR["inactive"];
+$status = $inactive? 0 : 1;
+
+$type = $_pgR["type"];
+$city = $_pgR['ct'];
+$allRetailers = $objRetailer->getRetailerByProducts($page,$productIDs,$type,$city,$status,$total);
+//print_r($allRetailers);
 ?>
 <?php
 $_SESSION[global_common::SES_C_CUR_PAGE] = "admin/admin_article.php";
@@ -106,7 +127,7 @@ include_once('include/_admin_header.inc');
 		<div class="span12">
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->
 			<h3 class="page-title">
-				Quản lý sản phẩm
+				Quản lý giá sản phẩm
 			</h3>
 		</div>
 	</div>
@@ -128,9 +149,9 @@ include_once('include/_admin_header.inc');
 		</div>
 		<!---->
 		<div class="portlet-body">
-<form method="get" id="admin_product" style="display: inline-flex" onclick="return core.util.resetSearchForm('admin_product')">
-<select class="" name="cid" id="id" style="height:25px" onchange="core.util.bindChosen(this,'manu','CategoryID');">
-<option value="0">Choose Category</option>
+<form method="get" id="admin_price" style="display: inline-flex" onclick="return core.util.resetSearchForm('admin_price')">
+<select class="" name="cid" id="id" style="height:25px">
+<option value="0" >Choose Category</option>
 <?php
 foreach($allCats as $parent)
 {
@@ -157,26 +178,41 @@ foreach($allCats as $parent)
 }
 ?>		
 </select>	
+<select class="" name="type" id="type" style="height:25px;width:150px">
+	<option value="0" >Choose Status</option>
+	<option <?php echo($type==global_common::STATUS_PRODUCT_NEW?'selected="selected"':'') ?> value="<?php echo global_common::STATUS_PRODUCT_NEW ?>" >New</option>
+	<option <?php echo( $type==global_common::STATUS_PRODUCT_USED?'selected="selected"':'')?> value="<?php echo global_common::STATUS_PRODUCT_USED ?>" >Used</option>
+	<option <?php echo( $type==global_common::STATUS_PRODUCT_Refurbished?'selected="selected"':'')?> value="<?php echo global_common::STATUS_PRODUCT_Refurbished ?>" >Refurbished</option>
+</select>	
 <select class="" name="manu" id="manu" style="height:25px;width:150px">
-	<option value="0"  CategoryID='0'>Choose Manufactory</option>
+	<option value="0" >Choose Manufactory</option>
 <?php
 foreach($allManuFactories as $item)
 {
-	$display ='';
-	if($item[global_mapping::CategoryID] != $catID)
-	{
-		$display = 'display:none';
-	}
-	
 	if($item[global_mapping::ManufactoryID] == $manu)
 	{
-		echo '			<option style="'.$display.'" value="'.$item[global_mapping::ManufactoryID].'" CategoryID="'.$item[global_mapping::CategoryID].'" selected="selected" >'.$item[global_mapping::ManufactoryName].'</option>';
+		echo '			<option value="'.$item[global_mapping::ManufactoryID].'" selected="selected" >'.$item[global_mapping::ManufactoryName].'</option>';
 	}
 	else
-		echo '			<option style="'.$display.'" value="'.$item[global_mapping::ManufactoryID].'" CategoryID="'.$item[global_mapping::CategoryID].'" >'.$item[global_mapping::ManufactoryName].'</option>';
+		echo '			<option value="'.$item[global_mapping::ManufactoryID].'" >'.$item[global_mapping::ManufactoryName].'</option>';
 }
 ?>
 </select>	
+<select class="" name="city" id="city" style="height:25px;width:150px">
+	<option value="">Tỉnh/Thành Phố</option>
+<?php
+foreach($allCities as $item)
+{
+	if($item[global_mapping::CityID] == $city)
+	{
+		echo '			<option value="'.$item[global_mapping::CityID].'" selected="selected" >'.$item[global_mapping::CityName].'</option>';
+	}
+	else
+		echo '			<option value="'.$item[global_mapping::CityID].'" >'.$item[global_mapping::CityName].'</option>';
+}
+?>
+</select>	
+<label for="inactive" style="height:20px;color:black; margin: 0 0 0 10px">InActive: </label> <input type="checkbox" <?php echo ($inactive?'checked=checked':'') ?> name="inactive" id="inactive" value="true" />
 <input type="submit" value="Search" style="height:24px;margin:0 10px" />	
 <input type="hidden"  name="p" id="p" value="<?php echo ($page) ?>" />	
 </form>		
@@ -185,7 +221,7 @@ foreach($allManuFactories as $item)
 </div>
 <?php
 //print_r($allRetailers);
-if($products)
+if($allRetailers)
 {
 	echo '<table class="table table-striped">';
 	echo '<thead>';
@@ -193,10 +229,13 @@ if($products)
 	echo 'Tên sản phẩm';		
 	echo '</th>';
 	echo '<th>';
-	echo 'Người tạo';		
+	echo 'Giá bán';		
 	echo '</th>';
 	echo '<th>';
-	echo 'Ngày tạo';		
+	echo 'Người bán';		
+	echo '</th>';
+	echo '<th>';
+	echo 'Ngày bán';		
 	echo '</th>';
 	echo '<th>';
 	echo 'Ngày cập nhật';		
@@ -205,12 +244,15 @@ if($products)
 	echo 'Action';		
 	echo '</th>';
 	echo '</thead>';
-	foreach($products as $item)
+	foreach($allRetailers as $item)
 	{
 	
 		echo '<tr>';
 		echo '<td>';
 		echo $item[global_mapping::ProductName];		
+		echo '</td>';
+		echo '<td style="padding:0;width:200px">';
+		echo global_common::FormatPrice($item[global_mapping::Price]);		
 		echo '</td>';
 		echo '<td>';
 		echo $item[global_mapping::CreatedBy][global_mapping::UserName];		
@@ -236,7 +278,7 @@ if($products)
 		
 	}
 	echo '</table>';
-	echo global_common::getPagingHTMLByNum($page,Model_ProductPrice::NUM_PER_PAGE,$total, 'core.util.changePage','admin_product');
+	echo global_common::getPagingHTMLByNum($page,Model_ProductPrice::NUM_PER_PAGE,$total, 'core.util.changePage','admin_price');
 }
 ?>
 				</div>

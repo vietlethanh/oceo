@@ -9,7 +9,7 @@ include_once('include/_header.inc');
 include_once('class/model_articletype.php');
 include_once('class/model_article.php');
 include_once('class/model_comment.php');
-nclude_once('class/model_user.php');
+include_once('class/model_user.php');
 include_once('class/model_propertygroup.php');
 include_once('class/model_property.php');
 include_once('class/model_product.php');

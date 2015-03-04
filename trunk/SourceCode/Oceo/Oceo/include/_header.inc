@@ -142,8 +142,8 @@ if (global_common::isCLogin())
 					</a>
 					<ul class="dropdown-menu">
 						<li><a href="profile.php"><i class="icon-user"></i> Thông tin cá nhân</a></li>
-						<li><a href="profile_price.php"><i class="icon-reorder"></i> Quản lý đăng bán</a></li>
-						<li><a href="profile_product.php"><i class="icon-reorder"></i> Quản lý sản phẩm</a></li>
+						<li><a href="profile_price.php"><i class="icon-reorder"></i> Giá bán của tôi</a></li>
+						<li><a href="profile_product.php"><i class="icon-reorder"></i>Sản phẩm của tôi</a></li>
 						<li class="divider"></li>
 						<li><a href="javascript:user.logout();"><i class="icon-signout"></i> Đăng xuất</a></li>
 					</ul>
