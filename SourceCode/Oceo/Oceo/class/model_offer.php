@@ -92,7 +92,7 @@ class Model_Offer
     public function insert( $price,$offereddate,$deleteddate,$isdelete,$status)
 	{	
 		$strTableName = self::TBL_SL_OFFER;
-		$intID = global_common::getMaxValueofField(global_mapping::UserID, $strTableName) + 1;
+		$intID = global_common::getMaxValueofField($this->_objConnection,global_mapping::UserID, $strTableName) + 1;
 		$strSQL = global_common::prepareQuery(self::SQL_INSERT_SL_OFFER,
 				array(self::TBL_SL_OFFER,$intID,global_common::escape_mysql_string($price),global_common::escape_mysql_string($offereddate),global_common::escape_mysql_string($deleteddate),global_common::escape_mysql_string($isdelete),global_common::escape_mysql_string($status)));
 		

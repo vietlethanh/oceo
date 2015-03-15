@@ -222,7 +222,7 @@ class Model_Article
 			global_common::writeLog('Error add sl_article:'.$strSQL,1);
 			return false;
 		}	
-		$articleID = global_common::getMaxValueofField(global_mapping::ArticleID,self::TBL_SL_ARTICLE);
+		$articleID = global_common::getMaxValueofField($this->_objConnection,global_mapping::ArticleID,self::TBL_SL_ARTICLE);
 		$strSQLValueType = '';
 		
 		foreach($articletype as $item){

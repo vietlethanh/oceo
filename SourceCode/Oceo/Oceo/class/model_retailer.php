@@ -163,7 +163,7 @@ class Model_Retailer
 	public function insert($productid,$productstatusid,$statusDetail,$price,$imagelink,$cityid,$shippingdesc,$boxinfo, $shortdesc, $description,$createdby,$status)
 	{	
 		$strTableName = self::TBL_SL_RETAILER;
-		$intID = global_common::getMaxValueofField(global_mapping::RetailerID, $strTableName) + 1;
+		$intID = global_common::getMaxValueofField($this->_objConnection,global_mapping::RetailerID, $strTableName) + 1;
 		
 		$strSQL = global_common::prepareQuery(self::SQL_INSERT_SL_RETAILER,
 				array(self::TBL_SL_RETAILER,$intID,

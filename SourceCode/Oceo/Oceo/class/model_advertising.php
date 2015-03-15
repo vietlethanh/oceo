@@ -142,7 +142,7 @@ class Model_Advertising
 			global_common::writeLog('Error add sl_advertising:'.$strSQL,1);
 			return false;
 		}	
-		$intID = global_common::getMaxValueofField(global_mapping::AdvertisingID,self::TBL_SL_ADVERTISING);
+		$intID = global_common::getMaxValueofField($this->_objConnection,global_mapping::AdvertisingID,self::TBL_SL_ADVERTISING);
 		return $intID;
 		
 	}

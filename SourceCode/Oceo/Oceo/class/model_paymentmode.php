@@ -99,7 +99,7 @@ class Model_PaymentMode
 	{	
 		
 		$strTableName = self::TBL_SL_PAYMENT_MODE;
-		$intID = global_common::getMaxValueofField(global_mapping::UserID, $strTableName) + 1;
+		$intID = global_common::getMaxValueofField($this->_objConnection,global_mapping::UserID, $strTableName) + 1;
 		$strSQL = global_common::prepareQuery(self::SQL_INSERT_SL_PAYMENT_MODE,
 				array(self::TBL_SL_PAYMENT_MODE,$intID,
 						global_common::escape_mysql_string($paymentmodename),
