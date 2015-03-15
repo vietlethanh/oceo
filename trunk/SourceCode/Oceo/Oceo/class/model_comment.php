@@ -110,7 +110,7 @@ class Model_Comment
 	public function insert($articleid,$content,$createdby,$status)
 	{
 		$strTableName = self::TBL_SL_COMMENT;
-		$intID = global_common::getMaxValueofField(global_mapping::CommentID, $strTableName) + 1;
+		$intID = global_common::getMaxValueofField($this->_objConnection,global_mapping::CommentID, $strTableName) + 1;
 		
 		$strSQL = global_common::prepareQuery(self::SQL_INSERT_SL_COMMENT,
 				array(self::TBL_SL_COMMENT,$intID,global_common::escape_mysql_string($commenttype),

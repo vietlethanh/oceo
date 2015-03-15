@@ -2900,13 +2900,13 @@ class global_common
 		
 	}
 	
-	public function getMaxValueofField($fieldName,$strTableName)
+	public function getMaxValueofField($objConnection, $fieldName,$strTableName)
 	{
 		
 		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_MAX_ID, 
 				array($fieldName, $strTableName ));
 		//echo '<br>SQL:'.$strSQL;
-		$arrResult =$this->_objConnection->selectCommand($strSQL);		
+		$arrResult = $objConnection->selectCommand($strSQL);		
 		if(!$arrResult)
 		{
 			global_common::writeLog('get getMaxValueofField:'.$strSQL,1,$_mainFrame->pPage);

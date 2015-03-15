@@ -1,6 +1,8 @@
 <?php
 // Neu tao session FAIL thi khoi tao session moi
 //session_save_path('/tmp');
+//$path="c:\temp"'; 
+//chdir($path); 
 if(!session_start())
 {
 	session_regenerate_id();

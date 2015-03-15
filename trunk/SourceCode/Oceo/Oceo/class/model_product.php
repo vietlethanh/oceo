@@ -171,7 +171,7 @@ class Model_Product
 	public function insert( $productname,$catalogueid,$imagelink,$manufactoryid,$description,$createdby,$status)
 	{
 		$strTableName = self::TBL_SL_PRODUCT;
-		$intID = global_common::getMaxValueofField(global_mapping::ProductID, $strTableName) + 1;
+		$intID = global_common::getMaxValueofField($this->_objConnection,global_mapping::ProductID, $strTableName) + 1;
 		$strSQL = global_common::prepareQuery(self::SQL_INSERT_SL_PRODUCT,
 				array(self::TBL_SL_PRODUCT,$intID,
 					global_common::escape_mysql_string($productname),
@@ -242,7 +242,7 @@ class Model_Product
 	public function cloneProduct($productid,$createdBy)
 	{
 		$strTableName = self::TBL_SL_PRODUCT;
-		$intID = global_common::getMaxValueofField(global_mapping::ProductID, $strTableName) + 1;
+		$intID = global_common::getMaxValueofField($this->_objConnection,global_mapping::ProductID, $strTableName) + 1;
 		$strSQL = global_common::prepareQuery(self::SQL_CLONE_SL_PRODUCT,
 				array($strTableName,
 					$productid,

@@ -157,7 +157,7 @@ class Model_User
 	public function insert( $username,$password,$fullname,$birthdate,$address,$phone,$email,$sex,$identity,$roleid,$userrankid,$avatar,$accountid,$isactived)
 	{
 		$strTableName = self::TBL_SL_USER;
-		$intID = global_common::getMaxValueofField(global_mapping::UserID, $strTableName) + 1;
+		$intID = global_common::getMaxValueofField($this->_objConnection,global_mapping::UserID, $strTableName) + 1;
 		//echo $intID;
 		$password = md5($intID.md5($password));
 		

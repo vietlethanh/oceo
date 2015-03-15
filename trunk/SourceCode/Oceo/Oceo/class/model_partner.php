@@ -263,7 +263,7 @@ class Model_Partner
     public function insert( $userid,$partnername,$company,$address1,$addressname1,$address2,$addressname2,$address3,$addressname3,$address4,$addressname4,$address5,$addressname5,$email1,$emailname1,$email2,$emailname2,$email3,$emailname3,$email4,$emailname4,$email5,$emailname5,$phone1,$phonename1,$phone2,$phonename2,$phone3,$phonename3,$phone4,$phonename4,$phone5,$phonename5,$fax1,$faxname1,$fax2,$faxname2,$fax3,$faxname3,$fax4,$faxname4,$fax5,$faxname5,$website1,$websitename1,$website2,$websitename2,$website3,$websitename3,$website4,$websitename4,$website5,$websitename5,$taxnumber,$accountnumber,$createdby,$createddate,$modifiedby,$modifieddate,$deletedby,$deleteddate,$status,$isdeleted)
 	{
 		$strTableName = self::TBL_SL_PARTNER;
-		$intID = global_common::getMaxValueofField(global_mapping::UserID, $strTableName) + 1;
+		$intID = global_common::getMaxValueofField($this->_objConnection,global_mapping::UserID, $strTableName) + 1;
 				
 		$strSQL = global_common::prepareQuery(self::SQL_INSERT_SL_PARTNER,
 				array(self::TBL_SL_PARTNER,$intID,

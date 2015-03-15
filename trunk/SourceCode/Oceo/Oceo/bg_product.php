@@ -50,7 +50,7 @@ if ($_pgR["act"] == Model_Product::ACT_ADD || $_pgR["act"] == Model_Product::ACT
 				
 				$orderProductProperty = 0;
 				
-				$orderGroup = global_common::getMaxValueofField(global_mapping::PropertyID, Model_PropertyGroup::TBL_SL_PROPERTY_GROUP) + 1;
+				$orderGroup = global_common::getMaxValueofField($objConnection,global_mapping::PropertyID, Model_PropertyGroup::TBL_SL_PROPERTY_GROUP) + 1;
 				foreach($properties as $item)
 				{
 					$group = $item[global_mapping::PropertyGroupID];

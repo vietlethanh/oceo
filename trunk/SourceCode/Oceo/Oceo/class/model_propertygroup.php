@@ -111,7 +111,7 @@ class Model_PropertyGroup
 	{
 		
 		$strTableName = self::TBL_SL_PROPERTY_GROUP;
-		$intID = global_common::getMaxValueofField(global_mapping::PropertyGroupID, $strTableName) + 1;
+		$intID = global_common::getMaxValueofField($this->_objConnection,global_mapping::PropertyGroupID, $strTableName) + 1;
 		$strSQL = global_common::prepareQuery(self::SQL_INSERT_SL_PROPERTY_GROUP,
 				array(self::TBL_SL_PROPERTY_GROUP,$intID,
 					global_common::escape_mysql_string($propertygroupname),
@@ -169,7 +169,7 @@ class Model_PropertyGroup
 	public function getMaxPropertyGroupID() 
 	{
 		$strTableName = self::TBL_SL_PROPERTY_GROUP;
-		return global_common::getMaxValueofField(global_mapping::PropertyGroupID, $strTableName) ;
+		return global_common::getMaxValueofField($this->_objConnection,global_mapping::PropertyGroupID, $strTableName) ;
 	}
 	public function getPropertyGroupByID($objID,$selectField='*') 
 	{		

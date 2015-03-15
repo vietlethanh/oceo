@@ -101,7 +101,7 @@ class Model_Numberaire
     public function insert( $numberairename,$createdby,$createddate,$modifiedby,$modifieddate,$deletedby,$deleteddate,$isdeleted,$status)
 	{
 		$strTableName = self::TBL_SL_NUMBERAIRE;
-		$intID = global_common::getMaxValueofField(global_mapping::UserID, $strTableName) + 1;
+		$intID = global_common::getMaxValueofField($this->_objConnection,global_mapping::UserID, $strTableName) + 1;
 		$strSQL = global_common::prepareQuery(self::SQL_INSERT_SL_NUMBERAIRE,
 				array(self::TBL_SL_NUMBERAIRE,$intID,global_common::escape_mysql_string($numberairename),global_common::escape_mysql_string($createdby),global_common::escape_mysql_string($createddate),global_common::escape_mysql_string($modifiedby),global_common::escape_mysql_string($modifieddate),global_common::escape_mysql_string($deletedby),global_common::escape_mysql_string($deleteddate),global_common::escape_mysql_string($isdeleted),global_common::escape_mysql_string($status)));
 		

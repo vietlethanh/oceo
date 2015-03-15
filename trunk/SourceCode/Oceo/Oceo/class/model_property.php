@@ -114,7 +114,7 @@ class Model_Property
 	public function insert($propertyGroupID, $propertyname,$propertyvalue,$datatypeid,$createdby,$status)
 	{		
 		$strTableName = self::TBL_SL_PROPERTY;
-		$intID = global_common::getMaxValueofField(global_mapping::PropertyID, $strTableName) + 1;
+		$intID = global_common::getMaxValueofField($this->_objConnection,global_mapping::PropertyID, $strTableName) + 1;
 		$strSQL = global_common::prepareQuery(self::SQL_INSERT_SL_PROPERTY,
 				array(self::TBL_SL_PROPERTY,$intID,
 						global_common::escape_mysql_string($propertyGroupID),
