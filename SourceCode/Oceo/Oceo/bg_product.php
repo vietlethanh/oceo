@@ -38,7 +38,7 @@ if ($_pgR["act"] == Model_Product::ACT_ADD || $_pgR["act"] == Model_Product::ACT
 		$manufactoryID = html_entity_decode($manufactoryID,ENT_COMPAT ,'UTF-8' );
 		
 		$description = $_pgR['Description'];
-		$description = html_entity_decode($description,ENT_COMPAT ,'UTF-8' );
+		$description = global_editor::rteSafe(html_entity_decode($description,ENT_COMPAT ,'UTF-8' ));
 		
 		$status = 1;
 		if($_pgR["act"] == Model_Product::ACT_ADD)

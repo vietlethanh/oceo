@@ -7,7 +7,7 @@ if ($_pgR["pid"])
 	$propertyInfo = $objProduct->getPropertyInfoByID($productID);
 	$exPrices = $objProductPrice->getProductPriceByProduct($productID);
 	$inPrices = $objRetailer->getRetailerByProduct($productID);
-	$imageLinks = global_common::splitString($product[global_mapping::ImageLink],',');
+	$imageLinks = global_common::splitString($product[global_mapping::ImageLink],';');
 	$city  = $_pgR["ct"];
 	if(!$city)
 	{
@@ -386,7 +386,7 @@ include('include/_social.inc');
 			<div class="content">			
 <?php 
 
-echo $product[global_mapping::Description]
+echo global_common::decodeEditor($product[global_mapping::Description]);
 			?>
 			</div>			
 
