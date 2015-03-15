@@ -10,7 +10,7 @@
 echo global_common::getPagingHTMLByNum($page,Model_Product::NUM_PER_PAGE,$total, 'core.util.changePage','formSearch');
 foreach($products as $item)
 {
-	$links = global_common::splitString($item[global_mapping::ImageLink],",");
+	$links = global_common::splitString($item[global_mapping::ImageLink],";");
 	$thumbnail = $links[0];
 	if(!$thumbnail)
 	{
