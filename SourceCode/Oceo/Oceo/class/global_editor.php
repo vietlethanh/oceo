@@ -266,10 +266,11 @@ class global_editor
 		
 		$tmpString = preg_replace($patterns, $replacements, $tmpString);
 		
-		//ch? này nên dùng strip_tags($text, '<p><a>');// tham s? th? 2 là nh?ng tag ch?p nh?n du?c
+		/*//ch? này nên dùng strip_tags($text, '<p><a>');// tham s? th? 2 là nh?ng tag ch?p nh?n du?c
 		return $tmpString;
+		*/
 		
-		
+		$tmpString = str_replace('\"','"',$tmpString);
 		return self::e_trim($tmpString);
 		//return $tmpString;
 	}

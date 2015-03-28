@@ -19,7 +19,7 @@ require('class/global_common.php');
 require('class/global_mapping.php');
 
 //require('class/security.php');
-require('lib/log4php/LoggerManager.php');
+//require('lib/log4php/LoggerManager.php');
 require('lib/URLcrypt-master/Urlcrypt.php');
 require('class/global_editor.php');
 require('class/global_mail.php');
