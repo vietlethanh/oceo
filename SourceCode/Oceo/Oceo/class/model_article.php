@@ -702,7 +702,7 @@ class Model_Article
 			//print_r($arrResult[$i]);
 			$arrResult[$i][global_mapping::Content] = stripslashes($arrResult[$i][global_mapping::Content]);
 		}
-		return global_common::mergeUserInfo($arrResult);	
+		return global_common::mergeUserInfo($arrResult,$this->_objConnection);	
 	}
 	
 	#endregion   

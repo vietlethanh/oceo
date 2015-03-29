@@ -10,4 +10,6 @@ ini_set("max_execution_time", 0);
 
 // Set default timezone
 date_default_timezone_set('Asia/Saigon');
+
+error_log( "Hello, errors!" );
 ?>

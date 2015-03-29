@@ -323,8 +323,8 @@ class Model_Retailer
 		{
 			$arrResult[$i][global_mapping::ProductStatus] = $statuses[$arrResult[$i][global_mapping::ProductStatusID]][global_mapping::StatusName];
 		}
-		
-		$arrResult = global_common::mergeUserInfo($arrResult);
+		if($type)
+		  $arrResult = global_common::mergeUserInfo($arrResult, $this->_objConnection);
 		//print_r($arrResult);
 		return $arrResult;
 	}
@@ -399,7 +399,7 @@ class Model_Retailer
 			$arrResult[$i][global_mapping::ProductName] = $products[$arrResult[$i][global_mapping::ProductID]][global_mapping::ProductName];
 		}
 		
-		$arrResult = global_common::mergeUserInfo($arrResult);
+		$arrResult = global_common::mergeUserInfo($arrResult, $this->_objConnection);
 		//print_r($arrResult);
 		return $arrResult;
 	}
@@ -525,9 +525,8 @@ class Model_Retailer
 			$arrResult[$i][global_mapping::ProductName] = $products[$arrResult[$i][global_mapping::ProductID]][global_mapping::ProductName];
 		}
 		
-		
-		
-		$arrResult = global_common::mergeUserInfo($arrResult);
+				
+		  $arrResult = global_common::mergeUserInfo($arrResult, $this->_objConnection);
 		//print_r($arrResult);
 		return $arrResult;
 	}
