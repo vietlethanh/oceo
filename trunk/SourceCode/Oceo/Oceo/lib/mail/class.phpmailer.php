@@ -1176,7 +1176,7 @@ class PHPMailer {
 
       }
 
-      echo $e->getMessage()."\n";
+      //echo $e->getMessage()."\n";
 
       return false;
 
