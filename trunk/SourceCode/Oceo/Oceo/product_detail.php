@@ -35,6 +35,7 @@ $_arrCategories =  $objArticleType->getAllArticleType(0,null,'`ParentID`=0','Lev
 if ($_pgR["pid"])
 {
 	$_currentProduct = $objProduct->getProductByID($_currentProductID);
+    //print_r($_currentProduct);
 	$catID = $objArticleType->getArticleTypeByID($_currentProduct[global_mapping::CatalogueID]);
 	$_currentParentCatID = $catID[global_mapping::ParentID];
 }

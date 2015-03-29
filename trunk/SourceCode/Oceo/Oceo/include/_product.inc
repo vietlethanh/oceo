@@ -16,6 +16,7 @@ if ($_pgR["pid"])
 			$city = $_SESSION[global_common::SES_C_USERINFO][global_mapping::CityID];;
 		}
 	}
+    //print_r($_currentProduct);
 	//$intPage = 1;
 	//$total = 0;
 	//$comments = $objComment->getCommentByArticle($intPage,$total,$articleID,'*','',' CreatedDate DESC');

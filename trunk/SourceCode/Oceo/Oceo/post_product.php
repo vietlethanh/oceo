@@ -200,7 +200,7 @@ foreach($allManuFactories as $item)
 			<div class="control-group">
 				<label class="control-label">Hình minh họa</label>
 				<div class="controls">
-					<textarea  name="txtImage" id="txtImage" class="m-wrap span6" maxlength="255"  rows="2" placeholder="vd: http://i134.photobucket.com/albums/left.jpg; http://i134.photobucket.com/albums/right.jpg;"><?php echo $product[global_mapping::ImageLink];?></textarea>
+					<textarea  name="txtImage" id="txtImage" class="m-wrap span6" rows="2" placeholder="vd: http://i134.photobucket.com/albums/left.jpg; http://i134.photobucket.com/albums/right.jpg;"><?php echo $product[global_mapping::ImageLink];?></textarea>
 				</div>
 			</div>
 			<div class="control-group property-product parent">

@@ -27,7 +27,7 @@ require_once('class/model_adtype.php');
 
 require_once ('lib/log4php/Logger.php');
 Logger::configure('config/appender_file.properties');
-$logger = Logger::getRootLogger();
+//$logger = Logger::getRootLogger();
 
 
 // Tao global variables
