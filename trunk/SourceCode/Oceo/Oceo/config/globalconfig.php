@@ -19,11 +19,16 @@ require('class/global_common.php');
 require('class/global_mapping.php');
 
 //require('class/security.php');
-//require('lib/log4php/LoggerManager.php');
+//require_once('lib/log4php/LoggerManager.php');
 require('lib/URLcrypt-master/Urlcrypt.php');
 require('class/global_editor.php');
 require('class/global_mail.php');
 require_once('class/model_adtype.php');
+
+require_once ('lib/log4php/Logger.php');
+Logger::configure('config/appender_file.properties');
+$logger = Logger::getRootLogger();
+
 
 // Tao global variables
 global $_mainFrame;			// Xu ly hoac chua thong tin o muc he thong
