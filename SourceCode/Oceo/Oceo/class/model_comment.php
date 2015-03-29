@@ -167,6 +167,7 @@ class Model_Comment
 		{
 			$page=1;
 		}
+        
 		$comments = $this->getCommentByArticle($articleID,$page,'*','','ModifiedDate Desc');
 		
 		$condition = ' where `'.global_mapping::ArticleID.'` =  \''. $articleID .'\'  AND CommentID NOT IN (SELECT CommentID FROM sl_comment_bad WHERE `STATUS` =\'1\')';
@@ -238,7 +239,7 @@ class Model_Comment
 			global_common::writeLog('function getCommentByIDs:'.$strSQL,1,$_mainFrame->pPage);
 			return null;
 		}
-		return global_common::mergeUserInfo($arrResult);	
+		return global_common::mergeUserInfo($arrResult,$this->_objConnection);	
 	}
 	
 	public function getAllBadComment($intPage = 0,$selectField='*',$whereClause='',$orderBy='') 
