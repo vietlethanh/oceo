@@ -15,7 +15,7 @@
 chdir("..");
 /* TODO: Add code here */
 require('config/globalconfig.php');
-include_once('class/model_adType.php');
+include_once('class/model_adtype.php');
 
 ?>
 <?php
