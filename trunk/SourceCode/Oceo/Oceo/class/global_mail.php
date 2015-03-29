@@ -32,7 +32,7 @@ class global_mail
 	public function send($to,$toname,$subject,$content,$attactment,$sender,$senderPass,$senderName, $useGoogleSMTP = 1)
 	{
 		try{
-			error_reporting(E_ALL);
+			//error_reporting(E_ALL);
 			$mail = new PHPMailer();
 			//$mail->AddReplyTo($replyto,$fullname);
 			$mail->From       = $sender;
@@ -58,7 +58,9 @@ class global_mail
 			$mail->Username   = $sender;			   
 			$mail->Password   = $senderPass;
 			$mail->CharSet = 'utf-8'; 
-			
+            
+			//echo $sender;
+            //echo $senderPass;
 			if(!$mail->Send()) 
 			{
 				global_common::writeLog("Mailer Error: " . $mail->ErrorInfo,0,"sendmail.php");
@@ -129,7 +131,7 @@ class global_mail
 	{
 		// [0]: Chi so cua mx record trong mang ma vua duoc dung
 		// [1]->...: Cac mx record
-		return array(1,"oceo.vn");
+		return array(1,"smtp.gmail.com");
 	}
 	
 	public function isYahooMail($strEmail)

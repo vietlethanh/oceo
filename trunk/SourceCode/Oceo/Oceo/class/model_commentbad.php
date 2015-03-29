@@ -218,7 +218,7 @@ class Model_CommentBad
 		}
 		//echo 'Merge bad comment info';
 		//print_r($arrResult);
-		$arrResult = global_common::mergeUserInfo($arrResult);
+		$arrResult = global_common::mergeUserInfo($arrResult, $this->_objConnection);
 		//echo 'End Merge bad comment info';
 		//print_r($arrResult);
 		return $arrResult;

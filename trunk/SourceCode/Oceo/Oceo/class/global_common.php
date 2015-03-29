@@ -176,8 +176,8 @@ class global_common
 	* 
 	*****************************************************************************/
 	
-	const SUPPORT_MAIL_USERNAME					= "oceo@gmail.com";
-	const SUPPORT_MAIL_PASSWORD					= "raovat100";
+	const SUPPORT_MAIL_USERNAME					= "oceohelp@gmail.com";
+	const SUPPORT_MAIL_PASSWORD					= "thanhviet88";
 	const SUPPORT_MAIL_DISPLAY_NAME				= "oCEO.vn";
 	
 	//end const for FOLDER
@@ -240,7 +240,7 @@ class global_common
 		// Neu _logger chua duoc khoi tao
 		if (!isset($_logger))
 		{
-			$_logger = &LoggerManager::getLogger($strLogPage);
+			$_logger = Logger::getRootLogger();
 		}
 		
 		// Write log
@@ -3769,7 +3769,7 @@ class global_common
 	}
 	
 	
-	public function mergeUserInfo($arrResult)
+	public function mergeUserInfo($arrResult, $connection)
 	{
 		$arrUsers= null;
 		
@@ -3793,7 +3793,7 @@ class global_common
 		}
 		//echo array_key_exists(global_mapping::ReportedBy,$arrResult);
 		
-		$arrUserInfo = global_common::getUserInfo($arrUsers,$this->_objConnection);
+		$arrUserInfo = global_common::getUserInfo($arrUsers,$connection);
 		//print_r($arrUserInfo);
 		$count = count($arrResult);
 		//print_r($arrUserInfo[$arrResult[0]['CreatedBy']]);

@@ -282,7 +282,7 @@ class Model_Comment
 		}
 		$arrResult = global_common::mergeReporterInfo($arrResult);
 		//echo 'Before merge comment info';
-		$arrResult = global_common::mergeUserInfo($arrResult);
+		$arrResult = global_common::mergeUserInfo($arrResult,$this->_objConnection);
 		//echo 'End merge comment info';
 		return $arrResult;	
 	}
