@@ -23,7 +23,7 @@ require('class/global_mapping.php');
 require('lib/URLcrypt-master/Urlcrypt.php');
 require('class/global_editor.php');
 require('class/global_mail.php');
-require_once('class/model_adType.php');
+require_once('class/model_adtype.php');
 
 // Tao global variables
 global $_mainFrame;			// Xu ly hoac chua thong tin o muc he thong
