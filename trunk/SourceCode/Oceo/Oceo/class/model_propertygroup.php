@@ -157,14 +157,14 @@ class Model_PropertyGroup
 					global_common::escape_mysql_string($isdeleted),
 					global_common::escape_mysql_string($status)
 					));
-		
+			//echo $strSQL;
 		if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_SL_PROPERTY_GROUP,$this->_objConnection,$strTableName))
 		{
 			//echo $strSQL;
 			global_common::writeLog('Error add sl_property_group:'.$strSQL,1);
 			return false;
 		}	
-		return $intNewID;		
+		return $propertygroupid;		
 	}
 	public function getMaxPropertyGroupID() 
 	{
@@ -224,8 +224,12 @@ class Model_PropertyGroup
 	}
 	
 	
-	public function getAllPropertyGroup($intPage = 0,$selectField='*',$whereClause='',$orderBy='') 
+	public function getAllPropertyGroup($intPage = 0,$selectField='*',$whereClause='',$orderBy='', &$total) 
 	{		
+        if(!$selectField)
+        {
+            $selectField='*';
+        }
 		if($whereClause)
 		{
 			$whereClause = ' WHERE '.$whereClause;
@@ -258,6 +262,7 @@ class Model_PropertyGroup
 			global_common::writeLog('get All sl_property_group:'.$strSQL,1,$_mainFrame->pPage);
 			return null;
 		}
+        $total = count($arrResult);
 		//print_r($arrResult);
 		return $arrResult;
 	}

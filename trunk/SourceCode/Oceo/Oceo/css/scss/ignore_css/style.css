@@ -48,6 +48,9 @@ body {
   margin: auto;
   background: none repeat scroll 0 0 rgba(228, 167, 219, 0.1); }
 
+#main.admin {
+  width: 98%; }
+
 .wrapper {
   width: 100%;
   display: block;
@@ -317,6 +320,9 @@ label.checkbox {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none; }
+
+label input[type=checkbox] {
+  vertical-align: top; }
 
 a.active {
   color: #E63002; }
@@ -1595,9 +1601,9 @@ table.table {
 
 /*********** end map ************/
 /*********** map ************/
-#admin-advertising {
+.admin-page {
   text-align: left; }
-  #admin-advertising h3.page-title {
+  .admin-page h3.page-title {
     text-align: center; }
 
 /*********** end map ************/

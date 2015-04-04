@@ -87,14 +87,17 @@
 
 ?>
 <body >
-<div id="main" align="center">
+<div id="main" align="center" class="admin">
     <!--div id="subcontent" -->
     <div id="admin-header" align="">
 		<a class="menu" href="../index.php">oCEO</a>
 		<a class="menu" href="admin_price.php">Manage Price</a>
 		<a class="menu" href="admin_product.php">Manage Product</a>
-		<a class="menu" href="admin_commentbad.php">Manage Comment</a>
+		<a class="menu" href="admin_Property.php">Manage Property</a>
+        <a class="menu" href="admin_commentbad.php">Manage Comment</a>
 		<a class="menu" href="admin_advertising.php">Manage Advertising</a>
+        
+        <a class="menu" href="admin_user.php">Manage User</a>
     </div>
 	<div class="wrapper">		
        

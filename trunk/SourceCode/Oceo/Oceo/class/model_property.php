@@ -51,11 +51,11 @@ class Model_Property
 	const SQL_UPDATE_SL_PROPERTY		= 'UPDATE `{0}`
 		SET  
 			`PropertyID` = \'{1}\',
-			`PropertyGroupID` = \'{2}\'
+			`PropertyGroupID` = \'{2}\',
 			`PropertyName` = \'{3}\',
 			`PropertyValue` = \'{4}\',
 			#`DataTypeID` = \'{5}\',
-			#`Order` = \'{6}\',
+			`Order` = \'{6}\',
 			#`CreatedBy` = \'{7}\',
 			#`CreatedDate` = \'{8}\',
 			`ModifiedBy` = \'{9}\',
@@ -63,7 +63,7 @@ class Model_Property
 			#`DeletedBy` = \'{11}\',
 			#`DeletedDate` = \'{12}\',
 			#`IsDeleted` = \'{13}\',
-			`Status` = \'{14}\',
+			`Status` = \'{14}\'
 			
 		WHERE `PropertyID` = \'{1}\'  ';
 		   
@@ -111,7 +111,7 @@ class Model_Property
     
     #region Public Functions
     
-	public function insert($propertyGroupID, $propertyname,$propertyvalue,$datatypeid,$createdby,$status)
+	public function insert($propertyGroupID, $propertyname,$propertyvalue,$datatypeid,$order,$createdby,$status)
 	{		
 		$strTableName = self::TBL_SL_PROPERTY;
 		$intID = global_common::getMaxValueofField($this->_objConnection,global_mapping::PropertyID, $strTableName) + 1;
@@ -142,7 +142,7 @@ class Model_Property
 		
 	}
     
-    public function update($propertyid,$propertyGroupID,$propertyname,$propertyvalue,$datatypeid,$modifiedby,$status)
+    public function update($propertyid,$propertyGroupID,$propertyname,$propertyvalue,$datatypeid,$order,$modifiedby,$status)
 	{
 		$strTableName = self::TBL_SL_PROPERTY;
 		$strSQL = global_common::prepareQuery(self::SQL_UPDATE_SL_PROPERTY,
@@ -169,7 +169,7 @@ class Model_Property
 			global_common::writeLog('Error add sl_property:'.$strSQL,1);
 			return false;
 		}	
-		return $intNewID;		
+		return $propertyid;		
 	}
  
     public function getPropertyByID($objID,$selectField='*') 
@@ -226,6 +226,104 @@ class Model_Property
 		return $properties;
 	}
 	
+    public function getPropertyByCat($catID, $groupID,&$total) 
+	{		
+	   $sqlSearch = '1=1';
+       if($catID)
+       {
+            $sqlSearch.= ' And '. global_mapping::ArticleTypeID.'=\''.$catID.'\'';
+       }
+       
+       if($groupID)
+       {            
+            $sqlSearch.= 'AND'. global_mapping::PropertyGroupID.'=\''.$groupID.'\'';                    
+       }
+       
+	   $strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+				array('*', Model_PropertyGroup::TBL_SL_PROPERTY_GROUP,							
+					'WHERE '.$sqlSearch.'  Order by `'.global_mapping::Order.'`'));
+	//	echo $strSQL;
+		
+		$arrResult =$this->_objConnection->selectCommand($strSQL);	
+		if(!$arrResult)
+		{
+			global_common::writeLog('get sl_product ByID:'.$strSQL,1,$_mainFrame->pPage);
+			return null;
+		}
+		else
+		{
+			//print_r($arrResult);
+			$groupIDs = global_common::getArrayColumn($arrResult,global_mapping::PropertyGroupID); 
+			$groupIDs = array_unique($groupIDs);
+			//print_r($groupIDs);
+		
+			$objPropertyGroup = new Model_PropertyGroup($this->_objConnection);
+			
+			$properties = $this->getPropertyGroupByIDs($groupIDs);
+            $total = count($properties);
+            //print_r($properties);
+			$propertyGroups = $objPropertyGroup->getPropertyGroupByIDs($groupIDs);
+			
+			$temp = array();
+			foreach($arrResult as $key => $info)
+			{
+				$temp[$info[global_mapping::PropertyID]]=$info;
+				unset($arrResult[$key]);				
+			}	
+			$arrResult = $temp;
+			$temp = array();
+			foreach($groupIDs as $item)
+			{
+				foreach($propertyGroups as $subitem)
+				{
+					if($item == $subitem[global_mapping::PropertyGroupID])
+					{
+						//echo $item.':';
+						$temp  = array_merge($temp, array($subitem));
+					}
+				}
+			}
+			$propertyGroups = $temp;
+			
+			//print_r($arrResult);
+			//print_r($propertyGroups);
+			$count = count($propertyGroups);
+			//print_r($properties);
+            
+			for($i=0; $i < $count; $i++)
+			{
+			    
+				foreach($properties as $item)
+				{
+					if($item[global_mapping::PropertyGroupID] == $propertyGroups[$i][global_mapping::PropertyGroupID])
+					{
+						//change defaut value  to product property value					
+						//$item[global_mapping::Status] = $arrResult[$item[global_mapping::PropertyID]][global_mapping::Status];
+						//$item[global_mapping::TypeID] = $arrResult[$item[global_mapping::PropertyID]][global_mapping::TypeID];
+						//$item[global_mapping::StatusID] = $arrResult[$item[global_mapping::PropertyID]][global_mapping::StatusID];
+						//$item[global_mapping::Order] = $arrResult[$item[global_mapping::PropertyID]][global_mapping::Order];
+                        if(count($propertyGroups[$i]['Properties']) >0)
+                        {
+                            array_push($propertyGroups[$i]['Properties'], $item);                          
+                        }
+                        else
+                        {
+                            $propertyGroups[$i]['Properties'] =  array($item);
+                        }
+						$propertyGroups[$i]['Properties'] = $propertyGroups[$i]['Properties']? : array($item);
+						//$propertyGroups[$i]['Properties'] = array_push($propertyGroups[$i]['Properties'], array($item));
+                      //  print_r($propertyGroups[$i]);
+                      
+					}
+				}
+			}
+		}
+		//print_r($propertyGroups[0]);
+	//	print_r($propertyGroups);
+		return $propertyGroups;
+	}
+	
+    
 	public function getPropertyByIDs($arrIDs) 
 	{		
 		$arrIDs = global_common::splitString($arrIDs);
@@ -246,6 +344,26 @@ class Model_Property
 		return $properties;
 	}
 	
+    public function getPropertyGroupByIDs($arrGroupIDs) 
+	{		
+		$arrGroupIDs = global_common::splitString($arrGroupIDs);
+		$strQueryIN = global_common::convertToQueryIN($arrGroupIDs);
+		$whereClause = 'WHERE '.global_mapping::PropertyGroupID.' IN ('.$strQueryIN.')';
+		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE,array('*',
+					self::TBL_SL_PROPERTY,$whereClause.' order by `Order`'));
+		//echo $strSQL;
+		$properties =  $this->_objConnection->selectCommand($strSQL);	
+		
+		if(!$properties)
+		{
+			global_common::writeLog('get getPropertyByIDs:'.$strSQL,1,$_mainFrame->pPage);
+			return null;
+		}
+		
+		//print_r($arrResult);
+		return $properties;
+	}
+    
 	public function getPropertyByName($groupID,$propertyName,$selectField='*') 
 	{		
 		$selectField = $selectField? $selectField : '*'; 

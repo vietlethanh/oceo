@@ -116,14 +116,6 @@ var product = {
 				});
 			})
 		}
-		
-		controlID = 'txtContent';		
-		var content = CKEDITOR.instances[controlID].getData()
-		core.util.validateInputTextBox(controlID,'');
-		if(core.util.isNull(controlID)){
-			core.util.validateInputTextBox(controlID,'Nội dung khuyến mãi không được rỗng', isValid);
-			isValid =  false;
-		}
 
         controlID = 'txtContent';		
 		var content = CKEDITOR.instances[controlID].getData()

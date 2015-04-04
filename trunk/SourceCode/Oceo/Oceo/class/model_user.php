@@ -373,11 +373,15 @@ class Model_User
 		return false;
 	}
 	
-	public function getAllUser($intPage = 0,$selectField='*',$whereClause='',$orderBy='') 
+	public function getAllUser($intPage = 0,$selectField='*',$whereClause='',$orderBy='',&$total) 
 	{		
 		if($whereClause)
 		{
 			$whereClause = ' WHERE '.$whereClause;
+		}
+		if(!$selectField)
+		{
+			$selectField = '*';
 		}
 		
 		if($orderBy)
@@ -389,6 +393,10 @@ class Model_User
 			$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
 					array($selectField, Model_User::TBL_SL_USER ,							
 						$whereClause.$orderBy .' limit '.(($intPage-1)* self::NUM_PER_PAGE).','.self::NUM_PER_PAGE));
+      
+     	    $strSQLCount .=  global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+					array('count(*)', Model_User::TBL_SL_USER ,							
+						$whereClause.$orderBy ));
 		}
 		else
 		{
@@ -396,12 +404,18 @@ class Model_User
 					array($selectField, Model_User::TBL_SL_USER ,							
 						$whereClause.$orderBy ));
 		}
-		//echo '<br>SQL:'.$strSQL;
+	//	echo '<br>SQL:'.$strSQL;
 		$arrResult =$this->_objConnection->selectCommand($strSQL);		
 		if(!$arrResult)
 		{
 			global_common::writeLog('get All sl_user:'.$strSQL,1,$_mainFrame->pPage);
 			return null;
+		}
+ 	      if($strSQLCount)
+		{
+			//echo '<br>$strSQLCount:'.$strSQLCount;
+			$arrTotal =$this->_objConnection->selectCommand($strSQLCount);		
+			$total = $arrTotal[0][0];
 		}
 		//print_r($arrResult);
 		return $arrResult;

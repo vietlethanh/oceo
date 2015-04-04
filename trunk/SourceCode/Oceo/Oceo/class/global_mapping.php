@@ -102,6 +102,7 @@ class global_mapping
 	const PropertyName				= 'PropertyName';
 	const PropertyValue				= 'PropertyValue';
 	const DataTypeID				= 'DataTypeID';
+    const DataTypeName              = 'DataTypeName';
 	const Suffix					= 'Suffix';
 	const InputType					= 'InputType';
 	const SelectType				= 'SelectType';

@@ -95,7 +95,7 @@ $products = $objProduct->getAllProduct(1,'*',$search,null,$total);
 $allManuFactories = $objManufactory->getAllManufactory(0);
 ?>
 <?php
-$_SESSION[global_common::SES_C_CUR_PAGE] = "admin/admin_article.php";
+$_SESSION[global_common::SES_C_CUR_PAGE] = "admin/admin_product.php";
 include_once('include/_admin_header.inc');
 
 ?>

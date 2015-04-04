@@ -339,9 +339,9 @@ class db_connection extends mysqli
 		// Initilize log
 		if($this->_cLogger == null)
 		{
-			require_once("lib/log4php/LoggerManager.php");
+			//require_once("lib/log4php/LoggerManager.php");
 			
-			$this->_cLogger = &LoggerManager::getLogger("dbconnection.php");
+			$this->_cLogger = Logger::getRootLogger();//&LoggerManager::getLogger("dbconnection.php");
 		}
 		
 		// Write log
