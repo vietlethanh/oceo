@@ -1,0 +1,7 @@
+ $("#txtPropertyValue").typeahead({
+                    minLength: 0,
+                    source: ["Neque", "porro", "quisquam", "est", "qui", "dolorem", "ipsum", "quia", "dolor", "sit", "amet", "consectetur"]
+                });
+				$("#txtPropertyValue").on('focus',$("#txtPropertyValue").typeahead.bind($("#txtPropertyValue"), 'lookup')); 
+				
+				 $("#txtPropertyValue").unbind();

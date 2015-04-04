@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,WACA;EAEC,UAAU,EAAE,IAAI;EAEhB,yBACA;IACC,UAAU,EAAE,MAAM",
+"sources": ["../admin-advertising.scss"],
+"names": [],
+"file": "admin-advertising.css"
+}

@@ -1,0 +1,73 @@
+#post-product
+{
+	min-height: 500px;
+	.table-post
+	{
+		.zone
+		{
+			margin: 10px 0 0 0 ;
+			.zone-title
+			{
+				color: $color_header_menu;
+				font-size: 1.1em;
+			}
+			
+		}		
+		.ad-value
+		{			
+			margin-top: 3px;
+			vertical-align: top;
+		}
+		.property-product
+		{
+			.btn-add
+			{
+				vertical-align: top;
+			}
+			.property-zone
+			{
+				color: $color_header_menu;
+				font-size: 1em;
+				padding-left: 28px;
+			}
+		}
+		.controls
+		{
+			.row-item
+			{
+				margin-bottom:0px;				
+				border-top: 1px solid #e5e5e5;
+				padding-top:5px;
+				padding-bottom:5px;
+				
+				label.lbl-property
+				{
+					min-height:15px;
+					margin:0;
+					cursor: text;
+					margin-top: 8px;
+				}				
+			}
+			.selectize
+			{
+				margin: 0px;
+				.selectize-input
+				{
+					padding: 4px 8px 0 11px;
+					height: 30px;
+					border-color: #e5e5e5;
+					background-image: none !important;
+					background-color:white; 
+					box-shadow: none; 
+				}
+			}
+		}
+		
+	}	
+	.item
+	{
+		overflow: inherit;
+		display: inherit;
+		margin-bottom: 0px;
+	}
+} 

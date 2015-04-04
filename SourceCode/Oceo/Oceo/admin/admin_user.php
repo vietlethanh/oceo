@@ -9,333 +9,249 @@
  */
 
 /// <summary>
-/// Implementations of slusers represent a User
+/// Implementations of slAdvertising represent a Advertising
 ///
 /// </summary>
 chdir("..");
 /* TODO: Add code here */
 require('config/globalconfig.php');
+require('include/_permission_admin.inc');
 include_once('class/model_user.php');
-
-?>
-<?php
 
 $objUser = new Model_User($objConnection);
 
-if ($_pgR["act"] == model_User::ACT_ADD)
+
+if($_pgR['act'] == Model_User::ACT_CHANGE_PASS)
 {
 	
-	if (global_common::isCLogin())
+	$userID = $_pgR['uid'];
+    /*
+	$advertising =  $objAdvertising->getAdvertisingByID($advertisingID);
+	if($advertising)
 	{
-		//get user info
-		//$c_userInfo = $_SESSION[consts::SES_C_USERINFO];
-		
-		//if ($objMenu->getMenuByName($_pgR['name'])) {
-		//	echo global_common::convertToXML($arrHeader, array("rs",'info'), array(0,global_common::STRING_NAME_EXIST), array(0,1));
-		//	return;
-		//}
-
-		$userID = $_pgR['UserID'];
-		$userID = global_editor::rteSafe(html_entity_decode($userID,ENT_COMPAT ,'UTF-8' ));
-		$userName = $_pgR['UserName'];
-		$userName = global_editor::rteSafe(html_entity_decode($userName,ENT_COMPAT ,'UTF-8' ));
-		$password = $_pgR['Password'];
-		$password = global_editor::rteSafe(html_entity_decode($password,ENT_COMPAT ,'UTF-8' ));
-		$fullname = $_pgR['Fullname'];
-		$fullname = global_editor::rteSafe(html_entity_decode($fullname,ENT_COMPAT ,'UTF-8' ));
-		$birthDate = $_pgR['BirthDate'];
-		$birthDate = global_editor::rteSafe(html_entity_decode($birthDate,ENT_COMPAT ,'UTF-8' ));
-		$address = $_pgR['Address'];
-		$address = global_editor::rteSafe(html_entity_decode($address,ENT_COMPAT ,'UTF-8' ));
-		$phone = $_pgR['Phone'];
-		$phone = global_editor::rteSafe(html_entity_decode($phone,ENT_COMPAT ,'UTF-8' ));
-		$email = $_pgR['Email'];
-		$email = global_editor::rteSafe(html_entity_decode($email,ENT_COMPAT ,'UTF-8' ));
-		$sex = $_pgR['Sex'];
-		$sex = global_editor::rteSafe(html_entity_decode($sex,ENT_COMPAT ,'UTF-8' ));
-		$identity = $_pgR['Identity'];
-		$identity = global_editor::rteSafe(html_entity_decode($identity,ENT_COMPAT ,'UTF-8' ));
-		$roleID = $_pgR['RoleID'];
-		$roleID = global_editor::rteSafe(html_entity_decode($roleID,ENT_COMPAT ,'UTF-8' ));
-		$userRankID = $_pgR['UserRankID'];
-		$userRankID = global_editor::rteSafe(html_entity_decode($userRankID,ENT_COMPAT ,'UTF-8' ));
-		$avatar = $_pgR['Avatar'];
-		$avatar = global_editor::rteSafe(html_entity_decode($avatar,ENT_COMPAT ,'UTF-8' ));
-		$accountID = $_pgR['AccountID'];
-		$accountID = global_editor::rteSafe(html_entity_decode($accountID,ENT_COMPAT ,'UTF-8' ));
-		$isActived = $_pgR['IsActived'];
-		$isActived = global_editor::rteSafe(html_entity_decode($isActived,ENT_COMPAT ,'UTF-8' ));
-		//$strName = $_pgR['name'];
-		//$strName = global_editor::rteSafe(html_entity_decode($strName,ENT_COMPAT ,'UTF-8' ));
-		$resultID = $objUser->insert($userID,$userName,$password,$fullname,$birthDate,$address,$phone,$email,$sex,$identity,$roleID,$userRankID,$avatar,$accountID,$isActived);
-		if ($resultID)
-		{
-			$arrHeader = global_common::getMessageHeaderArr($banCode);//$banCode
-			echo global_common::convertToXML(
-					$arrHeader, array("rs", "inf"), 
-					array(1, $result), 
-					array( 0, 1 )
-					);
-			return;
-		}
-		else
-		{
-			echo global_common::convertToXML($arrHeader, array("rs","info"), array(0,"Input data is invalid"), array(0,1));
-			return;
-		}
+		$advertising[global_mapping::StartDate] = global_common::formatDateVN($advertising[global_mapping::StartDate]);
+		$advertising[global_mapping::EndDate] = global_common::formatDateVN($advertising[global_mapping::EndDate]);
+		//echo json_encode($advertising);
+		echo global_common::convertToXML($strMessageHeader, 
+				array("rs","content"),array(1,json_encode($advertising)), array(0,1));
 	}
 	else
 	{
-		echo global_common::convertToXML($arrHeader, array("rs",'info'), array(0,global_common::STRING_REQUIRE_LOGIN), array(0,1));
+		echo global_common::convertToXML($arrHeader, array("rs","inf"), array(0,"Data is invalid. Pleae try again later"), array(0,1));
 	}
-	return;
-}
-elseif($_pgR['act'] == model_User::ACT_UPDATE)
-{
-	if (global_common::isCLogin())
-	{
-		//l?y th?ng tin user
-		//$c_userInfo = $_SESSION[consts::SES_C_USERINFO];
-		
-
-		$userID = $_pgR['UserID'];
-		$userID = global_editor::rteSafe(html_entity_decode($userID,ENT_COMPAT ,'UTF-8' ));
-		$userName = $_pgR['UserName'];
-		$userName = global_editor::rteSafe(html_entity_decode($userName,ENT_COMPAT ,'UTF-8' ));
-		$password = $_pgR['Password'];
-		$password = global_editor::rteSafe(html_entity_decode($password,ENT_COMPAT ,'UTF-8' ));
-		$fullname = $_pgR['Fullname'];
-		$fullname = global_editor::rteSafe(html_entity_decode($fullname,ENT_COMPAT ,'UTF-8' ));
-		$birthDate = $_pgR['BirthDate'];
-		$birthDate = global_editor::rteSafe(html_entity_decode($birthDate,ENT_COMPAT ,'UTF-8' ));
-		$address = $_pgR['Address'];
-		$address = global_editor::rteSafe(html_entity_decode($address,ENT_COMPAT ,'UTF-8' ));
-		$phone = $_pgR['Phone'];
-		$phone = global_editor::rteSafe(html_entity_decode($phone,ENT_COMPAT ,'UTF-8' ));
-		$email = $_pgR['Email'];
-		$email = global_editor::rteSafe(html_entity_decode($email,ENT_COMPAT ,'UTF-8' ));
-		$sex = $_pgR['Sex'];
-		$sex = global_editor::rteSafe(html_entity_decode($sex,ENT_COMPAT ,'UTF-8' ));
-		$identity = $_pgR['Identity'];
-		$identity = global_editor::rteSafe(html_entity_decode($identity,ENT_COMPAT ,'UTF-8' ));
-		$roleID = $_pgR['RoleID'];
-		$roleID = global_editor::rteSafe(html_entity_decode($roleID,ENT_COMPAT ,'UTF-8' ));
-		$userRankID = $_pgR['UserRankID'];
-		$userRankID = global_editor::rteSafe(html_entity_decode($userRankID,ENT_COMPAT ,'UTF-8' ));
-		$avatar = $_pgR['Avatar'];
-		$avatar = global_editor::rteSafe(html_entity_decode($avatar,ENT_COMPAT ,'UTF-8' ));
-		$accountID = $_pgR['AccountID'];
-		$accountID = global_editor::rteSafe(html_entity_decode($accountID,ENT_COMPAT ,'UTF-8' ));
-		$isActived = $_pgR['IsActived'];
-		$isActived = global_editor::rteSafe(html_entity_decode($isActived,ENT_COMPAT ,'UTF-8' ));
-        
-		//$checkProduct = $objMenu->getMenuByName($_pgR['name']);
-		//if ($checkProduct && $checkProduct['menu_id']!= $strID) {
-		//	echo global_common::convertToXML($arrHeader, array("rs",'info'), array(0,global_common::STRING_NAME_EXIST), array(0,1));
-		//	return;
-		//}
-		//$strName = $_pgR['name'];
-		//$strDetail= $_pgR['detail'];
-		$resultID = $objUser->update($userID,$userName,$password,$fullname,$birthDate,$address,$phone,$email,$sex,$identity,$roleID,$userRankID,$avatar,$accountID,$isActived);
-		
-		if ($resultID)
-		{
-			$arrHeader = global_common::getMessageHeaderArr($banCode);//$banCode
-			
-			echo global_common::convertToXML(
-					$arrHeader, array("rs", "inf"), 
-					array(1, $result ), 
-					array( 0, 1 )
-					);
-			return;
-		}
-		else
-		{
-			echo global_common::convertToXML($arrHeader, array("rs"), array(0), array(0));
-			return;
-		}
-	}
-	else
-	{
-		echo global_common::convertToXML($arrHeader, array("rs",'info'), array(0,global_common::STRING_REQUIRE_LOGIN), array(0,1));
-	}
-	return;
-}
-elseif($_pgR['act'] == model_User::ACT_CHANGE_PAGE)
-{
-	$intPage = $_pgR['p'];
-	
-	$outPutHTML =  $objUser->getListUser($intPage);
-	echo global_common::convertToXML($strMessageHeader, array('rs','inf'), array(1,$outPutHTML),array(0,1));
+	*/
 	return ;
 }
-elseif($_pgR['act'] == model_User::ACT_SHOW_EDIT)
+
+//$catID = $_pgR["cid"];
+$page = $_pgR["p"];
+if(!$page)
 {
-	
-	$strUserID = $_pgR['id'];
-	$arrUser =  $objUser->getUserByID($strUserID);
-	
-	echo global_common::convertToXML($strMessageHeader, array('rs','UserID','UserName','Password','Fullname','BirthDate','Address','Phone','Email','Sex','Identity','RoleID','UserRankID','Avatar','AccountID','IsActived'), array(1,'UserID','UserName','Password','Fullname','BirthDate','Address','Phone','Email','Sex','Identity','RoleID','UserRankID','Avatar','AccountID','IsActived'),array(0,1,1,1,1,1,1,1,1,0,1,1,1,1,1,0));
-	return ;
+    $page=1;
 }
-elseif ($_pgR["act"] == model_User::ACT_GET)
-{		
-	$sectionID = $_pgR["sect"];
-	$arrSection= $objMenu->getAllMenuBySection($sectionID);
-	if($arrSection)
-	{
-		$strHTML = $objMenu->outputHTMLMenu($arrSection);
-		echo global_common::convertToXML($arrHeader, array("rs", "inf"), 
-				array(1, $strHTML), array(0, 1));
-		return;	
-	}
-	else
-	{
-		echo global_common::convertToXML($arrHeader, array("rs",'inf'),array(0,'Kh?ng c? nh?m h?ng'),array(0,0));
-		return ;
-	}
+$keyword = $_pgR["keyword"];
+if($keyword)
+{	
+	$search = ' `'.global_mapping::UserName.'` like \'%'.global_common::escape_mysql_string($keyword).'%\' or `'.global_mapping::FullName.'` like \'%'.global_common::escape_mysql_string($keyword).'%\' or `'.global_mapping::Email.'` like \'%'.global_common::escape_mysql_string($keyword).'%\'' ;
 }
-elseif($_pgR['act'] == model_User::ACT_DELETE)
-{
-	
-	$IDName = "menu_id";
-	$contentID = $_pgR["id"];
-	$strTableName = user_menu::TBL_T_MENU;
-	$result = global_common::updateDeleteFlag($contentID,$IDName,$strTableName ,$_pgR["status"],$objConnection);
-	if($result)
-	{
-		$IDName = "content_id";
-		$strTableName = user_faq::TBL_T_FAQ;
-		$result = global_common::updateDeleteFlag($contentID,$IDName,$strTableName ,$_pgR["status"],$objConnection);
-	}
-	$arrHeader = global_common::getMessageHeaderArr($banCode=0,0);
-	$arrKey = array("rs","id");
-	$arrValue = array($result?1:0,$contentID);
-	$arrIsMetaData = array(0, 1);
-	echo global_common::convertToXML($arrHeader, $arrKey, $arrValue, $arrIsMetaData);
-	
-	return;
-}
+
+$allUsers = $objUser->getAllUser($page,'',$search,'',$total);
+
 ?>
-
 <?php
+$_SESSION[global_common::SES_C_CUR_PAGE] = "admin/admin_advertising.php";
 include_once('include/_admin_header.inc');
-include_once('include/_admin_menu.inc');
 ?>
-<script type="text/javascript" src="<?php echo $_objSystem->locateJs('sela_User.js');?>"></script>
-	
-<!--Begin Form Input -->
-<input type="hidden" id="adddocmode" name="adddocmode" value="1<?php //echo $intMode;?>" />
-<input type="hidden" id="txtPage" name="txtPage" value="<?php echo $_pgR["p"]?$intPage:1;?>" />
-<input type="hidden" id="txtID" name="txtID" value="" />
- <center>
-<br><h2 align="center">Mananage User</h2>
-		<div class="input-field-border input-field-content" >
-				<div id="lgTitle" class="div_admin_group_title" style="">
-				<span style="cursor:default; font-family:inherit" id='status-add' name='status-add'>Add Mode</span></div>
-				
-				<div class="div_admin_group_content_inside" style="width: 100%; top: -20px;">
-				    <table id="tblPopUp" style="width: 100%;" border="0" cellpadding="2" cellspacing="0">
-                        <tbody>
-						<tr>
-							<td width='110'><span style='cursor:default; font-family:inherit'>UserID</span></td>
-							<td width='10'><span class='forceFillForm'></span></td>
-							<td width='567'><input id='txtUserID' name='txtUserID' value='' style='width: 49.5%;'  maxlength='60' type='text'></td>
-						</tr>
-						<tr>
-							<td width='110'><span style='cursor:default; font-family:inherit'>UserName</span></td>
-							<td width='10'><span class='forceFillForm'></span></td>
-							<td width='567'><input id='txtUserName' name='txtUserName' value='' style='width: 49.5%;'  maxlength='150' type='text'></td>
-						</tr>
-						<tr>
-							<td width='110'><span style='cursor:default; font-family:inherit'>Password</span></td>
-							<td width='10'><span class='forceFillForm'></span></td>
-							<td width='567'><input id='txtPassword' name='txtPassword' value='' style='width: 49.5%;'  maxlength='765' type='text'></td>
-						</tr>
-						<tr>
-							<td width='110'><span style='cursor:default; font-family:inherit'>Fullname</span></td>
-							<td width='10'><span class='forceFillForm'></span></td>
-							<td width='567'><input id='txtFullname' name='txtFullname' value='' style='width: 49.5%;'  maxlength='765' type='text'></td>
-						</tr>
-						<tr>
-							<td width='110'><span style='cursor:default; font-family:inherit'>BirthDate</span></td>
-							<td width='10'><span class='forceFillForm'></span></td>
-							<td width='567'><input id='txtBirthDate' name='txtBirthDate' value='' style='width: 49.5%;'  maxlength='0' type='text'></td>
-						</tr>
-						<tr>
-							<td width='110'><span style='cursor:default; font-family:inherit'>Address</span></td>
-							<td width='10'><span class='forceFillForm'></span></td>
-							<td width='567'><input id='txtAddress' name='txtAddress' value='' style='width: 49.5%;'  maxlength='765' type='text'></td>
-						</tr>
-						<tr>
-							<td width='110'><span style='cursor:default; font-family:inherit'>Phone</span></td>
-							<td width='10'><span class='forceFillForm'></span></td>
-							<td width='567'><input id='txtPhone' name='txtPhone' value='' style='width: 49.5%;'  maxlength='60' type='text'></td>
-						</tr>
-						<tr>
-							<td width='110'><span style='cursor:default; font-family:inherit'>Email</span></td>
-							<td width='10'><span class='forceFillForm'></span></td>
-							<td width='567'><input id='txtEmail' name='txtEmail' value='' style='width: 49.5%;'  maxlength='765' type='text'></td>
-						</tr>
-						<tr>
-							<td width='110'><span style='cursor:default; font-family:inherit'>Sex</span></td>
-							<td width='10'><span class='forceFillForm'></span></td>
-							<td width='567'><input id='txtSex' name='txtSex' value='' style='width: 49.5%;'  maxlength='20' type='text'></td>
-						</tr>
-						<tr>
-							<td width='110'><span style='cursor:default; font-family:inherit'>Identity</span></td>
-							<td width='10'><span class='forceFillForm'></span></td>
-							<td width='567'><input id='txtIdentity' name='txtIdentity' value='' style='width: 49.5%;'  maxlength='60' type='text'></td>
-						</tr>
-						<tr>
-							<td width='110'><span style='cursor:default; font-family:inherit'>RoleID</span></td>
-							<td width='10'><span class='forceFillForm'></span></td>
-							<td width='567'><input id='txtRoleID' name='txtRoleID' value='' style='width: 49.5%;'  maxlength='60' type='text'></td>
-						</tr>
-						<tr>
-							<td width='110'><span style='cursor:default; font-family:inherit'>UserRankID</span></td>
-							<td width='10'><span class='forceFillForm'></span></td>
-							<td width='567'><input id='txtUserRankID' name='txtUserRankID' value='' style='width: 49.5%;'  maxlength='60' type='text'></td>
-						</tr>
-						<tr>
-							<td width='110'><span style='cursor:default; font-family:inherit'>Avatar</span></td>
-							<td width='10'><span class='forceFillForm'></span></td>
-							<td width='567'><input id='txtAvatar' name='txtAvatar' value='' style='width: 49.5%;'  maxlength='765' type='text'></td>
-						</tr>
-						<tr>
-							<td width='110'><span style='cursor:default; font-family:inherit'>AccountID</span></td>
-							<td width='10'><span class='forceFillForm'></span></td>
-							<td width='567'><input id='txtAccountID' name='txtAccountID' value='' style='width: 49.5%;'  maxlength='765' type='text'></td>
-						</tr>
-						<tr>
-							<td width='110'><span style='cursor:default; font-family:inherit'>IsActived</span></td>
-							<td width='10'><span class='forceFillForm'></span></td>
-							<td width='567'><input id='txtIsActived' name='txtIsActived' value='' style='width: 49.5%;'  maxlength='0' type='chec'></td>
-						</tr>
-                        </tbody>
-                    </table>
-				</div>
-	
-
-				<div class="div_admin_group_content_inside" style="margin: 4px; display: block;" align="center">		
-				  <input id="btnOK" value="OK"  style="width: 50px;" onClick="_objUser.btnSave_OnClick()" type="button" class="btn btn-oliver"> &nbsp;&nbsp;&nbsp;
-				  <input id="btnClose" value="Cancel" align="center" style="width: 65px;" onClick="_objUser.showAddMode()" type="button" class="btn btn-oliver">  
-			  </div>					
-		</div>	
-	
-		</center>
-<!--End Form Input -->
-
-   <div  id="content-admin" >
-                    <div align="center">
-	                    <h2>Danh s?ch</h2>									
-					</div>
-					<div id="list-content" style="padding:10px">
-						<?php echo $objUser ->getListUser(1) ?>					
-						</div>
+<script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_user.js');?>"></script>
+<div id="admin-user">
+	<div class="row-fluid">
+		<div class="span12">
+			<!-- BEGIN PAGE TITLE & BREADCRUMB-->
+			<h3 class="page-title">
+				Manage User
+			</h3>
+		</div>
 	</div>
-
-<?php 
-//footer
+	
+	 <div class="row-fluid">	
+            <div class="span12">
+				<input type="hidden" id="adddocmode" name="adddocmode" value="" />
+				<input type="hidden" id="UserID" name="UserID" value="" />		
+	<div class="portlet box">
+		<div class="portlet-title hide">
+			<div class="caption">
+				<!--i class="icon-reorder"></i-->
+			</div>
+			
+			<div class="tools">                                
+				<!--a href="#config-form" data-toggle="modal" class="config"></a-->
+				<!--a href="javascript:;" class="reload" title="Reload"></a-->
+			</div>
+			<div class="actions">									
+				
+			</div>
+		</div>
+		<!---->
+		<div class="portlet-body" style="text-align:center">
+		<form method="get" id="admin_user" style="display: inline-flex" onclick="return core.util.resetSearchForm('admin_user')">
+<input type="textbox" placeholder="Keyword to search" width="200px" id="keyword" name="keyword" value="<?php echo $keyword ?>" />	
+<input type="submit" value="Search" style="height:24px;margin:0 10px" />	
+<input type="hidden"  name="p" id="p" value="<?php echo ($page) ?>" />	
+</form>	
+		<?php echo 'Total:'.($total?$total:0); ?>							
+<?php
+//print_r($advertising);
+if($allUsers)
+{
+	echo '<table class="table table-striped">';
+	echo '<thead>';
+	echo '<th>';
+	echo 'FullName';		
+	echo '</th>';
+	echo '<th>';
+	echo 'UserName';		
+	echo '</th>';
+	echo '<th>';
+	echo 'Email';		
+	echo '</th>';
+	echo '<th>';
+	echo 'Address';		
+	echo '</th>';
+	echo '<th>';
+	echo 'Phone';		
+	echo '</th>';
+	echo '<th>';
+	echo 'BirthDay';		
+	echo '</th>';
+	echo '<th>';
+	echo 'Sex';		
+	echo '</th>';
+	echo '<th>';
+	echo 'Action';		
+	echo '</th>';
+	echo '</thead>';
+	foreach($allUsers as $item)
+	{
+		echo '<tr>';
+		echo '<td>';
+		echo $item[global_mapping::FullName];		
+		echo '</td>';
+		echo '<td style="">';
+		echo $item[global_mapping::UserName];		
+		echo '</td>';
+		echo '<td style="">';
+		echo $item[global_mapping::Email];		
+		echo '</td>';
+		echo '<td style="">';
+		echo $item[global_mapping::Address];		
+		echo '</td>';
+		echo '<td style="">';
+		echo  $item[global_mapping::Phone];		
+		echo '</td>';
+		echo '<td>';
+		echo global_common::formatDateVN($item[global_mapping::BirthDate]);		
+		echo '</td>';
+		echo '<td>';
+		echo $item[global_mapping::Sex]?'Male':'Female';			
+		echo '</td>';
+		echo '<td style="padding:0;width:180px">';
+		echo '<a href="javascript:user.showPopupEdit(\''.$item[global_mapping::UserID].'\',\''.$item[global_mapping::UserName].'\',\'modal-add\')" class="btn btn-mini">Edit</a> ';	
+		if(	!$item[global_mapping::IsDeleted])
+		{
+			echo '<a href="javascript:user.Delete(\''.$item[global_mapping::UserID].'\',1)" class="btn btn-mini">Delete</a> ';	
+		}
+		else
+		{
+			echo '<a href="javascript:user.Delete(\''.$item[global_mapping::UserID].'\',0)" class="btn btn-mini">Restore</a>';	
+		}	
+		echo '</td>';
+		echo '</tr>';
+	}
+	echo '</table>';
+	echo global_common::getPagingHTMLByNum($page,Model_User::NUM_PER_PAGE,$total, 'core.util.changePage','admin_user');
+}
+?>
+				</div>
+					</div>
+		</div>
+	</div>
+</div>
+<?php
 include_once('include/_admin_footer.inc');
 ?>
+
+
+<div id="modal-add" class="modal hide fade" tabindex="-1" data-width="600" data-keyboard="false"  aria-hidden="true" data-backdrop="static">
+    <div class="modal-header">
+        <!--button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+        </button-->
+        <h3 class="popup-title">Edit User: <span id="spanUserName"></span>
+        </h3>
+        <input type="hidden" id="hdUserID" />
+    </div>
+    <div class="modal-body" style="padding:0">	
+            <div class="span12 tabbable tabbable-custom">
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#change-role" data-toggle="tab">Role</a></li>				
+				
+					<li class=""><a href="#change-password" data-toggle="tab">Thay đổi mật khẩu</a></li>
+                </ul>
+                <div class="tab-content">
+					<div id="change-role" class="active tab-pane">
+                            <form action="#">
+								<div class="control-group">
+								
+									<div class="controls">
+									
+                                        	<label class="radio " style="">
+										<input type="checkbox" name="ckAdmin" id="ckAdmin"  
+										<?php echo ($currentUser[global_mapping::UserName]?'checked="checked"':'')?> />
+										 Admin
+									</label>
+										<div class="help-inline message"></div>
+									</div>
+								</div>
+                            </form>
+                    </div>
+                    <!-- End Change role-->
+                    <div id="change-password" class="tab-pane">
+                           
+								<div class="control-group">
+									<label class="control-label">
+										Mật khẩu mới</label>                                                                													
+									<div class="controls">
+										<input type="password" id="txtNewPass" class="m-wrap span4" name="password">
+										<div class="help-inline message"></div>
+									</div>
+								</div>
+								<div class="control-group">
+									<label class="control-label">
+										Nhắc lại mật khẩu mới</label>
+									<div class="controls">
+									    <input type="password" id="txtConfirmPass" class="m-wrap span4" />
+										<div class="help-inline message"></div>
+									</div>
+                             	</div>                            
+                         
+                    <!-- End Change Password-->
+                    </div>  
+                   <!-- End Tab Content-->                    
+                 </div>
+            </div>
+     </div>
+	 <div class="modal-footer">
+		<div class="pull-right">
+			<a href="javascript:user.editUserAdmin();" class="btn" id="btnSave">Save</a>
+			<a href="javascript:;" class="btn btn-mini" data-dismiss="modal"   aria-hidden="true">Close</a>        
+		</div>
+		 <!--div class="controls pull-right">
+			<label class="checkbox ckCreateOther">
+				<div class="checker">
+					<span class="">
+						<input type="checkbox" value=""></span>
+				</div>
+				Create another
+			</label>
+		</div-->
+	</div>
+</div>

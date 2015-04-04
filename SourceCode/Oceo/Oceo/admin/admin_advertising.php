@@ -115,7 +115,30 @@ elseif($_pgR['act'] == Model_Advertising::ACT_SHOW_EDIT)
 	
 	return ;
 }
-
+elseif($_pgR['act'] == Model_Advertising::ACT_DELETE)
+{
+    $c_userInfo = $_SESSION[global_common::SES_C_USERINFO];
+	$deletedBy = $c_userInfo[global_mapping::UserID];
+	$advertisingID = $_pgR[global_mapping::AdvertisingID];
+	$status = $_pgR[global_mapping::Status];
+	$result = global_common::updateDeleteFlag($advertisingID,global_mapping::AdvertisingID,$deletedBy,
+                    Model_Advertising::TBL_SL_ADVERTISING,$status,$objConnection);
+	if ($result)
+	{
+		$arrHeader = global_common::getMessageHeaderArr($banCode);//$banCode
+		echo global_common::convertToXML(
+				$arrHeader, array("rs", "inf"), 
+				array(1, ($status?'Xóa':'Deactivate').' thành công'), 
+				array( 0, 1 )
+				);
+		return;
+	}
+	else
+	{
+		echo global_common::convertToXML($arrHeader, array("rs","inf"), array(0,($isActivate?'Xóa':'Deactivate').' unsuccessfully'), array(0,1));
+		return;
+	}
+}
 $catID = $_pgR["cid"];
 $page = $_pgR["p"];
 if($catID == 0)
@@ -161,7 +184,7 @@ $_SESSION[global_common::SES_C_CUR_PAGE] = "admin/admin_advertising.php";
 include_once('include/_admin_header.inc');
 ?>
 <script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_advertising.js');?>"></script>
-<div id="admin-advertising">
+<div id="admin-advertising" class="admin-page">
 	<div class="row-fluid">
 		<div class="span12">
 			<!-- BEGIN PAGE TITLE & BREADCRUMB-->
@@ -284,11 +307,11 @@ if($allAds)
 		echo '<a href="javascript:advertising.showPopupEdit(\''.$item[global_mapping::AdvertisingID].'\',\'modal-add\')" class="btn btn-mini">Edit</a> ';	
 		if(	!$item[global_mapping::IsDeleted])
 		{
-			echo '<a href="javascript:advertising.Delete(\''.$item[global_mapping::AdvertisingID].'\',1)" class="btn btn-mini">Delete</a> ';	
+			echo '<a href="javascript:advertising.delete(\''.$item[global_mapping::AdvertisingID].'\',1)" class="btn btn-mini">Delete</a> ';	
 		}
 		else
 		{
-			echo '<a href="javascript:advertising.Delete(\''.$item[global_mapping::AdvertisingID].'\',0)" class="btn btn-mini">Restore</a>';	
+			echo '<a href="javascript:advertising.delete(\''.$item[global_mapping::AdvertisingID].'\',0)" class="btn btn-mini">Restore</a>';	
 		}	
 		echo '</td>';
 		echo '</tr>';
@@ -446,7 +469,7 @@ foreach($allAdType as $item)
 			<label class="checkbox ckCreateOther">
 				<div class="checker">
 					<span class="">
-						<input type="checkbox" value=""></span>
+						<input type="checkbox" value="" id="ckCreateOther"></span>
 				</div>
 				Create another
 			</label>

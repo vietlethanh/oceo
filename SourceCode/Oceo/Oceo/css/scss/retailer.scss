@@ -1,0 +1,144 @@
+#retailer
+{
+	clear:both;	
+	margin-top:20px;
+	
+	#retailer-detail
+	{		
+		display: inline-block;
+		margin: 0 0px;
+		width: 100%;
+		#retailer-summary
+		{
+			.retailer-image
+			{
+				float: left; 
+				width:55%;
+				img
+				{
+					height: 650px;
+					width: 550px;
+					max-height: 700px;
+					max-width:400px; 
+					position: initial !important; 
+				}
+			}
+			.retailer-spec 
+			{
+				margin:0 2px;
+				float: right;  
+				width: 44%;  
+				.form-horizontal
+				{
+					.control-group
+					{
+						.title
+						{
+							color:$color_header_menu;
+							font-size: 16px;
+							margin:0 0 10px 0 ;
+							padding:0;
+							line-height:1em;
+							text-align: center;
+						}
+						.control-label
+						{
+							width:auto; 
+							margin: 0;
+							padding:0;
+						}
+						.controls
+						{
+							margin-left: 160px;
+						}
+					}
+				}
+			}
+		}
+		#retailer-price
+		{
+			margin:0 2px;
+			float: right;
+			width: 44%; 
+			
+			.form-horizontal
+			{
+				.control-group
+				{
+					.control-label
+					{
+						width:auto; 
+						margin: 0;
+						padding:0;
+					}
+					.controls
+					{
+						margin-left: 160px;
+					}
+				}
+			}
+		}
+		#retailer-property
+		{
+			.form-horizontal
+			{
+				.control-header
+				{
+					display: table;
+				}
+				.control-group:nth-child(even) {
+					background: #DFD0D6;
+				}
+				
+				.control-group
+				{
+					.group-name
+					{
+						padding:10px;
+					}
+					.control-label
+					{
+						margin: 0;
+						padding:0;
+					}
+					.controls
+					{
+						margin-left: 180px;
+					}
+				}
+			}
+		}
+		#retailer-content
+		{			
+			clear:both;
+			margin: 2px 0px;
+			padding: 2px;
+			vertical-align: top;
+			margin-bottom:20px;
+			border: 2px solid $color_border;		
+			border: 2px solid $color_border_rbga;
+			-webkit-background-clip: padding-box; /* for Safari */
+			background-clip: padding-box; /* for IE9+, Firefox 4+, Opera, Chrome */	
+			.name		
+			{
+				color:$color_header_menu;
+				font-size: 1.3em;
+				font-weight: bold;
+			}
+			.title
+			{
+				font-size: 1.2em;
+				font-weight: bold;
+			}
+			.content
+			{
+				/*background: none repeat scroll 0 0 $color_body;*/
+				font-size: 1.1em;				
+				text-align:justify;
+				padding:2px;
+			}
+		}	
+		
+	}
+	
+} 

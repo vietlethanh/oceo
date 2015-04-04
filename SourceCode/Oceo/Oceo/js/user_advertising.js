@@ -101,12 +101,16 @@ var advertising = {
 	},
 	
 	getAdvertisingInfo: function(submitID) {
-		
+		var isValid= true;
         core.util.disableControl(submitID, true);
    
 		var controlID = 'txtAdName';		
 		var adName = core.util.getObjectValueByID(controlID);
-		
+		if(core.util.isNull(adName))
+        {
+            core.util.validateInputTextBox(controlID,'Advertising name is empty');
+            isValid =  false;
+        }
 		controlID = 'cmAdType';		
 		var adType = core.util.getObjectValueByID(controlID);
 		
@@ -133,7 +137,10 @@ var advertising = {
 		
 		controlID = 'txtPartner';		
 		var partner = core.util.getObjectValueByID(controlID);
-		
+		if (isValid == false) {
+			core.util.disableControl("btnOK", false);
+            return;
+        }
 		var adInfo = 
 		{
 			 AdvertisingName: adName,
@@ -154,7 +161,9 @@ var advertising = {
 	
 	clearForm: function()
 	{
-		var controlID = 'txtAdName';		
+	   isValid =  true;
+		var controlID = 'txtAdName';	
+        	
 		core.util.clearValue(controlID);
 		
 		controlID = 'cmAdType';		
@@ -208,7 +217,35 @@ var advertising = {
 					core.ui.showInfoBar(1, strRespond[1]["inf"]);	
 					advertising.clearForm();
 					core.util.disableControl(submitID, false);
-					core.util.reload();
+					if(core.util.isChecked("ckCreateOther") == false)
+					   core.util.reload();
+                }
+                else{
+                    core.ui.showInfoBar(2, strRespond[1]["inf"]);	
+					core.util.disableControl(submitID, false);
+                }
+            },
+            function()
+            {
+				core.ui.showInfoBar(2, core.constant.MsgProcessError);	
+				core.util.disableControl(submitID, false);
+            }
+        );
+    },
+    delete: function(objID,status) { 
+		var submitID = "btnSave"
+        var infoRequest ={};	
+	    infoRequest.act = this.ACT_DELETE;
+        infoRequest.AdvertisingID = objID;
+        infoRequest.Status = status;
+		
+		core.request.post(this.Page,infoRequest,
+            function(respone, info){
+				var strRespond = core.util.parserXML(respone);
+				if (parseInt(strRespond[1]['rs']) == 1) {
+					core.ui.showInfoBar(1, strRespond[1]["inf"]);					
+					core.util.disableControl(submitID, false);      
+                    core.util.reload();            
                 }
                 else{
                     core.ui.showInfoBar(2, strRespond[1]["inf"]);	
@@ -222,6 +259,5 @@ var advertising = {
             }
         );
     }
-
 }
 

@@ -240,7 +240,14 @@ label.checkbox
   -ms-user-select: none;
   user-select: none;
 }
-
+label
+{
+	input[type=checkbox]
+	{
+		vertical-align:top;
+	}
+	
+}
 a.active
 {
 	color: $color_active;

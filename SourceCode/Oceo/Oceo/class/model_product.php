@@ -397,7 +397,6 @@ class Model_Product
 	}
 	
 	
-	
 	public function getAllProduct($intPage = 0,$selectField='*',$whereClause='',$orderBy='',&$total) 
 	{		
 		if($whereClause)
