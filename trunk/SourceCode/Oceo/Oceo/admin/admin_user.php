@@ -17,32 +17,94 @@ chdir("..");
 require('config/globalconfig.php');
 require('include/_permission_admin.inc');
 include_once('class/model_user.php');
+include_once('class/model_city.php');
 
 $objUser = new Model_User($objConnection);
 
 
-if($_pgR['act'] == Model_User::ACT_CHANGE_PASS)
+if($_pgR['act'] == Model_User::ACT_SET_ROLE)
 {
-	
-	$userID = $_pgR['uid'];
-    /*
-	$advertising =  $objAdvertising->getAdvertisingByID($advertisingID);
-	if($advertising)
-	{
-		$advertising[global_mapping::StartDate] = global_common::formatDateVN($advertising[global_mapping::StartDate]);
-		$advertising[global_mapping::EndDate] = global_common::formatDateVN($advertising[global_mapping::EndDate]);
-		//echo json_encode($advertising);
+    if (global_common::isAdmin())
+    {                        	
+    	$userID = $_pgR[global_mapping::UserID];
+    	$isAdmin = $_pgR[global_mapping::RoleID];
+    	$result = $objUser->setRoleAdmin($userID, $isAdmin);
+    	if ($result)
+    	{
+    		$arrHeader = global_common::getMessageHeaderArr($banCode);//$banCode
+    		echo global_common::convertToXML(
+    				$arrHeader, array("rs", "inf"), 
+    				array(1,'Update successfully'), 
+    				array( 0, 1 )
+    				);
+    		return;
+    	}
+    	else
+    	{
+    		echo global_common::convertToXML($arrHeader, array("rs","inf"), array(0,'Update failed'), array(0,1));
+    		return;
+    	}
+    }
+    else
+    {
+        echo global_common::convertToXML($arrHeader, array("rs","inf"), array(0,'Update failed. You have no permision to perform this'), array(0,1));
+    		return;
+    }
+}
+elseif($_pgR['act'] == Model_User::ACT_SET_PASWORD)
+{
+    if (global_common::isAdmin())
+    {                  	
+    	$userID = $_pgR[global_mapping::UserID];
+    	$password = $_pgR[global_mapping::Password];
+        $confirmedPassword = $_pgR['ConfirmedPassword'];
+        if($password == $confirmedPassword)
+        {
+        	$result = $objUser->changeResetPassword($userID, $password);
+        	if ($result)
+        	{
+        		$arrHeader = global_common::getMessageHeaderArr($banCode);//$banCode
+        		echo global_common::convertToXML(
+        				$arrHeader, array("rs", "inf"), 
+        				array(1,'Update successfully'), 
+        				array( 0, 1 )
+        				);
+        		return;
+        	}
+        	else
+        	{
+        		echo global_common::convertToXML($arrHeader, array("rs","inf"), array(0,'Update failed'), array(0,1));
+        		return;
+        	}
+        }
+        else
+        {
+            echo global_common::convertToXML($arrHeader, array("rs","inf"), array(0,'Update failed. Password not matched'), array(0,1));
+        		return;
+        }
+    }
+    else
+    {
+        echo global_common::convertToXML($arrHeader, array("rs","inf"), array(0,'Update failed. You have no permision to perform this'), array(0,1));
+    		return;
+    }
+}
+ else if ($_pgR["act"] == Model_User::ACT_GET)
+{
+	$userID = $_pgR[global_mapping::UserID];
+	$userInfo =  $objUser->getUserByID($userID);
+	if($userInfo)
+	{       		
 		echo global_common::convertToXML($strMessageHeader, 
-				array("rs","content"),array(1,json_encode($advertising)), array(0,1));
+				array("rs","content"),array(1,json_encode($userInfo)), array(0,1));
 	}
 	else
 	{
 		echo global_common::convertToXML($arrHeader, array("rs","inf"), array(0,"Data is invalid. Pleae try again later"), array(0,1));
 	}
-	*/
+	
 	return ;
 }
-
 //$catID = $_pgR["cid"];
 $page = $_pgR["p"];
 if(!$page)
@@ -103,6 +165,7 @@ include_once('include/_admin_header.inc');
 //print_r($advertising);
 if($allUsers)
 {
+    echo global_common::getPagingHTMLByNum($page,Model_User::NUM_PER_PAGE,$total, 'core.util.changePage','admin_user');
 	echo '<table class="table table-striped">';
 	echo '<thead>';
 	echo '<th>';
@@ -181,7 +244,7 @@ include_once('include/_admin_footer.inc');
 ?>
 
 
-<div id="modal-add" class="modal hide fade" tabindex="-1" data-width="600" data-keyboard="false"  aria-hidden="true" data-backdrop="static">
+<div id="modal-add" class="modal hide fade" tabindex="-1" data-width="650" data-keyboard="false"  aria-hidden="true" data-backdrop="static">
     <div class="modal-header">
         <!--button type="button" class="close" data-dismiss="modal" aria-hidden="true">
         </button-->
@@ -220,7 +283,7 @@ include_once('include/_admin_footer.inc');
 									<label class="control-label">
 										Mật khẩu mới</label>                                                                													
 									<div class="controls">
-										<input type="password" id="txtNewPass" class="m-wrap span4" name="password">
+										<input type="password" id="txtPassowrd" class="m-wrap span4" name="txtPassowrd">
 										<div class="help-inline message"></div>
 									</div>
 								</div>

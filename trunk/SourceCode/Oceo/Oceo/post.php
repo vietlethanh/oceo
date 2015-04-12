@@ -2,12 +2,11 @@
 
 /* TODO: Add code here */
 require('config/globalconfig.php');
-include_once('class/model_status.php');
+
 include_once('class/model_articletype.php');
 include_once('class/model_product.php');
-include_once('class/model_retailer.php');
 include_once('class/model_user.php');
-
+include_once('class/model_article.php');
 include_once('class/model_manufactory.php');
 include_once('class/model_property.php');
 include_once('class/model_productproperty.php');
@@ -15,8 +14,6 @@ include_once('class/model_propertygroup.php');
 include_once('class/model_datatype.php');
 include_once('class/model_adtype.php');
 include_once('class/model_city.php');
-
-$objStatus = new Model_Status($objConnection);
 //get catId from _article.inc
 //$catID = $_pgR['cid'];
 $objCity = new Model_City($objConnection);
@@ -32,7 +29,6 @@ $keyword =  $_pgR['kw'];
 <?php
 $objArticleType = new model_ArticleType($objConnection);
 $objProduct = new Model_Product($objConnection);
-
 $objProductProperty = new Model_ProductProperty($objConnection);
 $objManufactory = new Model_Manufactory($objConnection);
 $catID = $_pgR['cid'];
@@ -126,18 +122,7 @@ if($productInIDs)
 }
 //echo 'search:'. $search;
 if($search)
-{
-    if($_pgR["mode"])//latest post view
-    {
-        $type= $_pgR["type"];
-        $retailers = $objProduct->getLatestRetailer($page,$search,$type,$total);
-        
-    }
-    else //product view
-    {
-        $products = $objProduct->getAllProduct($page,'*',$search,null,$total);
-    }    
-}
+	$products = $objProduct->getAllProduct($page,'*',$search,null,$total);
 //echo $total;
 
 //print_r($topProperties);
@@ -198,16 +183,17 @@ include_once('include/_search_box.inc');
 //article list
 include_once('include/_company_list.inc');
 ?>
-
 <?php 
-
 if($products)
 {
-	include_once('include/_product_list.inc');    
+	//article list
+	include_once('include/_product_list.inc');
+    include_once('include/_post_list.inc');
 }
-else if($retailers)
+else
 {
-	include_once('include/_post_list.inc');
+	//keyword list
+	//include_once('include/_keyword_list.inc');
 }
 ?>
 <?php 

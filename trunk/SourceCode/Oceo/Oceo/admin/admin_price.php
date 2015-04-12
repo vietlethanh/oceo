@@ -223,6 +223,7 @@ foreach($allCities as $item)
 //print_r($allRetailers);
 if($allRetailers)
 {
+    echo global_common::getPagingHTMLByNum($page,Model_Retailer::NUM_PER_PAGE,$total, 'core.util.changePage','admin_price');
 	echo '<table class="table table-striped">';
 	echo '<thead>';
 	echo '<th>';
@@ -258,10 +259,10 @@ if($allRetailers)
 		echo $item[global_mapping::CreatedBy][global_mapping::UserName];		
 		echo '</td>';
 		echo '<td>';
-		echo global_common::formatDateVN($item[global_mapping::CreatedDate]);		
+		echo global_common::formatDateTimeVN($item[global_mapping::CreatedDate]);		
 		echo '</td>';
 		echo '<td>';
-		echo global_common::formatDateVN($item[global_mapping::ModifiedDate]);		
+		echo global_common::formatDateTimeVN($item[global_mapping::ModifiedDate]);		
 		echo '</td>';
 		echo '<td style="padding:0;width:180px">';
 		echo '<a href="'.global_common::buildRetailerLink($item[global_mapping::RetailerID], true).'" target="_blank" class="btn btn-mini"> View</a> ';	
@@ -278,7 +279,7 @@ if($allRetailers)
 		
 	}
 	echo '</table>';
-	echo global_common::getPagingHTMLByNum($page,Model_ProductPrice::NUM_PER_PAGE,$total, 'core.util.changePage','admin_price');
+	echo global_common::getPagingHTMLByNum($page,Model_Retailer::NUM_PER_PAGE,$total, 'core.util.changePage','admin_price');
 }
 ?>
 				</div>

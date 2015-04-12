@@ -1,5 +1,9 @@
 #product-list
 {
+	.mode-view
+	{
+	 
+	}
 	margin-top:30px;
 	#products
 	{
@@ -67,6 +71,75 @@
 				
 			}
 			
+		}
+	}
+	#posts
+	{
+		display: inline-block;
+		background-clip: padding-box;
+		border: 5px solid rgba(113, 108, 104, 0.3);
+		margin: 1px;
+		vertical-align: top;
+		width:80%;
+		.item
+		{
+			vertical-align: top;
+			margin-top: 4px;	
+			padding:8px;
+			padding-right: 22px;
+			background: none repeat scroll 0 0 #eeeeee; 
+			display: inline-block;
+			margin-bottom: 0px;
+			overflow: hidden;
+			width:96%;
+			box-shadow: 0px 4px 2px #888888;
+			.avatar
+			{
+				
+				display:inline-block;
+				img
+				{
+					height:65px;
+					max-width: 51px;
+				}
+			}
+			.post-detail
+			{
+				vertical-align: top;
+				display:inline-block;
+				width:92%;
+				.username
+				{		
+					float: right;
+					line-height:10px;
+					a
+					{
+						
+					}
+					p.created-date
+					{
+						padding: 2px 5px;
+						float: right;
+					}
+				}
+				.post-detail-content 
+				{	
+					.title
+					{
+						color:$color_header_menu;
+						font-size:1.3em;					
+						line-height:1em;
+						text-align: center;
+					}
+					.price
+					{		
+						color: red;	
+						font-size:1.2em;
+						font-weight:bold;
+					}
+					display: inline;
+				}
+			}								
 		}
 	}
 	#advertises

@@ -177,7 +177,7 @@ if ($_pgR["rid"])
 						<div class="control-group">
 							<label class="control-label">Giá sản phẩm:</label>
 							<div class="controls">	
-								<label class=""><?php echo global_common::FormatPrice($retailer[global_mapping::Price]) ?></label>
+								<label class="price"><?php echo global_common::FormatPrice($retailer[global_mapping::Price]) ?></label>
 							</div>
 						</div>
 <?php

@@ -31,7 +31,8 @@ class Model_User
 	const ACT_RESET_PASS					= 21;
 	const ACT_UPDATE_RESET_PASS				= 22;
 	const ACT_CONTACT_US					= 23;
-	
+    const ACT_SET_ROLE  					= 24;
+	const ACT_SET_PASWORD                   = 25;
 	const NUM_PER_PAGE                      = 15;
 	
 	const TBL_SL_USER			            = 'sl_user';
@@ -268,6 +269,29 @@ class Model_User
 		return 0;
 	}
 	
+    function setRoleAdmin($userID, $isAdmin)
+	{
+		$userInfo = $this->getUserByID($userID);
+		
+		if($userInfo){
+			
+			$sqlUpdate = '`RoleID` ='.global_common::escape_mysql_string($isAdmin).'';
+			$condition = '`UserID` = \''.$userID.'\'';
+			$strTableName = self::TBL_SL_USER;
+			$strSQL = global_common::prepareQuery(global_common::SQL_UPDATE_BY_CONDITION,
+					array($strTableName, $sqlUpdate,$condition));
+			//echo $strSQL;
+			if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_SL_USER,$this->_objConnection,$strTableName))
+			{
+				//echo $strSQL;
+				global_common::writeLog('Error add setRoleAdmin:'.$strSQL,1);
+				return -1;
+			}	
+			return 1;
+		}
+		return 0;
+	}
+    
 	public function getUserByID($objID,$selectField='*') 
 	{		
 		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
@@ -404,7 +428,7 @@ class Model_User
 					array($selectField, Model_User::TBL_SL_USER ,							
 						$whereClause.$orderBy ));
 		}
-	//	echo '<br>SQL:'.$strSQL;
+		
 		$arrResult =$this->_objConnection->selectCommand($strSQL);		
 		if(!$arrResult)
 		{

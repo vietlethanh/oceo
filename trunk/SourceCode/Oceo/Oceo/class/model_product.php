@@ -186,8 +186,8 @@ class Model_Product
 					global_common::escape_mysql_string($description),
 					global_common::escape_mysql_string($createdby),
 					global_common::nowSQL(),
-					global_common::escape_mysql_string($modifiedby),
-					global_common::escape_mysql_string($modifieddate),
+					global_common::escape_mysql_string($createdby),
+					global_common::nowSQL(),
 					global_common::escape_mysql_string($deletedby),
 					global_common::escape_mysql_string($deleteddate),
 					global_common::escape_mysql_string($isdeleted),
@@ -470,6 +470,95 @@ class Model_Product
 		return $arrResult;
 	}
 	
+    public function getLatestRetailer($intPage = 0,$whereClause='',$type, &$total) 
+	{		
+		if($whereClause)
+		{
+			$whereClause = ' WHERE '.$whereClause;
+		}
+	
+		$orderBy = ' ORDER BY '.global_mapping::ModifiedDate.' DESC';
+		
+		
+		$strSQL = global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+					array(global_mapping::ProductID, Model_Product::TBL_SL_PRODUCT ,							
+						$whereClause ));
+	   
+		//echo '<br>SQL:'.$strSQL;
+		$products =$this->_objConnection->selectCommand($strSQL);		
+		if(!$products)
+		{
+			global_common::writeLog('get All sl_product:'.$strSQL,1,$_mainFrame->pPage);
+			return null;
+		}
+                
+        $productIDs = global_common::getArrayColumn($products,global_mapping::ProductID);
+        $productIDs = array_unique($productIDs);
+        //print_r($productIDs);
+        $strQueryIN = global_common::convertToQueryIN($productIDs);
+       	$whereClause= 'Where '.							
+						global_mapping::ProductID.' IN ('.$strQueryIN.')';
+        if($type)
+        {
+            $whereClause.= ' And '.global_mapping::ProductStatusID.'='.$type;
+        }
+		
+        $strSQL = global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+					array('*', Model_Retailer::TBL_SL_RETAILER , $whereClause.$orderBy .' limit '.(($intPage-1)* self::NUM_PER_PAGE).','.self::NUM_PER_PAGE));
+			
+        $arrResult =$this->_objConnection->selectCommand($strSQL);
+        //echo $strSQL;
+       	if(!$arrResult)
+		{
+			global_common::writeLog('get All Retailers:'.$strSQL,1,$_mainFrame->pPage);
+			return null;
+		}	
+        
+        $strSQLCount = global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+					array('count(*)', Model_Retailer::TBL_SL_RETAILER ,							
+						$whereClause));
+
+        //Get details of product to display
+        $productIDs = global_common::getArrayColumn($arrResult,global_mapping::ProductID);
+        $productIDs = array_unique($productIDs);
+        //print_r($productIDs);
+        $strQueryIN = global_common::convertToQueryIN($productIDs);
+        $productDetails = $this->getProductByIDs($productIDs);
+        
+        $convertedProducts = array();
+		foreach($productDetails as $key => $info)
+		{
+			$convertedProducts[$info[global_mapping::ProductID]]=$info;
+			unset($productDetails[$key]);
+		}	
+        $objStatus = new Model_Status($this->_objConnection);
+        $productStatus = $objStatus->getAllStatus();
+        $convertedStatus = array();
+		foreach($productStatus as $key => $info)
+		{
+			$convertedStatus[$info[global_mapping::StatusID]]=$info;
+			unset($productStatus[$key]);
+		}	
+        
+        //echo '<br>$strSQLCount:'.$strSQLCount;
+		//Get total results
+        if($strSQLCount)
+		{
+			$arrTotal =$this->_objConnection->selectCommand($strSQLCount);		
+			$total = $arrTotal[0][0];
+		}
+        //Assign product details to retailers by ProductID
+        $count = count($arrResult);
+		for($index=0;$index < $count;$index++)
+		{			
+		      $arrResult[$index]["Product"] = $convertedProducts[$arrResult[$index][global_mapping::ProductID]];		
+              $arrResult[$index][global_mapping::StatusName] = $convertedStatus[$arrResult[$index][global_mapping::ProductStatusID]][global_mapping::StatusName];
+		}
+        //echo 'Before merge comment info';
+		$arrResult = global_common::mergeUserInfo($arrResult,$this->_objConnection);
+              
+		return $arrResult;
+	}
 	
 	
 	public function getListProduct($intPage,$orderBy='ProductID', $whereClause)

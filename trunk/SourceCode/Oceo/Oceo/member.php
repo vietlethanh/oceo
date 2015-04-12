@@ -53,7 +53,7 @@ include_once('include/_menu.inc');
                                 <li><span>Tên đăng nhập:</span> <?php echo global_common::formatOutputText($currentUser[global_mapping::UserName])?></li>
                                 <li><span>Họ và Tên:</span> <?php echo global_common::formatOutputText($currentUser[global_mapping::FullName])?></li>
 								<li><span>Tham gia:</span> 
-									<?php echo global_common::formatOutputText(global_common::formatDateVN($currentUser[global_mapping::CreatedDate]))?></li>
+									<?php echo global_common::formatOutputText(global_common::formatDateTimeVN($currentUser[global_mapping::CreatedDate]))?></li>
                                 <li><span>Giới tính:</span> <?php echo ($currentUser[global_mapping::UserName]?'Nam':'Nữ')?></li>
                                 <li><span>Email:</span> <a href="mailto:">  <?php echo global_common::formatOutputText($currentUser[global_mapping::Email])?></a></li>
 	   						 <li><span>Số điện thoại:</span> <?php echo ($currentUser[global_mapping::Phone])?></li>                               

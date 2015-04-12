@@ -187,6 +187,7 @@ foreach($allManuFactories as $item)
 //print_r($allRetailers);
 if($products)
 {
+    echo global_common::getPagingHTMLByNum($page,Model_Product::NUM_PER_PAGE,$total, 'core.util.changePage','admin_product');
 	echo '<table class="table table-striped">';
 	echo '<thead>';
 	echo '<th>';
@@ -216,10 +217,10 @@ if($products)
 		echo $item[global_mapping::CreatedBy][global_mapping::UserName];		
 		echo '</td>';
 		echo '<td>';
-		echo global_common::formatDateVN($item[global_mapping::CreatedDate]);		
+		echo global_common::formatDateTimeVN($item[global_mapping::CreatedDate]);		
 		echo '</td>';
 		echo '<td>';
-		echo global_common::formatDateVN($item[global_mapping::ModifiedDate]);		
+		echo global_common::formatDateTimeVN($item[global_mapping::ModifiedDate]);		
 		echo '</td>';
 		echo '<td style="padding:0;width:180px">';
 		echo '<a href="'.global_common::buildRetailerLink($item[global_mapping::RetailerID], true).'" target="_blank" class="btn btn-mini"> View</a> ';	
