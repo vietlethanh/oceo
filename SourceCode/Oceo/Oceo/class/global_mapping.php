@@ -135,6 +135,9 @@ class global_mapping
 	
 	const ShippingDesc				= 'ShippingDesc';
 	const StatusDetail				= 'StatusDetail';
+    
+     
+    
 	
 }
 ?>

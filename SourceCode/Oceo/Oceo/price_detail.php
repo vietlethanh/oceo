@@ -2,19 +2,21 @@
 
 /* TODO: Add code here */
 require('config/globalconfig.php');
+include_once('class/model_status.php');
 include_once('class/model_articletype.php');
 include_once('class/model_article.php');
 include_once('class/model_comment.php');
 include_once('class/model_user.php');
 include_once('class/model_product.php');
 include_once('class/model_retailer.php');
-include_once('class/model_status.php');
+
 include_once('class/model_property.php');
 include_once('class/model_productprice.php');
 include_once('class/model_productproperty.php');
 include_once('class/model_propertygroup.php');
 include_once('class/model_datatype.php');
 include_once('class/model_manufactory.php');
+$objStatus = new Model_Status($objConnection);
 $objProduct = new Model_Product($objConnection);
 $objProductProperty = new Model_ProductProperty($objConnection);
 $objArticleType = new Model_ArticleType($objConnection);
@@ -44,7 +46,8 @@ include_once('include/_menu.inc');
 //include_once('include/_cat_list.inc');
 
 ?>
-<script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_article.js');?>"></script>
+<script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_product.js');?>"></script>
+<script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_user.js');?>"></script>
 <script type="text/javascript"> 
 
 </script>

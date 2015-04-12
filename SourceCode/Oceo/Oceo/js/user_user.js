@@ -29,9 +29,12 @@ var user = {
 	ACT_REGISTER:			19,
 	ACT_UPDATE_PROFILE:		20,
 	ACT_RESET_PASS:			21,
-	ACT_UPDATE_RESET_PASS:	22,
+	ACT_UPDATE_RESET_PASS:	22,	
 	ACT_CONTACT_US:	        23,
+    ACT_SET_ROLE:	        24,
+    ACT_SET_PASWORD:         25,
     Page : "bg_user.php",
+    AdminPage : "admin_user.php",
 
     	
 	login: function()
@@ -861,19 +864,123 @@ var user = {
 	showPopupEdit: function(userID, userName, modalID)
 	{
 	   $("#hdUserID").val(userID);
-       $("#spanUserName").text(userName);
-		$('#'+modalID).modal({ backdrop: 'static', keyboard: false });
+       $("#spanUserName").text(userName);       
+       var requestInfo = {
+                            act : this.ACT_GET, 
+                            UserID : userID
+                        };
+       core.request.post(this.AdminPage,requestInfo,
+            function(respone, info){
+				var strRespond = core.util.parserXML(respone);
+				if (parseInt(strRespond[1]['rs']) == 1) {
+   	                var userInfo = $.parseJSON(strRespond[1]['content']);
+					if(userInfo.RoleID == '1' || userInfo.RoleID == 1)
+                    {
+                        $('#ckAdmin').prop('checked', true);
+                    }
+                    else
+                    {
+                        $('#ckAdmin').prop('checked', false);
+                    }
+                    $('#'+modalID).modal({ backdrop: 'static', keyboard: false });
+                }
+                else{
+                    core.ui.showInfoBar(2, strRespond[1]["inf"]);		
+                }
+            },
+            function()
+            {
+				core.ui.showInfoBar(2, core.constant.MsgProcessError);					
+            }
+        );
+       
+		
 		
 	},
     editUserAdmin : function()
     {
+        var submitID = "btnSave";
         if($("#change-role").hasClass("active"))
         {
-            alert("Change role with userid "+ $("#hdUserID").val());
+            var isAdmin = core.util.isChecked("ckAdmin");
+            var data ={act:this.ACT_SET_ROLE}
+            data.RoleID = isAdmin?1:0;
+            data.UserID = core.util.getObjectValueByID("hdUserID");
+            core.request.post(this.AdminPage,data,
+                        function(respone, info){
+                        	var strRespond = core.util.parserXML(respone);
+                        	if (parseInt(strRespond[1]['rs']) == 1) {
+                        		core.ui.showInfoBar(1, strRespond[1]["inf"]);					
+                        		core.util.disableControl(submitID, false);                                           
+                            }
+                            else{
+                                core.ui.showInfoBar(2, strRespond[1]["inf"]);	
+                        		core.util.disableControl(submitID, false);
+                            }
+                        },
+                        function()
+                        {
+                            core.ui.showInfoBar(2, core.constant.MsgProcessError);	
+                            core.util.disableControl(submitID, false);
+                        }
+                );//Set Role
         }
         else
-        {
-            alert("Change password with userid "+ $("#hdUserID").val());
+        {                 
+            var isValid = true;
+            core.util.disableControl(submitID, true);
+    		controlID = 'txtPassowrd';	
+            var password = core.util.getObjectValueByID(controlID);
+            core.util.validateInputTextBox(controlID, '');
+            if (core.util.isNull(password)) {
+                core.util.validateInputTextBox(controlID, 'Mật khẩu không được rỗng', isValid);
+                isValid = false;
+            } 
+    		else if (password.length < 6 ) {
+                core.util.validateInputTextBox(controlID, 'Mật khẩu phải tối thiều 6 ký tự', isValid);
+                isValid = false;
+            }
+    		else if (password.length > 255) {
+                core.util.validateInputTextBox(controlID, 'Mật khẩu phải ngắn hơn 255 ký tự', isValid);
+                isValid = false;
+            }
+    		
+    		controlID = 'txtConfirmPass';	
+    		var confirmPass = core.util.getObjectValueByID(controlID);
+            core.util.validateInputTextBox(controlID, '');
+    		if (confirmPass != password) {
+                core.util.validateInputTextBox(controlID, 'Mật khẩu mới không trùng nhau', isValid);
+                isValid = false;
+            } 
+    		if(isValid == false)
+            {
+                core.util.disableControl(submitID, false);
+                return;
+            }
+         
+            var data ={act:this.ACT_SET_PASWORD};
+            data.UserID = core.util.getObjectValueByID("hdUserID");
+            data.Password = password;
+            data.ConfirmedPassword = confirmPass;
+            
+            core.request.post(this.AdminPage,data,
+                function(respone, info){
+                	var strRespond = core.util.parserXML(respone);
+                	if (parseInt(strRespond[1]['rs']) == 1) {
+                		core.ui.showInfoBar(1, strRespond[1]["inf"]);					
+                		core.util.disableControl(submitID, false);                                           
+                    }
+                    else{
+                        core.ui.showInfoBar(2, strRespond[1]["inf"]);	
+                		core.util.disableControl(submitID, false);
+                    }
+                },
+                function()
+                {
+                    core.ui.showInfoBar(2, core.constant.MsgProcessError);	
+                    core.util.disableControl(submitID, false);
+                }
+            );//Set password
         }
     }
 }

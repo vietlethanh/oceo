@@ -93,6 +93,7 @@ include_once('include/_header.inc');
 												<th class="span4">Tên sản phẩm</th>
 												<th class="span2">Giá bán</th>
 												<th style="width:120px">Tình trạng</th>
+                                                <th style="width:100px">Cập nhật</th>
 												<th style="width:120px"></th>
 											</tr>
 										</thead>
@@ -104,6 +105,7 @@ foreach($allRetailers as $item)
 	echo '									<td><a href="'.global_common::buildProductLink($item[global_mapping::ProductID]).'" >'.$item[global_mapping::ProductName].'</a></td>';
 	echo '									<td class="">'.global_common::FormatPrice($item[global_mapping::Price]).'</td>';
 	echo '									<td class="">'.$item[global_mapping::ProductStatus].' '.$item[global_mapping::StatusDetail].'</td>';
+    echo '									<td >'.global_common::formatDateTimeVN($item[global_mapping::ModifiedDate]).'</td>';
 	echo '									<td class="article-control">';
 	echo '										<a href="post_price.php?pid='.$item[global_mapping::ProductID].'&rid='.$item[global_mapping::RetailerID].'" class="btn btn-mini">Sửa</a>';
 	

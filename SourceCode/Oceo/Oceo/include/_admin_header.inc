@@ -52,6 +52,11 @@
 <script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('ckeditor/ckeditor.js');?>"></script>
 <script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('ckeditor/adapters/jquery.js');?>"></script>
 
+<script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('select2/select2.min.js');?>"></script>
+<link type="text/css" rel="stylesheet"  href="<?php echo $_objSystem->locateJPlugin('select2/select2.css');?>">
+
+
+
 <link type="text/css" rel="stylesheet"  href="<?php echo $_objSystem->locateJPlugin('bootstrap-modal/css/bootstrap-modal.css');?>">
 <script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('bootstrap-modal/js/bootstrap-modal.js');?>"></script>
 <script type="text/javascript" src="<?php echo $_objSystem->locateJPlugin('bootstrap-modal/js/bootstrap-modalmanager.js');?>"></script>
@@ -93,7 +98,7 @@
 		<a class="menu" href="../index.php">oCEO</a>
 		<a class="menu" href="admin_price.php">Manage Price</a>
 		<a class="menu" href="admin_product.php">Manage Product</a>
-		<a class="menu" href="admin_Property.php">Manage Property</a>
+		<a class="menu" href="admin_property.php">Manage Property</a>
         <a class="menu" href="admin_commentbad.php">Manage Comment</a>
 		<a class="menu" href="admin_advertising.php">Manage Advertising</a>
         

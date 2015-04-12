@@ -141,8 +141,14 @@ if (global_common::isCLogin())
 						<i class="icon-angle-down"></i>
 					</a>
 					<ul class="dropdown-menu">
+                    <?php
+                    if(global_common::isAdmin())
+                    {
+                        echo '<li><a href="/admin"><i class="icon-dashboard"></i> Admin Page</a></li>';
+                    }
+                     ?>
 						<li><a href="profile.php"><i class="icon-user"></i> Thông tin cá nhân</a></li>
-						<li><a href="profile_price.php"><i class="icon-reorder"></i> Giá bán của tôi</a></li>
+						<li><a href="profile_price.php"><i class="icon-reorder"></i>Giá bán của tôi</a></li>
 						<li><a href="profile_product.php"><i class="icon-reorder"></i>Sản phẩm của tôi</a></li>
 						<li class="divider"></li>
 						<li><a href="javascript:user.logout();"><i class="icon-signout"></i> Đăng xuất</a></li>

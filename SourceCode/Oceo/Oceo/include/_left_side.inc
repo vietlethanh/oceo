@@ -1,7 +1,7 @@
 <?php
 $objArticleType = new model_ArticleType($objConnection);
-$objArticleType = new model_ArticleType($objConnection);
-$objArticle = new model_Article($objConnection);
+
+
 //$_parentCatID get from parent page
 $allCats = $objArticleType->getAllArticleType(0,null,'ParentID='.$_parentCatID,null);
 if($_pgR["cid"])

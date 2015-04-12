@@ -4,7 +4,7 @@
  * Modifications will be overwritten when code smith is run
  *
  * PLEASE DO NOT MAKE MODIFICATIONS TO THIS FILE
- * Date Created 5/6/2012
+ * Date Created 5/6/2012f
  *
  */
 
@@ -93,7 +93,7 @@ class Model_Retailer
 		#`DeletedBy` = \'{25}\',
 		#`DeletedDate` = \'{26}\',
 		#`IsDeleted` = \'{27}\',
-		`StatusID` = \'{28}\',
+		#`StatusID` = \'{28}\',
 		`Status` = \'{29}\'
 		WHERE `RetailerID` = \'{1}\'  ';
 	
@@ -188,12 +188,12 @@ class Model_Retailer
 					global_common::escape_mysql_string($description),
 					$createdby,
 					global_common::nowSQL(),
-					global_common::escape_mysql_string($modifiedby),
-					global_common::escape_mysql_string($modifieddate),
+					$createdby,
+					global_common::nowSQL(),
 					global_common::escape_mysql_string($deletedby),
 					global_common::escape_mysql_string($deleteddate),
 					global_common::escape_mysql_string($isdeleted),
-					global_common::escape_mysql_string($statusid),
+					global_common::STATUS_ACTIVE,
 					global_common::escape_mysql_string($status)
 					));
 		//echo $strSQL;
@@ -490,9 +490,11 @@ class Model_Retailer
 		}
 		if($strSQLCount)
 		{
+            //echo $strSQLCount;
 			$arrTotal =$this->_objConnection->selectCommand($strSQLCount);		
 			$total = $arrTotal[0][0];
 		}
+        //echo $total;
 		$productIDs = global_common::getArrayColumn($arrResult,global_mapping::ProductID); 
 		//print_r($productIDs);
 		$productIDs = array_unique($productIDs);

@@ -141,6 +141,10 @@ elseif($_pgR['act'] == Model_Advertising::ACT_DELETE)
 }
 $catID = $_pgR["cid"];
 $page = $_pgR["p"];
+if(!$page)
+{
+    $page=1;
+}
 if($catID == 0)
 {
 	$allCatIDs ='';
@@ -176,7 +180,7 @@ if($keyword)
 }
 
 
-$allAds = $objAdvertising->getAllAdvertising(1,null,$search,null,$total);
+$allAds = $objAdvertising->getAllAdvertising($page,null,$search,null,$total);
 $allAdType = $objAdType->getAllAdType(0,null,null,null);
 ?>
 <?php
@@ -224,7 +228,7 @@ foreach($allCats as $parent)
 	//print_r($currentTypes);
 	if($parent[global_mapping::ParentID] == 0)
 	{
-		echo '			<option disabled="disabled" value="'.$parent[global_mapping::ArticleTypeID].'" >'.$parent[global_mapping::ArticleTypeName].'</option>';
+		echo '			<option  value="'.$parent[global_mapping::ArticleTypeID].'" >'.$parent[global_mapping::ArticleTypeName].'</option>';
 		foreach($allCats as $item)
 		{
 			$isSelect = false;
@@ -252,6 +256,7 @@ foreach($allCats as $parent)
 //print_r($advertising);
 if($allAds)
 {
+    echo global_common::getPagingHTMLByNum($page,Model_Advertising::NUM_PER_PAGE,$total, 'core.util.changePage','admin_advert');
 	echo '<table class="table table-striped">';
 	echo '<thead>';
 	echo '<th>';
