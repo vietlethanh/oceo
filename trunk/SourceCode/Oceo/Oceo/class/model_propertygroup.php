@@ -263,6 +263,20 @@ class Model_PropertyGroup
 			return null;
 		}
         $total = count($arrResult);
+        $objCat = new Model_ArticleType($this->_objConnection);
+        $allCats = $objCat->getAllArticleType(0);
+        $convertedCats = array();
+		foreach($allCats as $key => $info)
+		{
+			$convertedCats[$info[global_mapping::ArticleTypeID]]=$info;
+			unset($allCats[$key]);
+		}	
+        $count = count($arrResult);
+		for($index=0;$index < $count;$index++)
+		{	  
+              $arrResult[$index][global_mapping::ArticleTypeName] = $convertedCats[$arrResult[$index][global_mapping::ArticleTypeID]][global_mapping::ArticleTypeName];
+		}
+        
 		//print_r($arrResult);
 		return $arrResult;
 	}
