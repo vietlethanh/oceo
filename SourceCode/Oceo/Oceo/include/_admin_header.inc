@@ -101,7 +101,7 @@
 		<a class="menu" href="admin_property.php">Manage Property</a>
         <a class="menu" href="admin_commentbad.php">Manage Comment</a>
 		<a class="menu" href="admin_advertising.php">Manage Advertising</a>
-        
+        <a class="menu" href="admin_manufactory.php">Manage Manufactory</a>        
         <a class="menu" href="admin_user.php">Manage User</a>
     </div>
 	<div class="wrapper">		

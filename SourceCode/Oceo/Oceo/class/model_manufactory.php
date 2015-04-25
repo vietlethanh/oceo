@@ -51,12 +51,12 @@ class Model_Manufactory
 			`ManufactoryName` = \'{2}\',
 			`CategoryID` = \'{3}\',
 			`Order` = \'{4}\',
-			`CreatedBy` = \'{5}\',
-			`CreatedDate` = \'{6}\',
+			#`CreatedBy` = \'{5}\',
+			#`CreatedDate` = \'{6}\',
 			`ModifiedBy` = \'{7}\',
 			`ModifiedDate` = \'{8}\',
-			`DeletedBy` = \'{9}\',
-			`DeletedDate` = \'{10}\',
+			#`DeletedBy` = \'{9}\',
+			#`DeletedDate` = \'{10}\',
 			`IsDeleted` = \'{11}\'
 		WHERE `ManufactoryID` = \'{1}\'  ';
 		   
@@ -101,9 +101,10 @@ class Model_Manufactory
     
     #region Public Functions
     
-    public function insert( $manufactoryname,$categoryid,$order,$createdby,$createddate,$modifiedby,$modifieddate,$deletedby,$deleteddate,$isdeleted)
+    public function insert( $manufactoryname,$categoryid,$order,$createdby,$isdeleted)
 	{
-		$intID = global_common::getMaxID(self::TBL_SL_MANUFACTORY);
+	    $strTableName = self::TBL_SL_MANUFACTORY;
+		$intID = global_common::getMaxValueofField($this->_objConnection,global_mapping::ManufactoryID, $strTableName) + 1;
 		
 		$strTableName = self::TBL_SL_MANUFACTORY;
 		$strSQL = global_common::prepareQuery(self::SQL_INSERT_SL_MANUFACTORY,
@@ -112,14 +113,14 @@ class Model_Manufactory
 						global_common::escape_mysql_string($categoryid),
 						global_common::escape_mysql_string($order),
 						global_common::escape_mysql_string($createdby),
-						global_common::escape_mysql_string($createddate),
-						global_common::escape_mysql_string($modifiedby),
-						global_common::escape_mysql_string($modifieddate),
+						global_common::nowSQL(),
+						global_common::escape_mysql_string($createdby),
+						global_common::nowSQL(),
 						global_common::escape_mysql_string($deletedby),
 						global_common::escape_mysql_string($deleteddate),
 						global_common::escape_mysql_string($isdeleted)
                 ));
-		
+		//echo $strSQL;
 		if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_SL_MANUFACTORY,$this->_objConnection,$strTableName))
 		{
 			//echo $strSQL;
@@ -130,7 +131,7 @@ class Model_Manufactory
 		
 	}
     
-    public function update($manufactoryid,$manufactoryname,$categoryid,$order,$createdby,$createddate,$modifiedby,$modifieddate,$deletedby,$deleteddate,$isdeleted)
+    public function update($manufactoryid,$manufactoryname,$categoryid,$order,$modifiedby,$isdeleted)
 	{
 		$strTableName = self::TBL_SL_MANUFACTORY;
 		$strSQL = global_common::prepareQuery(self::SQL_UPDATE_SL_MANUFACTORY,
@@ -142,19 +143,19 @@ class Model_Manufactory
 						global_common::escape_mysql_string($createdby),
 						global_common::escape_mysql_string($createddate),
 						global_common::escape_mysql_string($modifiedby),
-						global_common::escape_mysql_string($modifieddate),
+						global_common::nowSQL(),
 						global_common::escape_mysql_string($deletedby),
 						global_common::escape_mysql_string($deleteddate),
-						global_common::escape_mysql_string($isdeleted)
+						$isdeleted
                 ));
 		
 		if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_SL_MANUFACTORY,$this->_objConnection,$strTableName))
 		{
-			//echo $strSQL;
+			echo $strSQL;
 			global_common::writeLog('Error add sl_manufactory:'.$strSQL,1);
 			return false;
 		}	
-		return $intNewID;		
+		return $manufactoryid;		
 	}
     
     public function getManufactoryByID($objID, $selectField='*') 
@@ -200,11 +201,27 @@ class Model_Manufactory
         }
 		//echo '<br>SQL:'.$strSQL;
 		$arrResult =$this->_objConnection->selectCommand($strSQL);		
+        
 		if(!$arrResult)
 		{
 			global_common::writeLog('get All sl_manufactory:'.$strSQL,1,$_mainFrame->pPage);
 			return null;
 		}
+        
+        $objCat = new Model_ArticleType($this->_objConnection);
+        $allCats = $objCat->getAllArticleType(0);
+        $convertedCats = array();
+		foreach($allCats as $key => $info)
+		{
+			$convertedCats[$info[global_mapping::ArticleTypeID]]=$info;
+			unset($allCats[$key]);
+		}	
+        $count = count($arrResult);
+		for($index=0;$index < $count;$index++)
+		{	  
+              $arrResult[$index][global_mapping::ArticleTypeName] = $convertedCats[$arrResult[$index][global_mapping::CategoryID]][global_mapping::ArticleTypeName];
+		}
+        
 		//print_r($arrResult);
 		return $arrResult;
 	}

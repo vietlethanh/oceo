@@ -275,7 +275,7 @@ if($allGroups)
 		echo $item[global_mapping::PropertyGroupName];		
 		echo '</td>';
 		echo '<td style="">';
-		echo $item[global_mapping::ArticleTypeID];		
+		echo $item[global_mapping::ArticleTypeName];		
 		echo '</td>';	
 		echo '<td style="">';
 		echo $item[global_mapping::Order];
@@ -334,7 +334,7 @@ include_once('include/_admin_footer.inc');
         
 		 <div class="control-group">
             <label class="control-label">
-                Group Name 
+                Category Name 
             </label>
             <div class="controls">
                 <select tabindex="1" class="span5" id="cmdCat">

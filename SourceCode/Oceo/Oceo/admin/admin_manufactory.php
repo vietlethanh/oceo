@@ -9,216 +9,349 @@
  */
 
 /// <summary>
-/// Implementations of slmanufactorys represent a Manufactory
+/// Implementations of Manufactory represent a Manufactory
 ///
 /// </summary>
 chdir("..");
 /* TODO: Add code here */
 require('config/globalconfig.php');
+require('include/_permission_admin.inc');
+include_once('class/model_user.php');
+include_once('class/model_articletype.php');
 include_once('class/model_manufactory.php');
 
-?>
-<?php
+
+$objArticleType = new Model_ArticleType($objConnection);
 
 $objManufactory = new Model_Manufactory($objConnection);
 
-if ($_pgR["act"] == model_Manufactory::ACT_ADD)
-{
-	
-	if (global_common::isCLogin())
-	{
-		//get user info
-		//$c_userInfo = $_SESSION[consts::SES_C_USERINFO];
-		
-		//if ($objMenu->getMenuByName($_pgR['name'])) {
-		//	echo global_common::convertToXML($arrHeader, array("rs",'info'), array(0,global_common::STRING_NAME_EXIST), array(0,1));
-		//	return;
-		//}
+$allCats = $objArticleType->getAllArticleType(0,null,'',null);
 
-		$manufactoryID = $_pgR['ManufactoryID'];
-		$manufactoryID = global_editor::rteSafe(html_entity_decode($manufactoryID,ENT_COMPAT ,'UTF-8' ));
-		$manufactoryName = $_pgR['ManufactoryName'];
-		$manufactoryName = global_editor::rteSafe(html_entity_decode($manufactoryName,ENT_COMPAT ,'UTF-8' ));
-		//$strName = $_pgR['name'];
-		//$strName = global_editor::rteSafe(html_entity_decode($strName,ENT_COMPAT ,'UTF-8' ));
-		$resultID = $objManufactory->insert($manufactoryID,$manufactoryName,);
+if ($_pgR["act"] == Model_Manufactory::ACT_ADD || $_pgR["act"] == Model_Manufactory::ACT_UPDATE)
+{
+	//get user info
+	$c_userInfo = $_SESSION[global_common::SES_C_USERINFO];
+	
+	$manufactoryName = $_pgR[global_mapping::ManufactoryName];
+	$manufactoryName = html_entity_decode($manufactoryName,ENT_COMPAT ,'UTF-8' );
+	
+	$articleTypeID = html_entity_decode($_pgR[global_mapping::ArticleTypeID],ENT_COMPAT ,'UTF-8' );
+	
+	$order = html_entity_decode($_pgR[global_mapping::Order],ENT_COMPAT ,'UTF-8' );	
+	$status = 1;
+	if($_pgR["act"] == Model_Manufactory::ACT_ADD)
+	{
+		$createdBy = $c_userInfo[global_mapping::UserID];
+		
+		$resultID = $objManufactory->insert($manufactoryName,$articleTypeID,$order,$createdBy,$status);
 		if ($resultID)
 		{
 			$arrHeader = global_common::getMessageHeaderArr($banCode);//$banCode
 			echo global_common::convertToXML(
 					$arrHeader, array("rs", "inf"), 
-					array(1, $result), 
+					array(1, 'Tạo mới thành công'), 
 					array( 0, 1 )
 					);
 			return;
 		}
 		else
 		{
-			echo global_common::convertToXML($arrHeader, array("rs","info"), array(0,"Input data is invalid"), array(0,1));
+			echo global_common::convertToXML($arrHeader, array("rs","inf"), array(0,"Input data is invalid"), array(0,1));
 			return;
 		}
 	}
 	else
 	{
-		echo global_common::convertToXML($arrHeader, array("rs",'info'), array(0,global_common::STRING_REQUIRE_LOGIN), array(0,1));
-	}
-	return;
-}
-elseif($_pgR['act'] == model_Manufactory::ACT_UPDATE)
-{
-	if (global_common::isCLogin())
-	{
-		//l?y th?ng tin user
-		//$c_userInfo = $_SESSION[consts::SES_C_USERINFO];
-		
-
-		$manufactoryID = $_pgR['ManufactoryID'];
-		$manufactoryID = global_editor::rteSafe(html_entity_decode($manufactoryID,ENT_COMPAT ,'UTF-8' ));
-		$manufactoryName = $_pgR['ManufactoryName'];
-		$manufactoryName = global_editor::rteSafe(html_entity_decode($manufactoryName,ENT_COMPAT ,'UTF-8' ));
-        
-		//$checkProduct = $objMenu->getMenuByName($_pgR['name']);
-		//if ($checkProduct && $checkProduct['menu_id']!= $strID) {
-		//	echo global_common::convertToXML($arrHeader, array("rs",'info'), array(0,global_common::STRING_NAME_EXIST), array(0,1));
-		//	return;
-		//}
-		//$strName = $_pgR['name'];
-		//$strDetail= $_pgR['detail'];
-		$resultID = $objManufactory->update($manufactoryID,$manufactoryName,);
-		
+		$modifiedBy = $c_userInfo[global_mapping::UserID];
+		$manufactoryID = html_entity_decode($_pgR[global_mapping::ManufactoryID],ENT_COMPAT ,'UTF-8' );
+	//	$currentProperty = $objProperty->getPropertyByID($propertyID);
+		$resultID = $objManufactory->update($manufactoryID,$manufactoryName,$articleTypeID,$order,$modifiedBy,$status);
 		if ($resultID)
 		{
 			$arrHeader = global_common::getMessageHeaderArr($banCode);//$banCode
-			
 			echo global_common::convertToXML(
 					$arrHeader, array("rs", "inf"), 
-					array(1, $result ), 
+					array(1, 'Cập nhật thành công'), 
 					array( 0, 1 )
 					);
 			return;
 		}
 		else
 		{
-			echo global_common::convertToXML($arrHeader, array("rs"), array(0), array(0));
+			echo global_common::convertToXML($arrHeader, array("rs","inf"), array(0,"Input data is invalid"), array(0,1));
 			return;
 		}
 	}
-	else
-	{
-		echo global_common::convertToXML($arrHeader, array("rs",'info'), array(0,global_common::STRING_REQUIRE_LOGIN), array(0,1));
-	}
 	return;
 }
-elseif($_pgR['act'] == model_Manufactory::ACT_CHANGE_PAGE)
-{
-	$intPage = $_pgR['p'];
-	
-	$outPutHTML =  $objManufactory->getListManufactory($intPage);
-	echo global_common::convertToXML($strMessageHeader, array('rs','inf'), array(1,$outPutHTML),array(0,1));
-	return ;
-}
-elseif($_pgR['act'] == model_Manufactory::ACT_SHOW_EDIT)
+elseif($_pgR['act'] == Model_Manufactory::ACT_SHOW_EDIT)
 {
 	
-	$strManufactoryID = $_pgR['id'];
-	$arrManufactory =  $objManufactory->getManufactoryByID($strManufactoryID);
-	
-	echo global_common::convertToXML($strMessageHeader, array('rs','ManufactoryID','ManufactoryName',), array(1,'ManufactoryID','ManufactoryName',),array(0,1,1,));
-	return ;
-}
-elseif ($_pgR["act"] == model_Manufactory::ACT_GET)
-{		
-	$sectionID = $_pgR["sect"];
-	$arrSection= $objMenu->getAllMenuBySection($sectionID);
-	if($arrSection)
+	$manuID = $_pgR['id'];
+	$manu =  $objManufactory->getManufactoryByID($manuID);
+	if($manu)
 	{
-		$strHTML = $objMenu->outputHTMLMenu($arrSection);
-		echo global_common::convertToXML($arrHeader, array("rs", "inf"), 
-				array(1, $strHTML), array(0, 1));
-		return;	
+	
+		echo global_common::convertToXML($strMessageHeader, 
+				array("rs","content"),array(1,json_encode($manu)), array(0,1));
 	}
 	else
 	{
-		echo global_common::convertToXML($arrHeader, array("rs",'inf'),array(0,'Kh?ng c? nh?m h?ng'),array(0,0));
-		return ;
+		echo global_common::convertToXML($arrHeader, array("rs","inf"), array(0,"Data is invalid. Pleae try again later"), array(0,1));
 	}
+	
+	return ;
 }
-elseif($_pgR['act'] == model_Manufactory::ACT_DELETE)
+
+elseif($_pgR['act'] == Model_Manufactory::ACT_DELETE)
 {
-	
-	$IDName = "menu_id";
-	$contentID = $_pgR["id"];
-	$strTableName = user_menu::TBL_T_MENU;
-	$result = global_common::updateDeleteFlag($contentID,$IDName,$strTableName ,$_pgR["status"],$objConnection);
-	if($result)
+    $c_userInfo = $_SESSION[global_common::SES_C_USERINFO];
+	$deletedBy = $c_userInfo[global_mapping::UserID];
+	$manuID = $_pgR[global_mapping::ManufactoryID];
+	$status = $_pgR[global_mapping::Status];
+	$result = global_common::updateDeleteFlag($manuID,global_mapping::ManufactoryID,$deletedBy,
+                    Model_Manufactory::TBL_SL_MANUFACTORY,$status,$objConnection);
+	if ($result)
 	{
-		$IDName = "content_id";
-		$strTableName = user_faq::TBL_T_FAQ;
-		$result = global_common::updateDeleteFlag($contentID,$IDName,$strTableName ,$_pgR["status"],$objConnection);
+		$arrHeader = global_common::getMessageHeaderArr($banCode);//$banCode
+		echo global_common::convertToXML(
+				$arrHeader, array("rs", "inf"), 
+				array(1, ($status?'Xóa':'Deactivate').' thành công'), 
+				array( 0, 1 )
+				);
+		return;
 	}
-	$arrHeader = global_common::getMessageHeaderArr($banCode=0,0);
-	$arrKey = array("rs","id");
-	$arrValue = array($result?1:0,$contentID);
-	$arrIsMetaData = array(0, 1);
-	echo global_common::convertToXML($arrHeader, $arrKey, $arrValue, $arrIsMetaData);
-	
-	return;
+	else
+	{
+		echo global_common::convertToXML($arrHeader, array("rs","inf"), array(0,($isActivate?'Xóa':'Deactivate').' unsuccessfully'), array(0,1));
+		return;
+	}
 }
+$catID = $_pgR["cid"];
+//$page = $_pgR["p"];
+
+if($catID)
+{
+    $searchGroup = global_mapping::CategoryID.'= \''.$catID.'\'';
+}
+//show all Manu, not paging
+$allManus = $objManufactory->getAllManufactory(0,'',$searchGroup,'');
+
 ?>
-
 <?php
+$_SESSION[global_common::SES_C_CUR_PAGE] = "admin/admin_manufactory.php";
 include_once('include/_admin_header.inc');
-include_once('include/_admin_menu.inc');
 ?>
-<script type="text/javascript" src="<?php echo $_objSystem->locateJs('sela_Manufactory.js');?>"></script>
-	
-<!--Begin Form Input -->
-<input type="hidden" id="adddocmode" name="adddocmode" value="1<?php //echo $intMode;?>" />
-<input type="hidden" id="txtPage" name="txtPage" value="<?php echo $_pgR["p"]?$intPage:1;?>" />
-<input type="hidden" id="txtID" name="txtID" value="" />
- <center>
-<br><h2 align="center">Mananage Manufactory</h2>
-		<div class="input-field-border input-field-content" >
-				<div id="lgTitle" class="div_admin_group_title" style="">
-				<span style="cursor:default; font-family:inherit" id='status-add' name='status-add'>Add Mode</span></div>
-				
-				<div class="div_admin_group_content_inside" style="width: 100%; top: -20px;">
-				    <table id="tblPopUp" style="width: 100%;" border="0" cellpadding="2" cellspacing="0">
-                        <tbody>
-						<tr>
-							<td width='110'><span style='cursor:default; font-family:inherit'>ManufactoryID</span></td>
-							<td width='10'><span class='forceFillForm'></span></td>
-							<td width='567'><input id='txtManufactoryID' name='txtManufactoryID' value='' style='width: 49.5%;'  maxlength='60' type='text'></td>
-						</tr>
-						<tr>
-							<td width='110'><span style='cursor:default; font-family:inherit'>ManufactoryName</span></td>
-							<td width='10'><span class='forceFillForm'></span></td>
-							<td width='567'><input id='txtManufactoryName' name='txtManufactoryName' value='' style='width: 49.5%;'  maxlength='150' type='text'></td>
-						</tr>
-                        </tbody>
-                    </table>
-				</div>
-	
-
-				<div class="div_admin_group_content_inside" style="margin: 4px; display: block;" align="center">		
-				  <input id="btnOK" value="OK"  style="width: 50px;" onClick="_objManufactory.btnSave_OnClick()" type="button" class="btn btn-oliver"> &nbsp;&nbsp;&nbsp;
-				  <input id="btnClose" value="Cancel" align="center" style="width: 65px;" onClick="_objManufactory.showAddMode()" type="button" class="btn btn-oliver">  
-			  </div>					
-		</div>	
-	
-		</center>
-<!--End Form Input -->
-
-   <div  id="content-admin" >
-                    <div align="center">
-	                    <h2>Danh s?ch</h2>									
-					</div>
-					<div id="list-content" style="padding:10px">
-						<?php echo $objManufactory ->getListManufactory(1) ?>					
-						</div>
+<script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_manufactory.js');?>"></script>
+<div id="admin-manufactory" class="admin-page">
+	<div class="row-fluid">
+		<div class="span12">
+			<!-- BEGIN PAGE TITLE & BREADCRUMB-->
+			<h3 class="page-title">
+				Manage Manufactory
+			</h3>
+		</div>
 	</div>
+	
+	 <div class="row-fluid">	
+            <div class="span12">
+				<input type="hidden" id="adddocmode" name="adddocmode" value="" />
+				<input type="hidden" id="ManufactoryID" name="ManufactoryID" value="" />
+		
+            <a href='javascript:manufactory.showPopupAdd("modal-add")' class="btn" title="Add new Manufactory"><i class="icon-plus"></i> Add New</a>
+              
+	<div class="portlet box">
+		<div class="portlet-title hide">
+			<div class="caption">
+				<!--i class="icon-reorder"></i-->
+			</div>
+			
+			<div class="tools">                                
+				<!--a href="#config-form" data-toggle="modal" class="config"></a-->
+				<!--a href="javascript:;" class="reload" title="Reload"></a-->
+			</div>
+			<div class="actions">									
+				
+			</div>
+		</div>
+		<!---->
+		<div class="portlet-body" style="text-align:center">
+		<form method="get" id="admin_manufactory" style="display: inline-flex" onclick="return core.util.resetSearchForm('admin_manufactory')">
+<select class="" name="cid" id="id" style="height:25px" onchange="">
+<option value="0">Choose Category</option>
+<?php
+foreach($allCats as $parent)
+{
+	//print_r($currentTypes);
+	if($parent[global_mapping::ParentID] == 0)
+	{
+		echo '			<option disabled="disabled" value="'.$parent[global_mapping::ArticleTypeID].'" >'.$parent[global_mapping::ArticleTypeName].'</option>';
+		foreach($allCats as $item)
+		{
+			$isSelect = false;
+			if($item[global_mapping::ParentID] == $parent[global_mapping::ArticleTypeID])
+			{
+				if($item[global_mapping::ArticleTypeID] == $catID)
+				{
+					$isSelect=true;
+				}
+				if($isSelect)
+					echo '			<option selected="selected" value="'.$item[global_mapping::ArticleTypeID].'" >- '.$item[global_mapping::ArticleTypeName].'</option>';
+				else
+					echo '			<option value="'.$item[global_mapping::ArticleTypeID].'" >- '.$item[global_mapping::ArticleTypeName].'</option>';
+			}
+		}
+	}
+}
+?>		
+</select>	
+<input type="submit" value="Search" style="height:24px;margin:0 10px" />	
+<input type="hidden"  name="p" id="p" value="<?php echo ($page) ?>" />	
+</form>	
+		<?php echo 'Total:'.($total?$total:0); ?>							
+<?php
+//print_r($allManus);
+if($allManus)
+{
+	echo '<table class="table table-striped">';
+	echo '<thead>';
+	echo '<th>';
+	echo 'Manufactory Name';		
+	echo '</th>';
+	echo '<th>';
+	echo 'Catagory';		
+	echo '</th>';
+	echo '<th>';
+	echo 'Order';		
+	echo '</th>';
+	echo '<th>';
+	echo 'Action';		
+	echo '</th>';
+	echo '</thead>';
 
-<?php 
-//footer
+   foreach($allManus as $item)
+   {
+    
+		echo '<tr>';
+		echo '<td>';
+		echo $item[global_mapping::ManufactoryName];		
+		echo '</td>';
+		echo '<td style="">';
+		echo $item[global_mapping::ArticleTypeName];		
+		echo '</td>';	
+		echo '<td style="">';
+		echo $item[global_mapping::Order];
+        echo '</td>';    	
+		echo '<td style="padding:0;width:180px">';
+		echo '<a href="javascript:manufactory.showPopupEdit(\''.$item[global_mapping::ManufactoryID].'\',\'modal-add\')" class="btn btn-mini">Edit</a> ';	
+		if(	!$item[global_mapping::IsDeleted])
+		{
+			echo '<a href="javascript:manufactory.delete(\''.$item[global_mapping::ManufactoryID].'\',1)" class="btn btn-mini">Delete</a> ';	
+		}
+		else
+		{
+			echo '<a href="javascript:manufactory.delete(\''.$item[global_mapping::ManufactoryID].'\',0)" class="btn btn-mini">Restore</a>';	
+		}	
+		echo '</td>';
+		echo '</tr>';
+    }
+
+	echo '</table>';
+	//echo global_common::getPagingHTMLByNum($page,Model_Advertising::NUM_PER_PAGE,$total, 'core.util.changePage','admin_advert');
+}
+?>
+				</div>
+					</div>
+		</div>
+	</div>
+</div>
+<?php
 include_once('include/_admin_footer.inc');
 ?>
+
+
+<div id="modal-add" class="modal hide fade" tabindex="-1" data-width="800" data-keyboard="false"  aria-hidden="true" data-backdrop="static">
+    <div class="modal-header">
+        <!--button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+        </button-->
+        <h3 class="popup-title">Add new Manufactory
+        </h3>
+    </div>
+    <div class="modal-body">
+		
+		 <!-- BEGIN FORM-->
+        <form class="form-horizontal" action="#">
+		<div class="control-group">
+			<div class="controls">
+				<!--label class="m-wrap">(*) là thông tin bắt buộc</label-->
+			</div>
+		</div>
+        <div class="control-group">
+            <label class="control-label">
+               Manufactory Name</label>
+            <div class="controls">
+                <input type="text" id="txtManuName" class="span5">
+            </div>
+        </div>
+        
+		 <div class="control-group">
+            <label class="control-label">
+                Category Name 
+            </label>
+            <div class="controls">
+                <select tabindex="1" class="span5" id="cmdCat">
+<?php
+foreach($allCats as $parent)
+{
+	//print_r($currentTypes);
+	if($parent[global_mapping::ParentID] == 0)
+	{
+		echo '			<option disabled="disabled" value="'.$parent[global_mapping::ArticleTypeID].'" >'.$parent[global_mapping::ArticleTypeName].'</option>';
+		foreach($allCats as $item)
+		{
+			$isSelect = false;
+			if($item[global_mapping::ParentID] == $parent[global_mapping::ArticleTypeID])
+			{
+				if($item[global_mapping::ArticleTypeID] == $catID)
+				{
+					$isSelect=true;
+				}
+				if($isSelect)
+					echo '			<option selected="selected" value="'.$item[global_mapping::ArticleTypeID].'" >- '.$item[global_mapping::ArticleTypeName].'</option>';
+				else
+					echo '			<option value="'.$item[global_mapping::ArticleTypeID].'" >- '.$item[global_mapping::ArticleTypeName].'</option>';
+			}
+		}
+	}
+}
+?>		
+                </select>
+            </div>
+         </div>
+		<div class="control-group">
+            <label class="control-label">
+                Order </label>
+            <div class="controls">
+                <input type="text" id="txtOrder" class="span5">
+            </div>
+        </div>	
+       
+        </form>
+        <!-- END FORM-->
+	</div>
+	 <div class="modal-footer">
+		<div class="pull-right">
+			<a href="javascript:manufactory.addManufactory();" class="btn" id="btnSave">Save</a>
+			<a href="javascript:;" class="btn btn-mini" data-dismiss="modal"   aria-hidden="true">Cancel</a>        
+		</div>
+		 <div class="controls pull-right">
+			<label class="checkbox ckCreateOther">
+				<div class="checker">
+					<span class="">
+						<input type="checkbox" value="" id="ckCreateOther"></span>
+				</div>
+				Create another
+			</label>
+		</div>
+	</div>
+</div>
