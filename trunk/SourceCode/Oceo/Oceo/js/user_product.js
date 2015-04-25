@@ -703,7 +703,8 @@ var product = {
 	    {
 	        $("#lbSuffix").text('');
 	    }
-	  
+        $("#"+controlID).val('');
+	    $("#"+controlID).typeahead("destroy");
 	    if(typeof(values) != 'undefined' && values!='')
 	    {
 	        arrValue = values.split(',');
@@ -715,7 +716,7 @@ var product = {
 	    }
 	    else
 	    {
-	         $("#"+controlID).typeahead("destroy");
+	         //$("#"+controlID).typeahead("destroy");
 	    }
 	},
 	
