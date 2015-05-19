@@ -23,10 +23,16 @@ var product = {
     ACT_CHANGE_PAGE : 13,
     ACT_SHOW_EDIT : 14,
     ACT_GET : 15,
-    ACT_ACTIVE : 16,
+    ACT_ACTIVE_PRODUCT : 106,
     ACT_REFRESH : 17,
     ACT_CLONE : 18,
+    ACT_SHOW_EDIT_STORE_PRICE : 109,
+    ACT_GET_PRODUCT_PRICE: 101,
+    ACT_STORE_PRICE_ADD:102,
+    ACT_STORE_PRICE_UPDATE:103,
+    ACT_STORE_PRICE_DELETE:104,
     Page : "bg_product.php",
+    AdminPage : "../bg_product.php",
     
    
     //endregion   
@@ -720,34 +726,173 @@ var product = {
 	    }
 	},
 	
-	
-	activeArticle: function(articleID,isActivate)
-	{
-		var articleInfo = 
+	activateProduct: function(productID, statusID, page) 
+    {
+        var data =
 		{
-			 id: articleID,
-			 isactivate: isActivate
+		    id: productID,
+		    statusid: statusID
 		};
+        if(typeof(page) == 'undefined')
+        {
+            page = this.Page;
+        }
+        data.act = this.ACT_ACTIVE_PRODUCT;
+        core.request.post(page, data,
+                function(respone, info) {
+                    var strRespond = core.util.parserXML(respone);
+                    if (parseInt(strRespond[1]['rs']) == 1) {
+                        core.ui.showInfoBar(1, strRespond[1]["inf"]);
+                        setTimeout(function() { core.util.reload(); }, 1500)
+                    }
+                    else {
+                        core.ui.showInfoBar(2, strRespond[1]["inf"]);
+                    }
+                },
+                function() {
+                    core.ui.showInfoBar(2, core.constant.MsgProcessError);
+                }
+            );
+    },
+    
+    showPopupEditStorePrice: function(productID,productName, modalID, page)
+	{
+		productInfo = {
+			id : productID,
+			act: this.ACT_SHOW_EDIT_STORE_PRICE
+		}
+		core.request.post(page,productInfo,
+            function(respone, info){
+                    $("#ProductID").val(productID);
+		            $('#'+modalID+' #txtProName').val(productName)
+					$('#'+modalID+' #store-prices').html(respone)
+					$('#'+modalID).modal({ backdrop: 'static', keyboard: false });
+					 core.ui.hideInfoBar();	
+                
+            },
+            function()
+            {
+				core.ui.showInfoBar(2, core.constant.MsgProcessError);					
+            }
+        );
 		
-		articleInfo.act = this.ACT_ACTIVE;
-		
-        core.request.post('../'+this.Page,articleInfo,
+	},
+    editStorePrice: function(productPriceID, page) 
+    {
+        var data =
+		{
+		    id: productPriceID		  
+		};
+        if(typeof(page) == 'undefined')
+        {
+            page = this.Page;
+        }
+        data.act = this.ACT_GET_PRODUCT_PRICE;
+        core.request.post(page, data,
+                function(respone, info) {
+                    var strRespond = core.util.parserXML(respone);
+                    if (parseInt(strRespond[1]['rs']) == 1) {
+                        core.ui.hideInfoBar();	
+                        var productPrice = $.parseJSON(strRespond[1]['content']);
+                        $("#ProductPriceID").val(productPrice.ProductPriceID);
+                        $("#adddocmode").val(1);
+                        var controlID = 'txtProductUrl';		
+                        core.util.getObjectByID(controlID).val(productPrice.ProductLink);
+                        
+                        controlID = 'cmdStore';		
+                        core.util.getObjectByID(controlID).val(productPrice.TypeID);
+                    }
+                    else {
+                        core.ui.showInfoBar(2, strRespond[1]["inf"]);
+                    }
+                },
+                function() {
+                    core.ui.showInfoBar(2, core.constant.MsgProcessError);
+                }
+            );
+    },
+    removeStorePrice: function(productPriceID, page) 
+    {
+        var data =
+		{
+		    id: productPriceID		  
+		};
+        if(typeof(page) == 'undefined')
+        {
+            page = this.Page;
+        }
+        data.act = this.ACT_STORE_PRICE_DELETE;
+        self = this;
+        core.request.post(page, data,
+                function(respone, info) {
+                    var strRespond = core.util.parserXML(respone);
+                    if (parseInt(strRespond[1]['rs']) == 1) {
+                       	core.ui.showInfoBar(1, strRespond[1]["inf"]);                   
+                        self.showPopupEditStorePrice($("#ProductID").val(),$("#txtProName").val(),'modal-add',self.AdminPage);
+                    }
+                    else {
+                        core.ui.showInfoBar(2, strRespond[1]["inf"]);
+                    }
+                },
+                function() {
+                    core.ui.showInfoBar(2, core.constant.MsgProcessError);
+                }
+            );
+    },
+    saveStorePrice: function(page) 
+    {
+        var submitID = "btnSave"
+        var data =
+		{
+		    ProductPriceID: $("#ProductPriceID").val(),
+            ProductID: $("#ProductID").val(),
+            TypeID: $("#cmdStore").val(),
+            Retailer: $("#cmdStore :selected").text(),
+            ProductLink: $("#txtProductUrl").val(),	
+            Mode: $("#adddocmode").val()  
+		};
+      
+		if(core.util.isNull(data))
+		{
+			return false;
+		}
+		if(data.Mode=='1' || data.Mode ==1 )
+		{
+			data.act = this.ACT_STORE_PRICE_UPDATE;
+		}
+		else
+		{
+			data.act = this.ACT_STORE_PRICE_ADD;
+		}
+        self = this;
+		//console.log(data);
+		core.request.post(page,data,
             function(respone, info){
 				var strRespond = core.util.parserXML(respone);
 				if (parseInt(strRespond[1]['rs']) == 1) {
-					core.ui.showInfoBar(1, strRespond[1]["inf"]);	
-					core.util.reload();
+					core.ui.showInfoBar(1, strRespond[1]["inf"]);
+                    	
+                    $("#hdProductPriceID").val('');                    
+                    $("#cmStore").val('');
+                    $("#cmStore").text('');
+                    $("#txtProductUrl").val('');	
+                    $("#adddocmode").val('');	 
+                    self.showPopupEditStorePrice(data.ProductID,$("#txtProName").val(),'modal-add',self.AdminPage);
+					//property.clearForm();
+					//core.util.disableControl(submitID, false);                
                 }
                 else{
                     core.ui.showInfoBar(2, strRespond[1]["inf"]);	
+					//core.util.disableControl(submitID, false);
                 }
             },
             function()
             {
 				core.ui.showInfoBar(2, core.constant.MsgProcessError);	
+				//core.util.disableControl(submitID, false);
             }
         );
-	},
+    },
 	refreshProduct: function(articleID,isActivate)
 	{
 		var productInfo = 

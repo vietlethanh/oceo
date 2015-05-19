@@ -18,8 +18,8 @@ require('config/globalconfig.php');
 require('include/_permission_admin.inc');
 include_once('class/model_property.php');
 include_once('class/model_propertygroup.php');
-include_once('class/Model_articletype.php');
-
+include_once('class/model_articletype.php');
+include_once('class/model_datatype.php');
 $objProperty = new Model_Property($objConnection);
 $objPropertyGroup = new Model_PropertyGroup($objConnection);
 ?>
@@ -48,6 +48,7 @@ if($_FILES["f"] && strtolower(end(explode('.', $_FILES['f']['name']))) == 'csv')
         fclose($handle);
         
         $count = count($stack);
+        echo '<br>Count:'. $count;
         for($i=0; $i < $count; $i++)
         {
             

@@ -94,8 +94,8 @@ class Model_ProductPrice
 	
 	public function insert( $productid,$retailer,$productlink,$typeid,$order,$statusid,$status)
 	{
-		$intID = global_common::getMaxID(self::TBL_SL_PRODUCT_PRICE);
-		
+		$intID = global_common::getMaxValueofField($this->_objConnection,global_mapping::ProductPriceID,self::TBL_SL_PRODUCT_PRICE);
+		$intID  = $intID + 1;
 		$strTableName = self::TBL_SL_PRODUCT_PRICE;
 		$strSQL = global_common::prepareQuery(self::SQL_INSERT_SL_PRODUCT_PRICE,
 				array(self::TBL_SL_PRODUCT_PRICE,$intID,
@@ -110,7 +110,7 @@ class Model_ProductPrice
 		
 		if (!global_common::ExecutequeryWithCheckExistedTable($strSQL,self::SQL_CREATE_TABLE_SL_PRODUCT_PRICE,$this->_objConnection,$strTableName))
 		{
-			//echo $strSQL;
+			echo $strSQL;
 			global_common::writeLog('Error add sl_product_price:'.$strSQL,1);
 			return false;
 		}	
@@ -139,7 +139,7 @@ class Model_ProductPrice
 			global_common::writeLog('Error add sl_product_price:'.$strSQL,1);
 			return false;
 		}	
-		return $intNewID;		
+		return $productpriceid;		
 	}
 	
 	public function getProductPriceByID($objID, $selectField='*') 
@@ -193,7 +193,7 @@ class Model_ProductPrice
 				//echo$arrResult[$index][global_mapping::ProductLink];
 				try
 				{
-					//$arrResult[$index][global_mapping::Price] = global_common::getPriceFromURL($arrResult[$index][global_mapping::ProductLink],$pathCode);
+					$arrResult[$index][global_mapping::Price] = global_common::getPriceFromURL($arrResult[$index][global_mapping::ProductLink],$pathCode);
 				}
 				catch(Exception $ex)
 				{

@@ -1171,6 +1171,7 @@ class global_common
 	
 	function FormatPrice($input)
 	{
+	   
 		if($input<0)
 		{
 			return "N/A";
@@ -1580,6 +1581,7 @@ class global_common
 		try
 		{
 			$html = file_get_html($url);
+            //echo $url;
 			if($html)
 			{
 				foreach($html->find($pathCode) as $e) 
@@ -4086,9 +4088,17 @@ class global_common
 		return $_SERVER["HTTP_HOST"];
 	}
 	
-	public function buildProductLink($productID)
+	public function buildProductLink($productID, $isAdmin = false)
 	{
-		return 'product_detail.php?pid='.$productID;
+	   	if($isAdmin)
+		{
+			return '../product_detail.php?pid='.$productID;
+		}
+		else
+		{
+			return 'product_detail.php?pid='.$productID;
+		}
+	
 	}
 	
 	public function buildPriceLink($productID,$type)

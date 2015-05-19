@@ -32,6 +32,7 @@ include_once('class/model_datatype.php');
 include_once('class/model_manufactory.php');
 include_once('class/model_city.php');
 $objProduct = new Model_Product($objConnection);
+$objStatus = new Model_Status($objConnection);
 $objCity = new Model_City($objConnection);
 $objProductProperty = new Model_ProductProperty($objConnection);
 $objArticleType = new Model_ArticleType($objConnection);
@@ -93,6 +94,9 @@ if($manu)
 
 $products = $objProduct->getAllProduct(1,'*',$search,null,$total);
 $allManuFactories = $objManufactory->getAllManufactory(0);
+
+$stores = $objStatus->getAllStatus(0,'*',global_mapping::Type.'=\''.global_common::STATUS_PRODUCT_PRICE.'\'');
+
 ?>
 <?php
 $_SESSION[global_common::SES_C_CUR_PAGE] = "admin/admin_product.php";
@@ -100,7 +104,7 @@ include_once('include/_admin_header.inc');
 
 ?>
 
-<script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_retailer.js');?>"></script>
+<script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_product.js');?>"></script>
 <div id="admin-article">
 	<div class="row-fluid">
 		<div class="span12">
@@ -208,7 +212,7 @@ if($products)
 	echo '</thead>';
 	foreach($products as $item)
 	{
-	
+	  
 		echo '<tr>';
 		echo '<td>';
 		echo $item[global_mapping::ProductName];		
@@ -222,15 +226,17 @@ if($products)
 		echo '<td>';
 		echo global_common::formatDateTimeVN($item[global_mapping::ModifiedDate]);		
 		echo '</td>';
-		echo '<td style="padding:0;width:180px">';
-		echo '<a href="'.global_common::buildRetailerLink($item[global_mapping::RetailerID], true).'" target="_blank" class="btn btn-mini"> View</a> ';	
-		if(	$item[global_mapping::StatusID] == global_common::STATUS_INACTIVE)
+		echo '<td style="padding:0;width:200px">';
+		echo '<a href="'.global_common::buildProductLink($item[global_mapping::ProductID], true).'" target="_blank" class="btn btn-mini"> View</a> ';	
+        echo '<a href="javascript:product.showPopupEditStorePrice(\''.$item[global_mapping::ProductID].'\',\''.str_replace("'"," ",$item[global_mapping::ProductName]) .'\',\'modal-add\', product.AdminPage)" class="btn btn-mini">Store Price</a>';
+      
+		if(	$item[global_mapping::IsDeleted] == true)
 		{
-			echo '<a href="javascript:retailer.activateRetailer(\''.$item[global_mapping::RetailerID].'\','.global_common::STATUS_ACTIVE.', retailer.AdminPage)" class="btn btn-mini">Bán lại</a>';
+			echo '<a href="javascript:product.activateProduct(\''.$item[global_mapping::ProductID].'\',0, product.AdminPage)" class="btn btn-mini">Bán lại</a>';
 		}
 		else
 		{
-			echo '<a href="javascript:retailer.activateRetailer(\''.$item[global_mapping::RetailerID].'\','.global_common::STATUS_INACTIVE.', retailer.AdminPage)" class="btn btn-mini">Dừng bán</a>';
+			echo '<a href="javascript:product.activateProduct(\''.$item[global_mapping::ProductID].'\',1, product.AdminPage)" class="btn btn-mini">Dừng bán</a>';
 		}	
 		echo '</td>';
 		echo '</tr>';
@@ -248,3 +254,65 @@ if($products)
 <?php
 include_once('include/_admin_footer.inc');
 ?>
+
+<input type="hidden" id="adddocmode" name="adddocmode" value="" />
+<input type="hidden" id="ProductID" name="ProductID" value="" />
+<input type="hidden" id="ProductPriceID" name="ProductPriceID" value="" />
+<div id="modal-add" class="modal hide fade" tabindex="-1" data-width="800" data-keyboard="false"  aria-hidden="true" data-backdrop="static">
+    <div class="modal-header">       
+        <h3 class="popup-title">Modify Store Price
+        </h3>
+    </div>
+    <div class="modal-body">		
+		 <!-- BEGIN FORM-->
+        <form class="form-horizontal" action="#">
+		<div class="control-group">
+			<div class="controls">
+				<!--label class="m-wrap">(*) là thông tin bắt buộc</label-->
+			</div>
+		</div>
+        <div class="control-group">
+            <label class="control-label">
+               Product Name</label>
+            <div class="controls">
+                <input type="text" id="txtProName" class="span5" readonly="true" disabled="disabled">
+            </div>
+        </div>
+		<div class="control-group">
+            <label class="control-label">
+               Store Name</label>
+            <div class="controls">
+                <select tabindex="1" class="span5" id="cmdStore">
+                <?php
+                foreach($stores as $item)
+                {
+                	echo '			<option value="'.$item[global_mapping::StatusID].'" >'.$item[global_mapping::StatusName].'</option>';
+                	
+                }
+                ?>
+                </select>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">
+                Product Url
+            </label>
+            <div class="controls">
+                 <input id="txtProductUrl" type="text" class="span5">
+           	     <a href="javascript:product.saveStorePrice(product.AdminPage);" class="btn" id="btnSave">Save</a>
+            </div>
+        </div>
+        <div class="control-group" id="store-prices">
+           
+        </div>	
+       
+        </form>
+        <!-- END FORM-->
+	</div>
+	 <div class="modal-footer">
+		<div class="pull-right">		
+			<a href="javascript:;" class="btn btn-mini" data-dismiss="modal"   aria-hidden="true">Close</a>        
+		</div>
+	
+	</div>
+</div>
