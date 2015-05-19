@@ -66,7 +66,7 @@ if($filterProperty)
 	$productInIDs = global_common::convertToQueryIN($productIDs);
 }
 
-$search = '';
+$search = '('.global_mapping::IsDeleted.' IS NULL or '.global_mapping::IsDeleted.' = \'0\')';
 $_arrCategories =  $objArticleType->getAllArticleType(0,null,'`ParentID`=0','Level');
 //echo $catID;
 $cat = $objArticleType->getArticleTypeByID($catID);
@@ -77,17 +77,17 @@ if($cat)
 {
 	$_currentParentCatID = $cat[global_mapping::ParentID];
 	
-	$search ='`'.global_mapping::CatalogueID.'` = '.$catID.' ';
+	$search .=' and `'.global_mapping::CatalogueID.'` = '.$catID.' ';
 }
 if($city)
 {
 	if($search)
 	{
-		$search = 'ProductID IN( select ProductID where CityID =`'.global_mapping::CityID.'` = '.$city.') ';
+		$search .= 'ProductID IN( select ProductID where CityID =`'.global_mapping::CityID.'` = '.$city.') ';
 	}
 	else
 	{
-		$search = ' and `'.global_mapping::CityID.'` = '.$city.' ';
+		$search .= ' and `'.global_mapping::CityID.'` = '.$city.' ';
 	}
 }
 

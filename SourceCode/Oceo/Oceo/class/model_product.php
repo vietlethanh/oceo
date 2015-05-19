@@ -412,7 +412,7 @@ class Model_Product
 	{		
 		if($whereClause)
 		{
-			$whereClause = ' WHERE '.$whereClause;
+			$whereClause = ' WHERE '.$whereClause ;
 		}
 		
 		if($orderBy)
