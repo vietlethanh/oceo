@@ -23,10 +23,14 @@ class Model_Product
 	const ACT_CHANGE_PAGE					= 13;
 	const ACT_SHOW_EDIT                     = 14;
 	const ACT_GET                           = 15;
-	const ACT_ACTIVE						= 16;
+	const ACT_ACTIVE_PRODUCT				= 106;
 	const ACT_REFRESH						= 17;
-	const ACT_CLONE                         = 18;
-	
+	const ACT_CLONE                         = 18;    
+    const ACT_SHOW_EDIT_STORE_PRICE			= 109;
+    const ACT_GET_PRODUCT_PRICE			    = 101;
+    const ACT_STORE_PRICE_ADD			    = 102;
+    const ACT_STORE_PRICE_UPDATE			= 103;
+    const ACT_STORE_PRICE_DELETE			= 104;
 	
 	const NUM_PER_PAGE                      = 12;
 	
@@ -144,6 +148,13 @@ class Model_Product
 		`DeletedDate`,
 		`IsDeleted`,
 		`Status` FROM `{0}` WHERE productid=\'{1}\'';
+        
+        	//status : Deactivate;  Active; Bad content> referenced from sl_status: type:1-General Statuses
+	const SQL_ACTIVE_SL_PRODUCT		= 'UPDATE `{0}`
+		SET  		
+		`StatusID` = \'{2}\'		
+		WHERE `ProductID` = \'{1}\'  ';
+	
 	#endregion   
 	
 	#region Variables
@@ -466,9 +477,12 @@ class Model_Product
 				$arrResult[$index][global_mapping::ArticleTypeName] = $cats[$arrResult[$index][global_mapping::CatalogueID]][global_mapping::ArticleTypeName];
 			}
 		}
+ 	    $arrResult = global_common::mergeUserInfo($arrResult,$this->_objConnection);              
 		//print_r($arrResult);
 		return $arrResult;
 	}
+ 
+
 	
     public function getLatestRetailer($intPage = 0,$whereClause='',$type, &$total) 
 	{		

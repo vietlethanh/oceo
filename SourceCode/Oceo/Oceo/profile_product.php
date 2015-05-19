@@ -31,7 +31,7 @@ $_SESSION[global_common::SES_LAST_PAGE] = $_SESSION[global_common::SES_C_CUR_PAG
 include_once('include/_header.inc');
 ?>
 <script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_user.js');?>"></script>
-<script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_article.js');?>"></script>
+<script type="text/javascript" src="<?php echo $_objSystem->locateJs('user_product.js');?>"></script>
 <div id="profile-page" class="page-content">
 	<div class="row-fluid">
 		<div class="span12">
@@ -98,16 +98,28 @@ include_once('include/_header.inc');
 <?php
 foreach($products as $item)
 {
-	echo '								<tr>';
-	echo '									<td><a href="'.global_common::buildProductLink($item[global_mapping::ProductID]).'" >'.$item[global_mapping::ProductName].'</a></td>';
-	echo '									<td class="">'.$item[global_mapping::ManufactoryName].'</td>';
-	echo '									<td class="">'.$item[global_mapping::ArticleTypeName].'</td>';
-	echo '									<td class="article-control">';
-	echo '										<a href="post_product.php?pid='.$item[global_mapping::ProductID].'" class="btn btn-mini">Sửa</a>';
-	//echo '										<a href="javascript:article.refreshArticle(\''.$item[global_mapping::ArticleID].'\')" class="btn btn-mini">Làm mới</a>';
-	echo '										<a href="javascript:article.activeArticle(\''.$item[global_mapping::ArticleID].'\',0)" class="btn btn-mini">Xóa</a>';
-	echo '									</td>';
-	echo '								</tr>';
+    
+	if(	$item[global_mapping::IsDeleted] != true)
+    {                
+    	echo '								<tr>';
+    	echo '									<td><a href="'.global_common::buildProductLink($item[global_mapping::ProductID]).'" >'.$item[global_mapping::ProductName].'</a></td>';
+    	echo '									<td class="">'.$item[global_mapping::ManufactoryName].'</td>';
+    	echo '									<td class="">'.$item[global_mapping::ArticleTypeName].'</td>';
+    	echo '									<td class="article-control">';
+    	echo '										<a href="post_product.php?pid='.$item[global_mapping::ProductID].'" class="btn btn-mini">Sửa</a>';
+    	//echo '										<a href="javascript:article.refreshArticle(\''.$item[global_mapping::ArticleID].'\')" class="btn btn-mini">Làm mới</a>';
+    	if(	$item[global_mapping::IsDeleted] == true)
+    	{
+    		//echo '<a href="javascript:product.activateProduct(\''.$item[global_mapping::ProductID].'\',0)" class="btn btn-mini">Phục hồi</a>';
+    	}
+    	else
+    	{
+    		echo '<a href="javascript:product.activateProduct(\''.$item[global_mapping::ProductID].'\',1)" class="btn btn-mini">Xóa</a>';
+    	}	
+    	//echo '										<a href="javascript:article.activeArticle(\''.$item[global_mapping::ArticleID].'\',0)" class="btn btn-mini">Xóa</a>';
+    	echo '									</td>';
+    	echo '								</tr>';
+    }
 }
 ?>
 										</tbody>

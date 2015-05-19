@@ -117,6 +117,7 @@ class global_mapping
 	
 	
 	const RetailerID				= 'RetailerID';
+    const ProductPriceID			= 'ProductPriceID';
 	
 	const ShortDesc					= 'ShortDesc';
 	const Promotion					= 'Promotion';
@@ -132,6 +133,8 @@ class global_mapping
 	const ExtraInfo					= 'ExtraInfo';
 	const TypeID					= 'TypeID';
 	const Mode						= 'Mode';
+    const Zone						= 'Zone';
+    
 	
 	const ShippingDesc				= 'ShippingDesc';
 	const StatusDetail				= 'StatusDetail';
