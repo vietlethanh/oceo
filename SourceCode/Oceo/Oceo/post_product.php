@@ -209,23 +209,30 @@ foreach($allManuFactories as $item)
 					
 					<select id="optGroup" name="optGroup" class="chosen span2 "  data-placeholder="Chọn nhóm" not-found="Tạo mới" onchange="core.util.bindChosen(this,'optProperty','PropertyGroupID');">
 <?php
-$display='style="display:none"';
+$display=' style="display:none;" ';
+
 foreach($allGroups as $item)
 {
-	echo '			<option value="'.$item[global_mapping::PropertyGroupID].'" CategoryID="'.$item[global_mapping::ArticleTypeID].'" '.$display.'>'.$item[global_mapping::PropertyGroupName].'</option>';
+    $enabled=' disabled=disabled ';
+    if($item[global_mapping::ArticleTypeID] == $currentTypeID)
+    {
+        $enabled= '';
+    }
+	echo '			<option value="'.$item[global_mapping::PropertyGroupID].'" CategoryID="'.$item[global_mapping::ArticleTypeID].'" '.$display.$enabled.'>'.$item[global_mapping::PropertyGroupName].'</option>';
 }
 ?>
 					</select>
 					<select id="optProperty" name="optProperty"  class="chosen span2" data-placeholder="Chọn thuộc tính" not-found="Tạo mới" 
 							onchange="product.bindValueField(this,'txtPropertyValue');">
 <?php
-$display='style="display:none"';
-
+$display=' style="display:none;" ';
+$isUsed=' ';
 foreach($allProperties as $item)
 {
 	$isExisted = false;
 	foreach($propertyInfo as $iGroup)
 	{
+	   $isUsed='';
 		//print_r($iGroup);
 		foreach($iGroup['Properties'] as $iProperty)
 		{
@@ -238,11 +245,12 @@ foreach($allProperties as $item)
 		}
 		if($isExisted)
 		{
+		    $isUsed = 'isUsed=true';
 			break;
 		}
 	}
 	//if(!$isExisted)
-		echo '			<option value="'.$item[global_mapping::PropertyID].'" '.$display.'  PropertyGroupID="'.$item[global_mapping::PropertyGroupID].'" 
+		echo '			<option value="'.$item[global_mapping::PropertyID].'" '.$display.$isUsed.'  PropertyGroupID="'.$item[global_mapping::PropertyGroupID].'" 
 				Values="'.$item[global_mapping::PropertyValue].'" DataType="'.$item[global_mapping::DataTypeID][global_mapping::InputType].'" 
 				Suffix="'.$item[global_mapping::DataTypeID][global_mapping::Suffix].'">'.$item[global_mapping::PropertyName].'</option>';
 }

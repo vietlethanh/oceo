@@ -575,10 +575,12 @@ core.util = {
 				if(($(this).attr(attName) == parentValue && $(this).attr('isUsed') != 'true') || typeof($(this).attr(attName)) == 'undefined' || $(this).attr(attName)==''  )
 				{
 					$(this).css("display","");
+                     $(this).removeAttr("disabled");
 				}
 				else
 				{
 					$(this).hide();
+    	            $(this).attr("disabled","disabled");
 				}
 			}
 		});

@@ -426,8 +426,8 @@ var product = {
 						'</label>'+
 						'<a onclick="product.moveUpItem(this,\'row-item\')" class="btn btn-mini float-right" href="javascript:;"><i class="icon-pencil"></i> Lên</a> '+
 						'<a onclick="product.moveDownItem(this,\'row-item\')" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Xuống</a> '+
-						'<a onclick="article.clickEDIT(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Sửa</a> '+
-						'<a onclick="article.clickDELETE(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-remove"></i> Xóa</a>'+
+						'<a onclick="product.clickEDIT(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-pencil"></i> Sửa</a> '+
+						'<a onclick="product.clickDELETE(this);" class="btn btn-mini float-right" href="javascript:void(0);"><i class="icon-remove"></i> Xóa</a>'+
 					'</div>');
                     $(existedGroup).closest('.property-group').append(newRow);
 		        }
@@ -495,7 +495,7 @@ var product = {
 		}
 		//console.log("prop:"+isImportant+":"+important);
 		$('#ckImportant').prop('checked', isImportant);
-		core.util.getObjectByID('txtPropertyValue').val(propertyValue);
+	
 		optCity = core.util.getObjectByID('optGroup').find('option');
 		$("#optGroup option[value='"+group+"']").attr("selected", "selected");
 		$("#optGroup").trigger("liszt:updated");
@@ -511,7 +511,7 @@ var product = {
 		//core.util.getObjectByID('optProperty').val(property);		
 		$("#optProperty").trigger("liszt:updated");
 		$('#optProperty').change();
-		
+		core.util.getObjectByID('txtPropertyValue').val(propertyValue);
 		this.showEditMode(true);
 	},	
 	

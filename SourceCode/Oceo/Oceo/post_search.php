@@ -27,7 +27,7 @@ $cmCategory = $_pgR["cmCategory"];
 $cmManufactory = $_pgR["cmManufactory"];
 $txtKeyword = $_pgR["txtKeyword"];
 $lastPage='';
-
+$condition = '('.global_mapping::IsDeleted.' IS NULL or '.global_mapping::IsDeleted.' = \'0\') ';
 if($_pgR["pid"])
 {
 	$preferProduct = $objProduct->getProductByID($_pgR["pid"]);
@@ -52,6 +52,7 @@ if($cmCategory)
 		$lastPage .='cmCategory='.$cmCategory;
 	
 	$currentTypeID = $cmCategory;
+    $condition .= $condition ? ' and ':'';
 	$condition .= global_mapping::CatalogueID.'='.$cmCategory;
 }
 else
@@ -59,6 +60,7 @@ else
 	$subTypes = $objArticleType->getAllArticleType(0,null, 'ParentID='.$currentParentType ,'Level');
 	$arrSubTypes = global_common::getArrayColumn($subTypes,global_mapping::ArticleTypeID);
 	$strCatIN = global_common::convertToQueryIN($arrSubTypes);
+    $condition .= $condition ? ' and ':'';
 	$condition .= global_mapping::CatalogueID.' IN ('.$strCatIN .')';
 }
 
