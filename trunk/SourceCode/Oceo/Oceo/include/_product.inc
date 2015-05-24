@@ -29,6 +29,7 @@ if ($_pgR["pid"])
 
 <script>
         jQuery(document).ready(function ($) {
+           
             slide.init('slide_product_container');
         });
     </script>

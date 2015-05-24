@@ -61,7 +61,7 @@ if ($_pgR["act"] == Model_Product::ACT_ADD || $_pgR["act"] == Model_Product::ACT
 					//is new group
 					if($groupID<=0)
 					{
-						$searchGroup = $objPropertyGroup->getPropertyGroupByName($group);
+						$searchGroup = $objPropertyGroup->getPropertyGroupByNameAndCat($group,$catalogueID);
 						if($searchGroup)
 						{
 							$groupID = $searchGroup[global_mapping::PropertyGroupID];
@@ -134,7 +134,7 @@ if ($_pgR["act"] == Model_Product::ACT_ADD || $_pgR["act"] == Model_Product::ACT
 						//is new group
 						if($groupID<=0)
 						{
-							$searchGroup = $objPropertyGroup->getPropertyGroupByName($group);
+							$searchGroup = $objPropertyGroup->getPropertyGroupByNameAndCat($group,$catalogueID);
 							if($searchGroup)
 							{
 								$groupID = $searchGroup[global_mapping::PropertyGroupID];

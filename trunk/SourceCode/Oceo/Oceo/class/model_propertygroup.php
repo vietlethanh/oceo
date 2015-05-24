@@ -223,7 +223,22 @@ class Model_PropertyGroup
 		return $arrResult[0];
 	}
 	
-	
+	public function getPropertyGroupByNameAndCat($objName,$catID,$selectField='*') 
+	{		
+		$strSQL .= global_common::prepareQuery(global_common::SQL_SELECT_FREE, 
+				array($selectField, self::TBL_SL_PROPERTY_GROUP ,							
+					'WHERE PropertyGroupName = \''.$objName.'\' and '.global_mapping::ArticleTypeID.'='.$catID));
+		//echo '<br>SQL:'.$strSQL;
+		$arrResult =$this->_objConnection->selectCommand($strSQL);		
+		if(!$arrResult)
+		{
+			global_common::writeLog('get sl_property_group ByID:'.$strSQL,1,$_mainFrame->pPage);
+			return null;
+		}
+		//print_r($arrResult);
+		return $arrResult[0];
+	}
+    
 	public function getAllPropertyGroup($intPage = 0,$selectField='*',$whereClause='',$orderBy='', &$total) 
 	{		
         if(!$selectField)
