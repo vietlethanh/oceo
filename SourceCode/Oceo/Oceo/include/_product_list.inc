@@ -5,7 +5,7 @@
 </style>
 <div id="product-list">	
 	<div id="products">
-	 <input class="btn  mocde-view" type="button" value="Xem theo Bài đăng"  onclick="$('#mode').val('1');$('#formSearch').submit(); "/>
+	 <input class="btn  mode-view" type="button" value="Xem theo Bài đăng"  onclick="$('#mode').val('1');$('#formSearch').submit(); "/>
 <?php
 echo global_common::getPagingHTMLByNum($page,Model_Product::NUM_PER_PAGE,$total, 'core.util.changePage','formSearch');
 foreach($products as $item)
