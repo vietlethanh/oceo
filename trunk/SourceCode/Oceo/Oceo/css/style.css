@@ -1443,6 +1443,8 @@ table.table {
 /*********** product ************/
 #product-list {
   margin-top: 30px; }
+  #product-list .mode-view {
+    display: block; }
   #product-list #products {
     display: inline-block;
     background-clip: padding-box;
