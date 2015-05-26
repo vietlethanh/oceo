@@ -578,18 +578,21 @@ var App = function () {
         $(".chosen").each(function () {
 			controlID = $.trim($(this).attr("id"));
 			message = $("#"+controlID).attr("not-found");
-			if(typeof(message) == 'undefined' || message == null || message == '')
-			{
-				message = 'Tạo mới';
-			}
-            $(this).chosen({
-                allow_single_deselect: $(this).attr("data-with-deselect") == "1" ? true : false,
-			
-				// message, which is somewhat redundant when option adding is enabled
-				 no_results_text: message +" <a style=\"cursor:pointer\" href=\"#\" onclick=\"App.addOptionChosen('"+controlID+"')\">Thêm</a>",
-				//persistent_create_option: true,
-				//create_option_text: 'Create New Business'
-            });
+            if($(this).hasClass("dymanic-value"))
+            {                
+    			if(typeof(message) == 'undefined' || message == null || message == '')
+    			{
+    				message = 'Tạo mới';
+    			}
+                $(this).chosen({
+                    allow_single_deselect: $(this).attr("data-with-deselect") == "1" ? true : false,
+    			
+    				// message, which is somewhat redundant when option adding is enabled
+    				 no_results_text: message +" <a style=\"cursor:pointer\" href=\"#\" onclick=\"App.addOptionChosen('"+controlID+"')\">Thêm</a>",
+    				//persistent_create_option: true,
+    				//create_option_text: 'Create New Business'
+                });
+            }
         });
     }
 	
