@@ -108,7 +108,7 @@ $productResults = $objProduct->getAllProduct(0,"*",$condition,'');
 			<div class="control-group">
 				<label class="control-label">Lĩnh vực</label>
 				<div class="controls">	
-					<select class="span6 chosen" name="cmArea" id="cmArea" data-placeholder="Chọn lĩnh vực" 
+					<select class="span6 chosen fix-value" name="cmArea" id="cmArea" data-placeholder="Chọn lĩnh vực" 
 								tabindex="1" onchange="core.util.bindChosen(this,'cmCategory','ParentID');">
 <?php
 foreach($parentTypes as $item)
@@ -127,7 +127,7 @@ foreach($parentTypes as $item)
 			<div class="control-group">	
 				<label class="control-label">Chuyên Mục</label>
 				<div class="controls">	
-					<select class="span6 chosen" name="cmCategory" id="cmCategory" data-placeholder="Chọn chuyên mục" 
+					<select class="span6 chosen fix-value" name="cmCategory" id="cmCategory" data-placeholder="Chọn chuyên mục" 
 						tabindex="1" onchange="core.util.bindChosen(this,'cmManufactory','CategoryID');">
 <?php
 foreach($allTypes as $item)
@@ -160,7 +160,7 @@ foreach($allTypes as $item)
 			<div class="control-group">	
 				<label class="control-label">Nhà sản xuất</label>
 				<div class="controls">	
-					<select class="span6 chosen" name="cmManufactory" id="cmManufactory" data-placeholder="Chọn nhà sản xuất" tabindex="1">
+					<select class="span6 chosen fix-value" name="cmManufactory" id="cmManufactory" data-placeholder="Chọn nhà sản xuất" tabindex="1">
 <?php
 echo $curentManuID;
 foreach($allManuFactories as $item)
