@@ -223,7 +223,10 @@ class Model_ProductProperty
 						GROUP BY PropertyID ORDER BY COUNT(*) DESC LIMIT 0,'.$sizeProperty.''));
 		//echo '<br>SQL:'.$strSQL;
 		$arrTopPropertyIDs = $this->_objConnection->selectCommand($strSQL);	
-		
+		if(!$arrTopPropertyIDs || count($arrTopPropertyIDs)<=0)
+        {
+            return;
+        }
 		//print_r($arrTopPropertyIDs);
 		$arrTopPropertyIDs = global_common::getArrayColumn($arrTopPropertyIDs,global_mapping::PropertyID);
 		$strQueryIN = 'WHERE '. global_mapping::PropertyID .' IN('. global_common::convertToQueryIN($arrTopPropertyIDs) .')';		

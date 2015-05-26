@@ -207,7 +207,7 @@ foreach($allManuFactories as $item)
 				<label class="control-label">Chi tiết kỹ thuật</label>
 				<div class="controls">
 					
-					<select id="optGroup" name="optGroup" class="chosen span2 "  data-placeholder="Chọn nhóm" not-found="Tạo mới" onchange="core.util.bindChosen(this,'optProperty','PropertyGroupID');">
+					<select id="optGroup" name="optGroup" class="chosen span2 dymanic-value"  data-placeholder="Chọn nhóm" not-found="Tạo mới" onchange="core.util.bindChosen(this,'optProperty','PropertyGroupID');">
 <?php
 $display=' style="display:none;" ';
 
@@ -222,7 +222,7 @@ foreach($allGroups as $item)
 }
 ?>
 					</select>
-					<select id="optProperty" name="optProperty"  class="chosen span2" data-placeholder="Chọn thuộc tính" not-found="Tạo mới" 
+					<select id="optProperty" name="optProperty"  class="chosen span2 dymanic-value" data-placeholder="Chọn thuộc tính" not-found="Tạo mới" 
 							onchange="product.bindValueField(this,'txtPropertyValue');">
 <?php
 $display=' style="display:none;" ';
