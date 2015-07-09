@@ -1,0 +1,282 @@
+PropertyName,GroupName,DefaultValue,Order,Category
+Băng tần 2G,Kết nối,GSM 850/ 900/ 1800/ 1900,25,10
+Băng tần 3G,Kết nối,"HSDPA 850/ 900/ 1900/ 2100 , Không",26,10
+Bảo hành,Thông tin cơ bản,"12,18, 24, 36",2,10
+Bluetooth,Kết nối,"Có, Không, Khác",31,10
+Bộ nhớ trong,Bộ nhớ và lưu trữ,"8 GB, 32 GB",8,10
+Chip đồ họa (GPU),Cấu hình phần cứng,,14,10
+Chức năng khác,Ứng dụng,"Có, Không, Khác",24,10
+Công nghệ cảm ứng,Mản hình,"Cảm ứng điện dung đa điểm, Không",6,10
+Cổng sạc,Kết nối,MicroUSB,34,10
+Danh bạ lưu trữ,Bộ nhớ và lưu trữ,Không giới hạn,7,10
+Độ phân giải màn hình,Mản hình,,4,10
+Dung lượng,Thông tin Pin,,16,10
+FM radio,Ứng dụng,"Có, Không, Khác",23,10
+Ghi âm,Ứng dụng,"Có, Không, Khác",22,10
+GPS,Kết nối,"Có, Không, Khác",30,10
+Hệ điều hành,Cấu hình phần cứng,,12,10
+Hỗ trợ Sim,Kết nối,"Micro Sim, Sim thường",28,10
+Hỗ trợ thẻ nhớ tối đa,Bộ nhớ và lưu trữ,"64 GB, 32 GB, 8GB, Khác",10,10
+Jack tai nghe,Kết nối,"3.5 mm, Khác",35,10
+Kết nối khác,Kết nối,"Có, Không, Khác",36,10
+Kết nối USB,Kết nối,"Có MicroUSB, Không",33,10
+Kích thước,Trọng lượng,,18,10
+Kích thước màn hình,Mản hình,,5,10
+Loại màn hình,Mản hình,"Cảm ứng, QQVGA, Khác",3,10
+Loại pin,Thông tin Pin,"Lithium,  Li-Ion, Khác",15,10
+NFC,Kết nối,"Có, Không, Khác",32,10
+Nghe nhạc,Ứng dụng,"Có, Không, Khác",21,10
+Số khe sim,Kết nối,"1 Sim, 2 Sim",27,10
+Số nhân CPU,Cấu hình phần cứng,,13,10
+Thẻ nhớ ngoài,Bộ nhớ và lưu trữ,"MicroSD (TFlash), Không",9,10
+Thiết kế,Thông tin cơ bản,"Thẳng, Khác",1,10
+Thời gian sử dụng,Thông tin Pin,,17,10
+Tốc độ CPU,Cấu hình phần cứng,,11,10
+Trọng lượng (g),Trọng lượng,,19,10
+Wifi,Kết nối,"Có, Không, Khác",29,10
+Xem phim,Ứng dụng,"Có, Không, Khác",20,10
+Băng tần 2G,Kết nối & Cổng giao tiếp,"Có, Không, Khác",25,11
+Bảo hành,Thông số cơ bản,"12 tháng,18 tháng, 24tháng, 36 tháng",4,11
+Bluetooth,Kết nối & Cổng giao tiếp,"Có, Không, Khác",29,11
+Camera sau,Chụp hình & Quay phim,,20,11
+Camera trước,Chụp hình & Quay phim,,21,11
+Công nghệ cảm ứng,Màn hình,Cảm ứng điện dung,7,11
+Công vụ văn phòng,Giải trí & Ứng dụng,"Có, Không, Khác",16,11
+Độ phân giải màn hình,Màn hình,,5,11
+Dung lượng pin,Thông tin pin,,24,11
+Ghi âm,Giải trí & Ứng dụng,"Có, Không, Khác",15,11
+GPS,Kết nối & Cổng giao tiếp,"Có, Không, Khác",28,11
+Hỗ trợ SIM,Kết nối & Cổng giao tiếp,"Có, Không, Khác",26,11
+Hỗ trợ thẻ nhớ tối đa,Bộ nhớ & Lưu trữ,"64 GB, 32 GB, 8GB, Khác",19,11
+Jack (Input & Output),Kết nối & Cổng giao tiếp,"3.5 mm, Khác",31,11
+Kết nối USB,Kết nối & Cổng giao tiếp,"Có MicroUSB, Không",30,11
+Kích thước màn hình,Màn hình,,6,11
+Loại CPU (Chipset),Cấu hình phần cứng,,9,11
+Loại pin,Thông tin pin,"Li-Ion, Lithium Polymer, Khác",23,11
+Màu màn hình,Màn hình,"16 triệu màu, Khác",8,11
+Màu sắc,Thông số cơ bản,"Trắng, Đen, Xám, Bạc, Khác",3,11
+Nghe nhạc,Giải trí & Ứng dụng,"Có, Không, Khác",14,11
+Quay Phim,Chụp hình & Quay phim,"Có, Không, Khác",22,11
+RAM,Cấu hình phần cứng,"1GB, 2GB, Khác",12,11
+Số nhân,Cấu hình phần cứng,,10,11
+Thẻ nhớ ngoài,Bộ nhớ & Lưu trữ,Micro SD,18,11
+Thời gian sử dụng,Thông số cơ bản,,2,11
+Tốc độ CPU,Cấu hình phần cứng,"1.3 GHz, 1.2 GHz, 1.6 GHz, Khác",11,11
+Trọng lượng,Thông số cơ bản,,1,11
+Ứng dụng khác,Giải trí & Ứng dụng,"Có, Không, Khác",17,11
+Wifi,Kết nối & Cổng giao tiếp,"Có, Không, Khác",27,11
+Xem phim,Giải trí & Ứng dụng,"Có, Không, Khác",13,11
+Adapter,Bảo hành,"12 tháng,18 tháng, 24tháng, 36 tháng",36,12
+Bộ nhớ đệm,Bộ xử lý,,10,12
+Bộ nhớ đồ họa,Đồ họa,"Share, Khác",21,12
+Cảm ứng,Màn hình,"Có, Không, Khác",5,12
+Cao,Kích thước & trọng lượng,,34,12
+Chipset,Bo mạch,,12,12
+Chipset đồ họa,Đồ họa,Intel HD Graphics,20,12
+Chuẩn Wifi,Giao tiếp mạng,,29,12
+Cổng giao tiếp,Tính năng mở rộng & cổng giao tiếp,"USB 2.0, USB 3.0, HDMI, SD Card Slot, VGA, Headphones, Microphone, Khác",27,12
+Công nghệ,Âm thanh,"High Definition (HD) Audio, Dual speakers, Khác",24,12
+Công nghệ CPU,Bộ xử lý,,7,12
+Công nghệ màn hình,Màn hình,HD LED,4,12
+Dài,Kích thước & trọng lượng,,32,12
+Độ phân giải (W x H),Màn hình,,3,12
+Dung lượng ổ đĩa,Đĩa cứng,"128 GB, 320 GB, 500 GB, Khác",19,12
+Dung lượng RAM,Bộ nhớ,"8GB, 4 GB, 2 GB, Khác",15,12
+Hệ điều hành ,Màn hình,"Free DOS, Windows, Android, iOS, Khác",2,12
+Hỗ trợ RAM tối đa,Bo mạch,"64 GB, 32 GB, 8GB, Khác",14,12
+Kênh âm thanh,Âm thanh,2.0,23,12
+Kích thước màn hình,Màn hình,,1,12
+Kiểu thiết kế đồ họa,Đồ họa,Tích hợp,22,12
+Lan,Giao tiếp mạng,,28,12
+Loại CPU,Bộ xử lý,,8,12
+Loại đĩa quang,Đĩa quang,"Có, Không, Khác",26,12
+Loại ổ đĩa,Đĩa cứng,"SSD, HDD, SATA, Khác",18,12
+Loại pin,Thông tin Pin,"4 Cell, Khác",30,12
+Loại RAM,Bộ nhớ,DDR3,16,12
+Pin,Bảo hành,"6 tháng, 12 tháng, 18 tháng, 24t háng",37,12
+Rộng,Kích thước & trọng lượng,,33,12
+Thời gian hoạt động,Thông tin Pin,,31,12
+Tích hợp,Đĩa quang,"Có, Không, Khác",25,12
+Tốc độ,Bộ xử lý,,9,12
+Tốc độ Bus,Bo mạch,"1600 MHz, 1333 MHz, Khác",13,12
+Tốc độ BUS RAM,Bộ nhớ,"1600Mhz, 1333Mhz, Khác",17,12
+Tốc độ tối đa,Bộ xử lý,,11,12
+Trọng lượng,Kích thước & trọng lượng,,35,12
+"Báo tinh nhắn, Email, cuộc gọi",Tính Năng,"Có, Không, Khác",17,14
+Báo tình trạng thời tiết,Tính Năng,"Có, Không, Khác",16,14
+Bộ nhớ trong,Lưu trữ,,9,14
+Chất liệu dây,Chất liệu,"Da, Nhựa, Cao su, Thép không rỉ, Silicon, Kim loại",12,14
+Chất liệu mặt đồng hồ,Chất liệu,"Gorilla, Kính  chống xước, Màn hình cảm ứng, Màn hình Mirasol, Sapphire chống xước, Khác ",11,14
+Chụp ảnh,Tính Năng,"Có, Không, Khác",13,14
+Đọc Email,Tính Năng,"Có, Không, Khác",15,14
+Hệ điều hành tương thích,Lưu trữ,"Android, Iso, Blackberry, Windows 8, Khác",10,14
+Kết nối không dây,Thông tin cơ bản,"Bluetooth 3.0, Bluetooth 4.0, Bluetooth 2.1, Wifi, GPS, NFC",6,14
+Kích cỡ màn hình (inches),Thông tin cơ bản,"1 inch, 1.5 inch, 2 inch, Khác",3,14
+Kích thước sản phẩm (D x R x C cm),Thông tin cơ bản,,7,14
+Màu,Thông tin cơ bản,"Trắng, Đen, Xám, Đỏ, Xanh, Hồng, Nâu, Khác",4,14
+Nghe nhạc/ Xem ảnh/ Video,Tính Năng,"Có, Không, Khác",18,14
+Pin,Thông tin cơ bản,,5,14
+Thời gian bảo hành,Thông tin cơ bản,"12 tháng,18 tháng, 24tháng, 36 tháng",2,14
+Trả lời cuộc gọi,Tính Năng,"Có, Không, Khác",14,14
+Trọng lượng (KG),Thông tin cơ bản,,8,14
+Bảo hành,Thông tin cơ bản,"12 tháng,18 tháng, 24tháng, 36 tháng",5,20
+Bộ nhớ trong,Cấu hình,500 GB,10,20
+Bộ vi xử lý,Cấu hình,Intel Core i3,12,20
+Đồ họa,Cấu hình,VGA 1024MB Onboard,14,20
+Dung lượng ổ cứng,Cấu hình,,9,20
+HDD,Cấu hình,8 GB,16,20
+Hệ điều hành,Cấu hình,"Free DOS, ",11,20
+Kích cỡ màn hình (inches),Kích thước,,8,20
+Kích thước sản phẩm,Kích thước,,7,20
+Màu sắc,Thông tin cơ bản,"Trắng, Đen, Xám, Bạc, Khác",4,20
+Model,Thông tin cơ bản,,3,20
+Một bộ sản phẩm,Thông tin cơ bản,"Màn hình, Case máy tính, bàn phím, chuột",1,20
+RAM,Cấu hình,"2 GB, ",15,20
+Tốc dộ CPU,Cấu hình,,13,20
+Trọng lượng,Thông tin cơ bản,,6,20
+Bảo Hành,Thông số kĩ thuật,"12 tháng,18 tháng, 24 tháng, 36 tháng",4,21
+Cổng kết nối,Cấu hình,"D-sub, HDMI, DVI, Khác",12,21
+Độ phân giải,Cấu hình,,7,21
+Độ sáng cực đại,Cấu hình,,8,21
+Độ tương phản,Cấu hình,,9,21
+Góc nhìn,Cấu hình,,11,21
+Kích thước,Thông số kĩ thuật,,6,21
+Màu sắc,Thông số kĩ thuật,"Trắng, Đen, Xám, Bạc, Khác",3,21
+Model,Thông số kĩ thuật,,2,21
+Nhà sản xuất,Thông số kĩ thuật,"Acer, Asus, Intel, HP, Lenovo, Dell, Nove, Khác",1,21
+Thời gian đáp ứng,Cấu hình,,10,21
+Xuất xứ,Thông số kĩ thuật,"Việt Nam, Trung Quốc, Nhật Bản, Khác",5,21
+Các kết nối bên trong,Thông số kĩ thuật,,10,22
+Chipset,Thông số kĩ thuật,,3,22
+Cổng kết nối phía sau,Thông số kĩ thuật,,11,22
+Cổng USB và SATA,Thông số kĩ thuật,,12,22
+CPU onboard,Thông số kĩ thuật,"Có, Không, Khác",4,22
+Front Side Bus (FSB),Thông số kĩ thuật,,7,22
+Khe mở rộng,Thông số kĩ thuật,,13,22
+Loại CPU hỗ trợ 2,Thông số kĩ thuật,"Intel Core i3, Intel Core i5, Intel Core i7, Khác",5,22
+Loại CPU hỗ trợ 2,Thông số kĩ thuật,"Intel Core i3, Intel Core i5, Intel Core i7, Khác",6,22
+Memory Bus,Thông số kĩ thuật,,9,22
+Memory Slot (Số khe cắm ram),Thông số kĩ thuật,,8,22
+Socket,Thông số kĩ thuật,,2,22
+Bảo hành,Thông số kĩ thuật,"12 tháng,18 tháng, 24 tháng, 36 tháng",3,23
+Bộ nhớ đệm,Thông số kĩ thuật,,8,23
+Cấu Hình CPU Tối Đa,Thông số kĩ thuật,,13,23
+Hỗ trợ Socket,Thông số kĩ thuật,"2011, 1150, AM2, 939, 775, 771, 1366, 1156, 1155",9,23
+Model,Thông số kĩ thuật,,2,23
+Năng Suất Giải Nhiệt Thiết Kế (TDP) Tối Đa,Thông số kĩ thuật,,12,23
+Số lõi,Thông số kĩ thuật,,5,23
+Số luồng,Thông số kĩ thuật,,6,23
+Số lượng Cores,Thông số kĩ thuật,,10,23
+Số lượng Threads,Thông số kĩ thuật,,11,23
+Tốc độ  xung nhịp,Thông số kĩ thuật,"≥ 3.0 Ghz, ≥ 2.4 Ghz, ≥ 2.0 Ghz, ≥ 1.0 Ghz, Khác",7,23
+Tốc độ CPU,Thông số kĩ thuật,,4,23
+Bộ nhớ Cache,Thông số kỹ thuật,"2 MB, 8 MB, 16 MB, 32 MB, 64 MB, Khác",6,24
+Chuẩn giao tiếp,Thông số kỹ thuật,"SATA3, MiniSATA3, SATA2, Khác",7,24
+Dung lượng,Thông số kỹ thuật,,4,24
+Kích thước,Thông số kỹ thuật,"2.5 Inch, 3.5 Inch, Khác",8,24
+Loại ổ,Thông số kỹ thuật,"HDD, SSD",3,24
+Model (P/N),Thông số kỹ thuật,,2,24
+Tính năng khác,Thông số kỹ thuật,,9,24
+Tốc độ quay ,Thông số kỹ thuật,,5,24
+Bảo hành,Thông số kĩ thuật,"12 tháng,18 tháng, 24 tháng, 36 tháng",6,26
+Bus,Thông số kĩ thuật,"2133 Mhz, 1333 Mhz, 2666 Mhz, 1866 Mhz, 3000 Mhz, 1600 Mhz, 800 Mhz, Khác",5,26
+Dung lượng,Thông số kĩ thuật,"2 GB, 4 GB, 8 GB, 16 GB, Khác",3,26
+Loại RAM,Thông số kĩ thuật,"DDR2, DDR3, DDR4",4,26
+Model,Thông số kĩ thuật,,2,26
+Ăngten,Thông tin cơ bản,"1, 2, 3",8,27
+Bảo hành,Thông tin cơ bản,,5,27
+Cổng kết nối LAN,Thông tin cơ bản,,7,27
+Loại sản phẩm,Thông tin cơ bản,"Wifi có dây, Wifi không dây, Camera, Thiết bị mạng 3G, ",1,27
+Màu sắc ,Thông tin cơ bản,"Trắng, Đen, Xám, Bạc, Khác",3,27
+Model ,Thông tin cơ bản,,2,27
+Thương hiệu,Thông tin cơ bản,"Dlink, Asus, Tenda, TP-Link, Cisco, VICOM, Khác",4,27
+Tốc độ truyền dự liệu Wifi,Thông tin cơ bản,"12 tháng,18 tháng, 24 tháng, 36 tháng",6,27
+Bảo hành,Thông tin cơ bản,"12 tháng,18 tháng, 24 tháng, 36 tháng",7,28
+Kích thước sản phẩm ,Thông tin cơ bản,,4,28
+kiểu dáng,Thông tin cơ bản,"có dây, không dây",1,28
+Màu,Thông tin cơ bản,"Trắng, Đen, Xám, Bạc, Khác",6,28
+Model,Thông tin cơ bản,,3,28
+SKU,Thông tin cơ bản,,2,28
+Trọng lượng ,Thông tin cơ bản,,5,28
+Bộ sản phẩm bao gồm,Thông tin sản phẩm,,1,49
+SKU,Thông tin sản phẩm,,2,49
+Màu,Thông tin sản phẩm,,4,49
+Chất liệu,Thông tin sản phẩm,,5,49
+Kích thước sản phẩm,Thông tin sản phẩm,,6,49
+Bảo hành,Thông tin sản phẩm,,7,49
+Trọng lượng (KG),Thông tin sản phẩm,,8,49
+Sản xuất tại,Thông tin sản phẩm,,9,49
+Loại sản phẩm,Thông tin sản phẩm,,2,42
+Kích thước,Thông tin sản phẩm,,3,42
+Trọng lượng,Thông tin sản phẩm,,4,42
+Công suất,Thông tin sản phẩm,,5,42
+Dung tích,Thông tin sản phẩm,,6,42
+Bảo hành,Thông tin sản phẩm,,7,42
+Màu,Thông tin sản phẩm,,3,41
+Model,Thông tin sản phẩm,,4,41
+Kích thước sản phẩm ,Thông tin sản phẩm,,5,41
+Trọng lượng ,Thông tin sản phẩm,,6,41
+Mã sản phẩm,Thông tin sản phẩm,,1,40
+Bảo hành camera,Thông tin sản phẩm,,3,40
+Cảm biến hình ảnh,Thông tin sản phẩm,,4,40
+Độ phân giải,Thông tin sản phẩm,,6,40
+Đời xe,Tổng quát,,3,82
+Màu,Tổng quát,"Trắng, Đen, Xám, Bạc, Khác",4,82
+Số cửa,Tổng quát,,5,82
+Số chỗ ngồi,Tổng quát,,6,82
+Tình trạng,Tổng quát,"Cũ, Mới",7,82
+Hộp số,Tổng quát,"Số tự động, Số tay",8,82
+Nhiên liệu,Tổng quát,Xăng. Dầu diesel,9,82
+Bảo hành,Tổng quát,"1 năm, 2 năm, 3 năm, Khác",1,81
+Tình trạng,Tổng quát,"Cũ, Mới",2,81
+Dung tich xy lanh,Tổng quát,,3,81
+Công suất tối đa,Tổng quát,,4,81
+Chiều dài ,Kích thước,,5,81
+Chiều rộng ,Tổng quát,,6,81
+Chiều cao ,Tổng quát,,7,81
+Độ cao yên xe,Tổng quát,,8,81
+Kiểu động cơ,Động cơ,,9,81
+Hệ thống cung cấp nhiên liệu,Tổng quát,,10,81
+Dung tích bình xăng,Tổng quát,,11,81
+Công suất cực đại,Tổng quát,,12,81
+Hệ thống làm mát,Tổng quát,,13,81
+Hệ thống truyền động,Tổng quát,,14,81
+Hệ thống phanh trước,Thân xe,,15,81
+Hệ thống phanh sau,Tổng quát,,16,81
+Lốp trước,Tổng quát,,17,81
+Lốp sau,Tổng quát,,18,81
+Bảo hành,Thông tin chi tiết,"1 năm, 2 năm, 3 năm, Khác",3,83
+Tình trạng,Thông tin chi tiết,"Cũ, Mới",4,83
+SIZE,Kết cấu,,5,83
+Khung xe,Kết cấu,,6,83
+Phuộc,Kết cấu,,7,83
+Ghi đông,Kết cấu,,8,83
+Pô tăng,Kết cấu,,9,83
+Yên xe,Kết cấu,,10,83
+Cọc yên,Kết cấu,,11,83
+Chuyển đề trước,Kết cấu,,12,83
+Chuyển đề sau,Kết cấu,,13,83
+Líp,Kết cấu,,14,83
+Phanh,Kết cấu,,15,83
+Đùi đĩa,Kết cấu,,16,83
+Vành,Kết cấu,,17,83
+Lốp,Kết cấu,,18,83
+Chiều dài,Thông tin chi tiết,,1,87
+Chiều rộng,Thông tin chi tiết,,2,87
+Diện tích,Thông tin chi tiết,,3,87
+Địa chỉ,Thông tin chi tiết,,4,87
+Số Phòng,Thông tin chi tiết,,6,87
+Số tầng,Thông tin chi tiết,,7,87
+Giấy tờ,Thông tin chi tiết,,8,87
+Loại Tour,Thông tin,"Trong nước, Ngoài nước",1,85
+Thời gian,Thông tin,,2,85
+Phương tiện,Thông tin,"Xe máy, Tàu, Máy bay, Xe lửa, Khác",3,85
+Khởi hành từ,Thông tin,,4,85
+Giá,Thông tin,,5,85
+Liên hệ,Thông tin,,6,85
+Loại vé,Thông tin,"Khứ hồi, Một chiều, Nhiều chặng",1,84
+Nơi đi,Thông tin,,2,84
+Nơi đến,Thông tin,,3,84
+Gía,Thông tin,,4,84
+Ngày đi,Thông tin,,5,84
+Ngày đến,Thông tin,,6,84

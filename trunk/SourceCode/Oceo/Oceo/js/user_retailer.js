@@ -125,7 +125,7 @@ var retailer =
                 if (parseInt(strRespond[1]['rs']) == 1) {
                     core.ui.showInfoBar(1, strRespond[1]["inf"]);
                     //core.util.goTo("PostSucess.php");
-                    //article.clearForm();
+                    retailer.clearForm();
                     core.util.disableControl("btnOK", false);
                     //if(articleInfo.Mode=='1' || articleInfo.Mode==1)
                     //{
@@ -145,33 +145,33 @@ var retailer =
     },
 
     clearForm: function() {
-        controlID = 'cmArea';
+        controlID = 'cmProductStatus';
         core.util.deSelectOption(controlID);
 
-
-        controlID = 'cmCategory';
+        controlID = 'cmCity';
         core.util.deSelectOption(controlID);
 
-        controlID = 'cmManufactory';
-        core.util.deSelectOption(controlID);
+        controlID = 'txtPrice';
+        core.util.clearValue(controlID);
 
-        controlID = 'txtName';
+        controlID = 'txtShipDesc';
         core.util.clearValue(controlID);
 
         controlID = 'txtImage';
         core.util.clearValue(controlID);
 
-        controlID = 'optGroup';
-        core.util.deSelectOption(controlID);
-        controlID = 'optProperty';
-        core.util.deSelectOption(controlID);
-
-
-        controlID = 'txtPropertyValue';
+        
+        controlID = 'txtBoxInfo';
         core.util.clearValue(controlID);
 
-        $('.property-group').remove();
-
+        controlID = 'txtStatusDetail';
+        core.util.clearValue(controlID);
+        
+        controlID = 'txtShortDesc';
+        core.util.clearValue(controlID);
+        
+        $("#chkRecieveEmail").prop('checked',false);
+        
         controlID = 'txtContent';
         var content = CKEDITOR.instances[controlID].setData('');
 
