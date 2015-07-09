@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Bootstrap Better Typeahead Example</title>
+
+        <!-- optional -->
+        <link rel="stylesheet" href="css/bootstrap-better-typeahead.css">
+    </head>
+    <body>
+        <input type="text" id="selector" />
+
+        <script type="text/javascript" src="js/jquery.min.js" > </script>
+        <script type="text/javascript" src="js/bootstrap-typeahead.js" > </script>
+
+        <script type="text/javascript" src="js/bootstrap-better-typeahead.js" > </script>
+        
+        <script type="text/javascript">
+			$(document).ready(function(){
+                $("#selector").typeahead({
+                    minLength: 0,
+                    source: ["Neque", "porro", "quisquam", "est", "qui", "dolorem", "ipsum", "quia", "dolor", "sit", "amet", "consectetur"]
+                });
+				$("#selector").on('focus',$("#selector").typeahead.bind($("#selector"), 'lookup')); 
+				// $("#txtPropertyValue").unbind();
+			});
+        </script>
+    </body>
+</html>

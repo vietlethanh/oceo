@@ -179,7 +179,7 @@ var product = {
 				if (parseInt(strRespond[1]['rs']) == 1) {
 					core.ui.showInfoBar(1, strRespond[1]["inf"]);	
 					//core.util.goTo("PostSucess.php");
-					//article.clearForm();
+					product.clearForm();
 					core.util.disableControl("btnOK", false);
 					//if(articleInfo.Mode=='1' || articleInfo.Mode==1)
 					//{

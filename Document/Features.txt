@@ -1,0 +1,17 @@
+Home page:
+- Show all major category level1
+- searchbox
+
+
+Post price
+-Add Location
+-General information
+-Box info
+-Product status: New Brand, like new, 99%
+
+Advert:
+- 3 zone
++ slide: cat level 1
++ company: cat level 2
++ righ- product-list: cat level 2
+

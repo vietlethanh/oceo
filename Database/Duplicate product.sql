@@ -1,0 +1,43 @@
+INSERT INTO `sl_product`
+            (`ProductID`,
+             `ProductName`,
+             `CatalogueID`,
+             `ImageLink`,
+             `ManufactoryID`,
+             `PaymentModeID`,
+             `NumberaireID`,
+             `StorageDate`,
+             `Price`,
+             `Amount`,
+             `Description`,
+             `CreatedBy`,
+             `CreatedDate`,
+             `ModifiedBy`,
+             `ModifiedDate`,
+             `DeletedBy`,
+             `DeletedDate`,
+             `IsDeleted`,
+             `Status`)
+
+SELECT
+	 ( `ProductID` + (SELECT MAX(`ProductID`) FROM sl_product)) AS `ProductID`,
+  
+  `ProductName`,
+    FLOOR(1+ RAND()*(36)),
+  `ImageLink`,
+  `ManufactoryID`,
+  `PaymentModeID`,
+  `NumberaireID`,
+  `StorageDate`,
+  `Price`,
+  `Amount`,
+  `Description`,
+  `CreatedBy`,
+  `CreatedDate`,
+  `ModifiedBy`,
+  `ModifiedDate`,
+  `DeletedBy`,
+  `DeletedDate`,
+  `IsDeleted`,
+  `Status`
+FROM `oceo`.`sl_product`

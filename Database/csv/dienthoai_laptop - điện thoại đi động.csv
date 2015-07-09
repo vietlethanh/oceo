@@ -1,0 +1,37 @@
+PropertyName,GroupName,DefaultValue,Order
+Thiết kế,Thông tin cơ bản,"Thẳng, Khác",1
+Bảo hành,Thông tin cơ bản,"12,18, 24, 36",2
+Loại màn hình,Mản hình,"Cảm ứng, QQVGA, Khác",3
+Độ phân giải màn hình,Mản hình,0,4
+Kích thước màn hình,Mản hình,0,5
+Công nghệ cảm ứng,Mản hình,"Cảm ứng điện dung đa điểm, Không",6
+Danh bạ lưu trữ,Bộ nhớ và lưu trữ,Không giới hạn,7
+Bộ nhớ trong,Bộ nhớ và lưu trữ,"8 GB, 32 GB",8
+Thẻ nhớ ngoài,Bộ nhớ và lưu trữ,"MicroSD (TFlash), Không",9
+Hỗ trợ thẻ nhớ tối đa,Bộ nhớ và lưu trữ,"64 GB, 32 GB, 8GB, Khác",10
+Tốc độ CPU,Cấu hình phần cứng,0,11
+Hệ điều hành,Cấu hình phần cứng,0,12
+Số nhân CPU,Cấu hình phần cứng,0,13
+Chip đồ họa (GPU),Cấu hình phần cứng,0,14
+Loại pin,Thông tin Pin,"Lithium,  Li-Ion, Khác",15
+Dung lượng,Thông tin Pin,0,16
+Thời gian sử dụng,Thông tin Pin,0,17
+Kích thước,Trọng lượng,0,18
+Trọng lượng (g),Trọng lượng,0,19
+Xem phim,Ứng dụng,"Có, Không, Khác",20
+Nghe nhạc,Ứng dụng,"Có, Không, Khác",21
+Ghi âm,Ứng dụng,"Có, Không, Khác",22
+FM radio,Ứng dụng,"Có, Không, Khác",23
+Chức năng khác,Ứng dụng,"Có, Không, Khác",24
+Băng tần 2G,Kết nối,GSM 850/ 900/ 1800/ 1900,25
+Băng tần 3G,Kết nối,"HSDPA 850/ 900/ 1900/ 2100 , Không",26
+Số khe sim,Kết nối,"1 Sim, 2 Sim",27
+Hỗ trợ Sim,Kết nối,"Micro Sim, Sim thường",28
+Wifi,Kết nối,"Có, Không, Khác",29
+GPS,Kết nối,"Có, Không, Khác",30
+Bluetooth,Kết nối,"Có, Không, Khác",31
+NFC,Kết nối,"Có, Không, Khác",32
+Kết nối USB,Kết nối,"Có MicroUSB, Không",33
+Cổng sạc,Kết nối,MicroUSB,34
+Jack tai nghe,Kết nối,"3.5 mm, Khác",35
+Kết nối khác,Kết nối,"Có, Không, Khác",36
